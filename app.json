@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "tcc-codekingss",
+    "slug": "tcc-codekingss",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
