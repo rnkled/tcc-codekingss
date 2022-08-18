@@ -5,6 +5,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 //import { TextInput } from 'react-native-material-textinput';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import Header from '../../components/Header';
+import InputText from '../../components/InputText';
 
 const Login = () => {
 
@@ -24,12 +26,9 @@ const Login = () => {
     <ScrollView
       contentContainerStyle={styles.scrollViewContainer}
     >
-      <View style={styles.header}>
-        <Text style={styles.textoHeader}>Entrar</Text>
-      </View>
+      <Header titlePage={"Entrar"}/>
       <View style={styles.form}>
-        <TextInput
-          label="E-mail"
+        {/* <TextInput
           value={email}
           style={styles.input}
           placeholder="E-mail"
@@ -37,9 +36,8 @@ const Login = () => {
           autoCapitalize="none"
           autoCorrect={false}
           onChangeText={setEmail}
-        />
-        <TextInput
-          label="Senha"
+        /> */}
+        {/* <TextInput
           value={senha}
           style={styles.input}
           placeholder="Senha"
@@ -48,7 +46,9 @@ const Login = () => {
           autoCorrect={false}
           secureTextEntry={!mostrarSenha}
           onChangeText={setSenha}
-        />
+        /> */}
+        <InputText label={"E-mail"} keyboardType="name-phone-pad"  />
+        <InputText label={"Senha"}  keyboardType="name-phone-pad" secureTextEntry={true}/>
         <TouchableOpacity onPress={irParaRegistrar}>
           <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
         </TouchableOpacity>
@@ -82,12 +82,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: '8%',
     paddingTop: '8%',
-  },
-  header: {
-    width: "100%",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
   },
   textoHeader: {
     fontSize: 38,
