@@ -1,14 +1,21 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 //import { TextInput } from 'react-native-material-textinput';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import TextInput from '../../components/TextInput';
+import Button from '../../components/Button';
+
+const image = { uri: "https://data.whicdn.com/images/270290896/original.gif" };
 
 const Registrar = () => {
 
-  const navigation = useNavigation();
+  type Nav = {
+    navigate: (value: string) => void;
+  }
+  const navigation = useNavigation<Nav>();
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -22,68 +29,48 @@ const Registrar = () => {
   }
 
   return (
-  <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-    <ScrollView
-      contentContainerStyle={styles.scrollViewContainer}
-    >
-      <View style={styles.header}>
-        <MaterialCommunityIcons name="format-float-left" size={30} color="#8B97FF" />
-        <Text style={styles.textoHeader}>Cadastro</Text>
-        <TouchableOpacity onPress={irParaLogin}>
-          <Text style={[styles.textoAzul, {fontSize: 20}]}>Login</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.form}>
-      <TextInput
-          label="Nome"
-          value={nome}
-          style={styles.input}
-          placeholder="Nome"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={setNome}
-        />
-        <TextInput
-          label="E-mail"
-          value={email}
-          style={styles.input}
-          placeholder="E-mail"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          label="Senha"
-          value={senha}
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry={!mostrarSenha}
-          onChangeText={setSenha}
-        />
-        <TextInput
-          label="Senha"
-          value={senhaConfirma}
-          style={styles.input}
-          placeholder="Confirme sua Senha"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry={!mostrarSenhaConfirma}
-          onChangeText={setSenhaConfirma}
-        />
-      </View>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.botao} onPress={() => {}}>
-          <Text style={styles.textoBotao}>Cadastrar</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  </KeyboardAwareScrollView>);
+  <ImageBackground source={image} resizeMode="cover" style={{flex: 1, justifyContent: "center", }} blurRadius={90} >
+    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContainer}
+      >
+          <View style={styles.header}>
+            <MaterialCommunityIcons name="format-float-left" size={30} color="#8B97FF" />
+            <Text style={styles.textoHeader}>Cadastro</Text>
+            <TouchableOpacity onPress={irParaLogin}>
+              <Text style={[styles.textoAzul, {fontSize: 20}]}>Login</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.form}>
+            <TextInput
+              label="Nome"
+              value={nome}
+              setValue={setNome}
+            />
+            <TextInput
+              label={"E-mail"} 
+              value={email} 
+              setValue={setEmail}
+            />
+            <TextInput
+              label={"Senha"} 
+              value={senha} 
+              setValue={setSenha} 
+              secure={true}
+            />
+            <TextInput
+              label="Confirme sua senha"
+              value={senhaConfirma}
+              setValue={setSenhaConfirma} 
+              secure={true}
+            />
+          </View>
+          <View style={styles.footer}>
+            <Button label={"Cadastrar"} onPress={() => {}}/>
+          </View>
+      </ScrollView>
+    </KeyboardAwareScrollView>
+  </ImageBackground>);
 }
 
 const styles = StyleSheet.create({
@@ -91,7 +78,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     flex: 1,
-    backgroundColor: "#0C0150",
+    // backgroundColor: "#0C0150",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -120,7 +107,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: 350,
-    height: "70%",
+    height: "80%",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -146,7 +133,8 @@ const styles = StyleSheet.create({
     marginTop: "3%",
   },
   footer: {
-    height: "30%",
+    position: "relative",
+    bottom: 0,
     alignItems: "center",
     marginBottom: "5%",
   },

@@ -1,25 +1,27 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 //import { TextInput } from 'react-native-material-textinput';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
-import InputText from '../../components/InputText';
+import TextInput from '../../components/TextInput';
+import Button from '../../components/Button';
 
 const Login = () => {
+  type Nav = {
+    navigate: (value: string) => void;
+  }
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<Nav>();
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   function irParaRegistrar() {
     navigation.navigate('login.create');
   }
-
 
   return (
   <KeyboardAwareScrollView contentContainerStyle={styles.container}>
@@ -28,35 +30,14 @@ const Login = () => {
     >
       <Header titlePage={"Entrar"}/>
       <View style={styles.form}>
-        {/* <TextInput
-          value={email}
-          style={styles.input}
-          placeholder="E-mail"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={setEmail}
-        /> */}
-        {/* <TextInput
-          value={senha}
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry={!mostrarSenha}
-          onChangeText={setSenha}
-        /> */}
-        <InputText label={"E-mail"} keyboardType="name-phone-pad"  />
-        <InputText label={"Senha"}  keyboardType="name-phone-pad" secureTextEntry={true}/>
+        <TextInput label={"E-mail"} value={email} setValue={setEmail} />
+        <TextInput label={"Senha"} value={senha} setValue={setSenha} secure={true}/>
         <TouchableOpacity onPress={irParaRegistrar}>
           <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.botao} onPress={() => {}}>
-          <Text style={styles.textoBotao}>Entrar</Text>
-        </TouchableOpacity>
+        <Button label={"Entrar"} onPress={() => {}}/>
         <TouchableOpacity onPress={() => {}}>
           <Text style={styles.textoAzul}>Esqueci minha senha</Text>
         </TouchableOpacity>
@@ -119,22 +100,6 @@ const styles = StyleSheet.create({
     height: "30%",
     alignItems: "center",
     marginBottom: "5%",
-  },
-  botao: {
-    width: 350,
-    height: 50,
-    marginTop: "5%",
-    backgroundColor: "#8B97FF",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: "#0C0150",
-  },
-  textoBotao: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#0C0150",
   },
 });
 
