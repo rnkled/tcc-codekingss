@@ -9,7 +9,7 @@ type Props = {
 
 const Button = ({label, onPress, ...rest}: Props) => {
   return(
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.button}>
       <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   );
@@ -18,7 +18,8 @@ const Button = ({label, onPress, ...rest}: Props) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "Inter_600SemiBold",
     color: "#0C0150",
   },
   button: {
