@@ -6,12 +6,20 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Copyright from '../../components/Copyright';
 import Button from '../../components/Button';
 
+import { useNavigation } from '@react-navigation/native';
+
 // import { Container } from './styles';
 
 const Home: React.FC = () => {
+  const navigation = useNavigation();
 
   function handleNav() {
 
+  }
+
+  function handleNewVideoCall(){
+    navigation.navigate("videoCall");
+    
   }
 
 
@@ -31,7 +39,7 @@ const Home: React.FC = () => {
       />
       <View style={styles.contentPrimary}>
         <Text style={styles.titleHome}>Bem-Vindo, Paciente!</Text>
-        <TouchableOpacity activeOpacity={0.8} style={styles.buttonCircle}>
+        <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <View style={styles.contentBorderButton}>
             <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
           </View>
