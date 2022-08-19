@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Copyright from '../../components/Copyright';
+import Button from '../../components/Button';
 
 // import { Container } from './styles';
 
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
       />
       <View style={styles.contentPrimary}>
         <Text style={styles.titleHome}>Bem-Vindo, Paciente!</Text>
-        <TouchableOpacity style={styles.buttonCircle}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.buttonCircle}>
           <View style={styles.contentBorderButton}>
             <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
           </View>
@@ -38,12 +39,8 @@ const Home: React.FC = () => {
 
       </View>
       <View style={styles.contentSecondary}>
-        <TouchableOpacity style={styles.buttonStyle} onPress={() => {}}>
-          <Text style={styles.labelButton}>Minhas consultas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonStyle} onPress={() => {}}>
-          <Text style={styles.labelButton}>Buscar profissionais</Text>
-        </TouchableOpacity>
+        <Button label='Minhas consultas' onPress={() => {}} />
+        <Button label='Buscar profissionais' onPress={() => {}}/>
       </View>
       <View style={styles.contentCopyright}>
         <Copyright/>
@@ -103,31 +100,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: '#0C0150',
-    fontFamily: "Inter_500Medium"
+    fontFamily: "Inter_600SemiBold"
   },
 
-  labelButton: {
-    fontSize: 16,
-    textAlign: "center",
-    color: '#0C0150',
-    fontFamily: "Inter_500Medium"
-  },
 
   titleHome: {
     color: "#FFF",
     fontSize: 24
-  },
-
-  buttonStyle: {
-    width: 350,
-    height: 50,
-    marginTop: "5%",
-    backgroundColor: "#8B97FF",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: "#0C0150",
   },
 
   contentCopyright: {
