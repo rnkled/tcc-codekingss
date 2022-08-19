@@ -17,15 +17,16 @@ type Props = ViewProps & {
     icon: Function,
   },
   titlePage?: string,
+  backgroundColor?: string;
 }
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 12 : 64; 
-const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
+const Header = ({titlePage, backgroundColor, buttonLeft, buttonRight, ...rest}: Props) => {
 
 
 
   return(
-    <View style={styles.container}  {...rest} >
+    <View style={[styles.container, {backgroundColor: backgroundColor || "#0C0150",}]}  {...rest} >
       <View style={styles.contentButton}>
         {buttonLeft?.label && (
         <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
@@ -70,7 +71,6 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0C0150",
     paddingTop: statusBarHeight,
     flexDirection: "row",
     paddingHorizontal: 20,
