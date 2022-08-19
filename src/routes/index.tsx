@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 
 const Routes = () => {
 
-    let isSignedIn = false;
+    let isSignedIn = true;
     return (
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
