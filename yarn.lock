@@ -1541,11 +1541,6 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@react-native-community/blur@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-4.2.0.tgz#f100d0ba220ecfed26be3c0ad2ceffa5eee17533"
-  integrity sha512-StgP5zQJOCHqDRjmcKnzVkJ920S6DYBKRJfigSUnlkNQp+HzZtVtyKq0j5a7x84NtHcV7j8Uy5mz1Lx9ZKRKfA==
-
 "@react-native-community/cli-clean@^8.0.4":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-8.0.4.tgz#97e16a20e207b95de12e29b03816e8f2b2c80cc7"
@@ -1988,6 +1983,16 @@ aggregate-error@^3.0.0:
   dependencies:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
+
+agora-react-native-rtm@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/agora-react-native-rtm/-/agora-react-native-rtm-1.5.0.tgz#fe650a9a61db0c94cb804180eb4c1020da092c10"
+  integrity sha512-8LApJVTK21a6/JkOPwzkatrFrcvD/t4WUJNdc55BybBadrlSSE1yzz/1Ts/8tHVdzsX9Pya9pjMZ+UQBGovong==
+
+agora-rn-uikit@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/agora-rn-uikit/-/agora-rn-uikit-4.0.0.tgz#0cd7754f5bfd0ed37a28b65e080860001b619daf"
+  integrity sha512-Oo7Kt84eSez5nc2Rdb/ftmgkX6Cze2MVtkR+HdJD3ey8uepXDNr7Kk5JlWmvP0417YnV8Q/mF9Rt1YVe3fR8Yg==
 
 anser@^1.4.9:
   version "1.4.10"
@@ -5730,6 +5735,11 @@ react-is@^17.0.1:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-native-agora@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-agora/-/react-native-agora-3.7.1.tgz#04362c3a02186e36d0255f042a0d28a94de6fd64"
+  integrity sha512-meArJ8YQoZZb4UP2qZEAGWtEJYu/LrOcD/d0sH5BIhwKWZzuLYwN6E/hzlYnd4iWDbuPvaW0dgKCN/RgsoAr3A==
 
 react-native-codegen@^0.69.1:
   version "0.69.1"
