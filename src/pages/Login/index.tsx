@@ -28,7 +28,7 @@ const Login = () => {
     <ScrollView
       contentContainerStyle={styles.scrollViewContainer}
     >
-      <Header titlePage={"Entrar"}/>
+      <Header titlePage={"Entrar"} />
       <View style={styles.form}>
         <TextInput label={"E-mail"} value={email} setValue={setEmail} />
         <TextInput label={"Senha"} value={senha} setValue={setSenha} secure={true}/>
