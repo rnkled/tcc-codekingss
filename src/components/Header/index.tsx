@@ -35,7 +35,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
         </TouchableOpacity>
         )}
         {buttonLeft?.isIcon && (
-          <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
+          <TouchableOpacity onPress={buttonLeft?.onPress} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
           <Text style={[styles.labelButton, {textAlign: "left"}]}>
             {buttonLeft.icon()}
           </Text>
@@ -55,7 +55,8 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
         )}
 
         {buttonRight?.isIcon && (
-          <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
+    
+          <TouchableOpacity onPress={buttonLeft?.onPress} style={[styles.buttonComponent, {alignItems: "flex-end",}]}>
           <Text style={[styles.labelButton, {textAlign: "left"}]}>
             {buttonRight.icon()}
           </Text>
@@ -95,20 +96,20 @@ const styles = StyleSheet.create({
   contentTitle: {
     width: "60%",
     justifyContent: "center",
-    alignItems: "center"
-  },
-
-  contentButton: {
-    width: "20%",
-    justifyContent: "center",
     alignItems: "center",
+  },
+  
+  contentButton: {
+    width: "auto",
+    
   },
 
   buttonComponent: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+
+    
     
   }
 
