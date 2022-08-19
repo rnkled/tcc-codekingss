@@ -5,14 +5,18 @@ import { StatusBar, StyleSheet, ViewProps, Text, TouchableOpacity, View } from '
 
 type Props = ViewProps & {
   buttonLeft?: { 
-    label: string, 
-    onPress: () => {}
+    label?: string, 
+    onPress: () => {},
+    isIcon: boolean,
+    icon: Function,
   },
   buttonRight?: {
-    label: string, 
-    onPress: () => {}
+    label?: string, 
+    onPress: () => {},
+    isIcon: boolean,
+    icon: Function,
   },
-  titlePage: string,
+  titlePage?: string,
 }
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 12 : 64; 
@@ -30,6 +34,13 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
           </Text>
         </TouchableOpacity>
         )}
+        {buttonLeft?.isIcon && (
+          <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
+          <Text style={[styles.labelButton, {textAlign: "left"}]}>
+            {buttonLeft.icon()}
+          </Text>
+        </TouchableOpacity>
+        )}
       </View>
       <View style={styles.contentTitle}>
         <Text style={styles.titleHeader}>{titlePage}</Text>
@@ -39,6 +50,14 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
         <TouchableOpacity onPress={buttonRight.onPress} style={styles.buttonComponent}>
           <Text style={[styles.labelButton, {textAlign: "right"}]}>
             {buttonRight.label}
+          </Text>
+        </TouchableOpacity>
+        )}
+
+        {buttonRight?.isIcon && (
+          <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
+          <Text style={[styles.labelButton, {textAlign: "left"}]}>
+            {buttonRight.icon()}
           </Text>
         </TouchableOpacity>
         )}
@@ -89,6 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     justifyContent: "center",
+    alignItems: "center"
     
   }
 
