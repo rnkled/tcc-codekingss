@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import Header from '../../components/Header';
 
 const image = { uri: "https://data.whicdn.com/images/270290896/original.gif" };
 
@@ -29,7 +30,7 @@ const Registrar = () => {
   }
 
   return (
-  <ImageBackground source={image} resizeMode="cover" style={{flex: 1, justifyContent: "center", }} blurRadius={90} >
+  <ImageBackground fadeDuration={3} source={image} resizeMode="cover" style={{flex: 1, justifyContent: "center", }} blurRadius={90} >
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
@@ -41,6 +42,7 @@ const Registrar = () => {
               <Text style={[styles.textoAzul, {fontSize: 20}]}>Login</Text>
             </TouchableOpacity>
           </View>
+        
           <View style={styles.form}>
             <TextInput
               label="Nome"
