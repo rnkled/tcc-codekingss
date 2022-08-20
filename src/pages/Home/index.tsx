@@ -5,6 +5,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Copyright from '../../components/Copyright';
 import Button from '../../components/Button';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // import { Container } from './styles';
 
@@ -16,8 +17,13 @@ const Home: React.FC = () => {
 
 
   return(
-    <View style={styles.container}>
+      <LinearGradient
+        colors={['#0C0150', '#000']}
+        style={styles.container}
+      >
       <Header 
+        titlePage={"Bem-Vindo, Paciente!"}
+        fontSize={24}
         buttonLeft={{
           isIcon: true,
           icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
@@ -30,7 +36,6 @@ const Home: React.FC = () => {
         }}
       />
       <View style={styles.contentPrimary}>
-        <Text style={styles.titleHome}>Bem-Vindo, Paciente!</Text>
         <TouchableOpacity activeOpacity={0.8} style={styles.buttonCircle}>
           <View style={styles.contentBorderButton}>
             <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
@@ -42,11 +47,10 @@ const Home: React.FC = () => {
         <Button label='Minhas consultas' onPress={() => {}} />
         <Button label='Buscar profissionais' onPress={() => {}}/>
       </View>
-      <View style={styles.contentCopyright}>
+      <View style={styles.poweredBy}>
         <Copyright/>
       </View>
-
-    </View>
+      </LinearGradient>
   );
 }
 
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flex: 1,
-    backgroundColor: "#0C0150",
+    //backgroundColor: "#0C0150",
     
   },
 
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
 
-  contentCopyright: {
+  poweredBy: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",

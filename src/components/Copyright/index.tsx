@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 const Copyright: React.FC = () => {
   return(
     <View style={styles.container}>
-      <Text style={styles.label}>Powered By CodeKinkss</Text>
+      <Text style={styles.label}>Powered By CodeKingss</Text>
     </View>
   );
 }

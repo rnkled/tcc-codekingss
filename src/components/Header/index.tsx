@@ -17,10 +17,11 @@ type Props = ViewProps & {
     icon: Function,
   },
   titlePage?: string,
+  fontSize?: number,
 }
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 12 : 64; 
-const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
+const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) => {
 
 
 
@@ -43,7 +44,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
         )}
       </View>
       <View style={styles.contentTitle}>
-        <Text style={styles.titleHeader}>{titlePage}</Text>
+        <Text style={[styles.titleHeader, {fontSize: fontSize ? fontSize : 16}]}>{titlePage}</Text>
       </View>
       <View style={styles.contentButton}>
         {buttonRight?.label && (
@@ -70,7 +71,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, ...rest}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0C0150",
+    // backgroundColor: "#0C0150",
     paddingTop: statusBarHeight,
     flexDirection: "row",
     paddingHorizontal: 20,
@@ -83,18 +84,18 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontFamily: 'Inter_600SemiBold',
     color: '#FFF',
-    fontSize: 30,
+    width: "100%",
+    textAlign: "center",
   },
 
   labelButton: {
-    fontSize: 16,
     color: '#8B97FF',
     textAlign: "center",
     fontFamily: 'Inter_500Medium'
   },
 
   contentTitle: {
-    width: "60%",
+    width: "80%",
     justifyContent: "center",
     alignItems: "center",
   },
