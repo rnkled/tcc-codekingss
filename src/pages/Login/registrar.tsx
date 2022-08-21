@@ -8,8 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
-
-const image = { uri: "https://data.whicdn.com/images/270290896/original.gif" };
+import Background from '../../components/Background';
 
 const Registrar = () => {
 
@@ -22,27 +21,21 @@ const Registrar = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [senhaConfirma, setSenhaConfirma] = useState(''); 
-  const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [mostrarSenhaConfirma, setMostrarSenhaConfirma] = useState(false);
 
   function irParaLogin() {
     navigation.navigate('login.index');
   }
 
   return (
-  <ImageBackground fadeDuration={3} source={image} resizeMode="cover" style={{flex: 1, justifyContent: "center", }} blurRadius={90} >
+  <Background>
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
       >
           <View style={styles.header}>
-            <MaterialCommunityIcons name="format-float-left" size={30} color="#8B97FF" />
             <Text style={styles.textoHeader}>Cadastro</Text>
-            <TouchableOpacity onPress={irParaLogin}>
-              <Text style={[styles.textoAzul, {fontSize: 20}]}>Login</Text>
-            </TouchableOpacity>
           </View>
-        
+          <Text style={[styles.textoAzul, {fontSize: 20}]}>Primeira vez por aqui? Crie uma conta.</Text>
           <View style={styles.form}>
             <TextInput
               label="Nome"
@@ -69,10 +62,13 @@ const Registrar = () => {
           </View>
           <View style={styles.footer}>
             <Button label={"Cadastrar"} onPress={() => {}}/>
+            <TouchableOpacity onPress={irParaLogin}>
+              <Text style={[styles.textoAzul, {fontSize: 20}]}>Voltar</Text>
+            </TouchableOpacity>
           </View>
       </ScrollView>
     </KeyboardAwareScrollView>
-  </ImageBackground>);
+  </Background>);
 }
 
 const styles = StyleSheet.create({
@@ -106,10 +102,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     width: "90%",
     textAlign: "center",
+    fontFamily: "Inter_600SemiBold"
   },
   form: {
     width: 350,
-    height: "80%",
+    height: "70%",
     alignItems: "center",
     justifyContent: "center",
   },

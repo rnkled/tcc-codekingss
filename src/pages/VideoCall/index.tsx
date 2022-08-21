@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 import AgoraUIKit from 'agora-rn-uikit';
 import { useNavigation } from '@react-navigation/native';
 import {VideoRenderMode} from 'react-native-agora';
-// import { Container } from './styles';
+
 
 const VideoCall: React.FC = () => {
   const navigation = useNavigation();

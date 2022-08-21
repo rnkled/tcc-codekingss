@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 // import { Container } from './styles';
 
-const Copyright: React.FC = () => {
+const Footer: React.FC = () => {
   return(
     <View style={styles.container}>
       <Text style={styles.label}>Powered By CodeKingss</Text>
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Copyright;
+export default Footer;

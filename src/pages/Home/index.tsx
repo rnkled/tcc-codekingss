@@ -3,16 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import Copyright from '../../components/Copyright';
+import Footer from '../../components/Footer';
 import Button from '../../components/Button';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import { useNavigation } from '@react-navigation/native';
-
-// import { Container } from './styles';
+import Background from '../../components/Background';
 
 const Home: React.FC = () => {
-  const navigation = useNavigation();
+  type Nav = {
+    navigate: (value: string) => void;
+  }
+
+  const navigation = useNavigation<Nav>();
 
   function handleNav() {
 
@@ -25,13 +27,10 @@ const Home: React.FC = () => {
 
 
   return(
-      <LinearGradient
-        colors={['#0C0150', '#000']}
-        style={styles.container}
-      >
+    <Background>
       <Header 
-        titlePage={"Bem-Vindo, Paciente!"}
-        fontSize={24}
+        titlePage={"Bem-Vindo, Paciente."}
+        fontSize={20}
         buttonLeft={{
           isIcon: true,
           icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
@@ -55,21 +54,14 @@ const Home: React.FC = () => {
         <Button label='Minhas consultas' onPress={() => {}} />
         <Button label='Buscar profissionais' onPress={() => {}}/>
       </View>
-      <View style={styles.poweredBy}>
-        <Copyright/>
+      <View style={styles.footer}>
+        <Footer/>
       </View>
-      </LinearGradient>
+    </Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flex: 1,
-    //backgroundColor: "#0C0150",
-    
-  },
-
   contentPrimary: {
     width: "100%",
     height: "40%",
@@ -86,7 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#8B97FF",
     borderRadius: 190 / 2,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: "10%",
   },
 
   contentBorderButton: {
@@ -97,7 +90,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.9,
     borderColor: "#0C0150",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   contentSecondary: {
@@ -121,7 +114,7 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
 
-  poweredBy: {
+  footer: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",

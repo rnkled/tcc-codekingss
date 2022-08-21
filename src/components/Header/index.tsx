@@ -26,7 +26,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) 
 
 
   return(
-    <View style={[styles.container, {backgroundColor: backgroundColor || "#0C0150",}]}  {...rest} >
+    <View style={styles.container} {...rest} >
       <View style={styles.contentButton}>
         {buttonLeft?.label && (
         <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
@@ -78,7 +78,8 @@ const styles = StyleSheet.create({
     // paddingBottom: 44,
     justifyContent: "space-between",
     alignItems: "center",
-
+    height: "10%",
+    marginBottom: "5%",
   },
 
   titleHeader: {

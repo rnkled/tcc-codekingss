@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -8,12 +8,16 @@ import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import Background from '../../components/Background';
+import { Ionicons } from '@expo/vector-icons';
+import AuthContext from "../../context/AuthContext";
 
 const Login = () => {
   type Nav = {
     navigate: (value: string) => void;
   }
 
+  //const {signed, setSigned} = useContext(AuthContext);
   const navigation = useNavigation<Nav>();
 
   const [email, setEmail] = useState('');
@@ -24,26 +28,29 @@ const Login = () => {
   }
 
   return (
-  <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-    <ScrollView
-      contentContainerStyle={styles.scrollViewContainer}
-    >
-      <Header titlePage={"Entrar"} />
-      <View style={styles.form}>
-        <TextInput label={"E-mail"} value={email} setValue={setEmail} />
-        <TextInput label={"Senha"} value={senha} setValue={setSenha} secure={true}/>
-        <TouchableOpacity onPress={irParaRegistrar}>
-          <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <Button label={"Entrar"} onPress={() => {}}/>
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.textoAzul}>Esqueci minha senha</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  </KeyboardAwareScrollView>);
+    <Background>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContainer}
+        >
+          <Ionicons name="person-circle-outline" size={120} color="#8B97FF" />
+          <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
+          <View style={styles.form}>
+            <TextInput label={"E-mail"} value={email} setValue={setEmail} />
+            <TextInput label={"Senha"} value={senha} setValue={setSenha} secure={true}/>
+            <TouchableOpacity onPress={irParaRegistrar}>
+              <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.footer}>
+            <Button label={"Entrar"} onPress={() => {}}/>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.textoAzul}>Esqueci minha senha</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAwareScrollView>
+    </Background>);
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +58,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     flex: 1,
-    backgroundColor: "#0C0150",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -65,13 +71,13 @@ const styles = StyleSheet.create({
     paddingTop: '8%',
   },
   textoHeader: {
-    fontSize: 38,
+    fontSize: 34,
     fontWeight: "bold",
     color: "#fff",
   },
   form: {
     width: 350,
-    height: "70%",
+    height: "50%",
     alignItems: "center",
     justifyContent: "center",
   },
