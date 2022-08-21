@@ -111,7 +111,9 @@ const styles = StyleSheet.create({
 
   titleHome: {
     color: "#FFF",
-    fontSize: 24
+    fontSize: 24,
+    fontFamily: "Inter_600SemiBold"
+
   },
 
   footer: {
