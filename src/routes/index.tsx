@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 
 const Routes = () => {
 
-    let isSignedIn = false;
+    let isSignedIn = true;
     return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {!isSignedIn ? (
@@ -21,7 +21,7 @@ const Routes = () => {
                     ) : (
                     <>
                         <Stack.Screen name="home" component={HomeStack} />
-                        {/* <Stack.Screen name="videoCall" component={VideoCall} /> */}
+                        <Stack.Screen name="videoCall" component={VideoCall} />
 
                     </>
                 )}
