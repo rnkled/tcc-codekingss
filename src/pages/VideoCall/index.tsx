@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
-import AgoraUIKit, {VideoRenderMode} from 'agora-rn-uikit';
+import AgoraUIKit, {VideoRenderMode,} from 'agora-rn-uikit';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,16 +13,34 @@ const VideoCall: React.FC = () => {
   const navigation = useNavigation();
 
   const [videoCall, setVideoCall] = useState(false);
+
+
+
   const connectionData = {
     appId: '885ca3cade8f4a3e81c7550a827300a2',
     channel: 'test',
-    
+    rtmUid: "1234",
+    rtcUid: 1234,
+    username: "Joao",
+    disableAudio: true
+
   };
+
+
+
+
   
   const rtcCallbacks = {
-    EndCall: () => setVideoCall(false),
-  
-   
+    EndCall: () => {
+      setVideoCall(false),
+      navigation.navigate("rateVideoCall")
+    },
+    // JoinChannelSuccess: (uid) => {
+      
+    //   uid.UserMuteAudio(uid);
+    //   uid.UserMuteVideo();
+    // },
+    
     
     
   };
@@ -33,6 +51,7 @@ const VideoCall: React.FC = () => {
         // iconSize: 30,
         // theme: "#0C0150",
         // borderColor: "#8B97FF"
+        
         localBtnStyles:{
           muteLocalAudio: {backgroundColor: "#8B97FF", borderWidth: 0 },
           muteLocalVideo: {backgroundColor: "#8B97FF", borderWidth: 0 },
@@ -45,7 +64,10 @@ const VideoCall: React.FC = () => {
           bottom: 0,
           paddingVertical: 10,
           height: 80,
+          
         },
+
+        
         
         UIKitContainer: {height: '94%'},
       //   minViewContainer: {
@@ -72,15 +94,18 @@ const VideoCall: React.FC = () => {
       settings={{
         mode: 2,
         role: 1, // analisar o acesso do psicologo aqui
-        activeSpeaker: false,
-        initialDualStreamMode: 1,
+        activeSpeaker: true,
+        initialDualStreamMode: 2,
         dual: true,
+       
+      
         
         
 
       }}
       connectionData={connectionData} 
       rtcCallbacks={rtcCallbacks}
+
   
     
     />
@@ -95,7 +120,7 @@ const VideoCall: React.FC = () => {
           <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo da chamada somente se sentir-se confortável.</Text>
         </View>
         <View style={styles.buttonsContent}>
-          <TouchableOpacity activeOpacity={0.8} style={styles.buttonRadio}>
+          <TouchableOpacity onPress={() => setVideoCall(!videoCall)} activeOpacity={0.8} style={styles.buttonRadio}>
             <Feather name="mic-off" size={30} color="#0C0150" />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} style={styles.buttonRadio}>
