@@ -29,7 +29,7 @@ const Home: React.FC = () => {
   return(
     <Background>
       <Header 
-        titlePage={"Bem-Vindo, Paciente."}
+        titlePage={"Bem-Vindo Mariana"}
         fontSize={20}
         buttonLeft={{
           isIcon: true,
