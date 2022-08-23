@@ -5,6 +5,7 @@ import { Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeStack from './home.drawer.routes';
 import VideoCall from '../pages/VideoCall';
+import RateCallVideo from '../pages/RateCallVideo';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,8 @@ const Routes = () => {
                     <>
                         <Stack.Screen name="home" component={HomeStack} />
                         <Stack.Screen name="videoCall" component={VideoCall} />
+                        <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
+
 
                     </>
                 )}
