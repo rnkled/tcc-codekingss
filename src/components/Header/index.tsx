@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   
   contentButton: {
     width: "auto",
+    height: 150,
     
   },
 
