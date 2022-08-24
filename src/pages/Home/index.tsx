@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +17,7 @@ const Home: React.FC = () => {
   const navigation = useNavigation<Nav>();
 
   function handleNav() {
+    Alert.alert("Alerta")
 
   }
 
@@ -34,12 +35,12 @@ const Home: React.FC = () => {
         buttonLeft={{
           isIcon: true,
           icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
-          onPress: () => handleNav,
+          onPress: handleNav,
         }} 
         buttonRight={{
           isIcon: true,
           icon: () =><MaterialIcons name="logout" size={30} color="#8B97FF" />,
-          onPress: () => handleNav,
+          onPress: handleNav,
         }}
       />
       <View style={styles.contentPrimary}>
