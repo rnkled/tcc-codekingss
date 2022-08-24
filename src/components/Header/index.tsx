@@ -6,22 +6,23 @@ import { StatusBar, StyleSheet, ViewProps, Text, TouchableOpacity, View } from '
 type Props = ViewProps & {
   buttonLeft?: { 
     label?: string, 
-    onPress: () => {},
+    onPress: Function,
     isIcon: boolean,
     icon: Function,
   },
   buttonRight?: {
     label?: string, 
-    onPress: () => {},
+    onPress: Function,
     isIcon: boolean,
     icon: Function,
   },
   titlePage?: string,
   fontSize?: number,
+  color?:string,
 }
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 12 : 64; 
-const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) => {
+const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: Props) => {
 
 
 
@@ -29,14 +30,14 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) 
     <View style={styles.container} {...rest} >
       <View style={styles.contentButton}>
         {buttonLeft?.label && (
-        <TouchableOpacity onPress={buttonLeft?.onPress} style={styles.buttonComponent}>
+        <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={styles.buttonComponent}>
           <Text style={[styles.labelButton, {textAlign: "left"}]}>
             {buttonLeft.label}
           </Text>
         </TouchableOpacity>
         )}
         {buttonLeft?.isIcon && (
-          <TouchableOpacity onPress={buttonLeft?.onPress} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
+          <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
           <Text style={[styles.labelButton, {textAlign: "left"}]}>
             {buttonLeft.icon()}
           </Text>
@@ -44,11 +45,11 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) 
         )}
       </View>
       <View style={styles.contentTitle}>
-        <Text style={[styles.titleHeader, {fontSize: fontSize ? fontSize : 16}]}>{titlePage}</Text>
+        <Text style={[styles.titleHeader, {fontSize: fontSize ? fontSize : 16, color: color ? color : "#FFF"}]}>{titlePage}</Text>
       </View>
       <View style={styles.contentButton}>
         {buttonRight?.label && (
-        <TouchableOpacity onPress={buttonRight.onPress} style={styles.buttonComponent}>
+        <TouchableOpacity onPress={() => buttonRight?.onPress()} style={styles.buttonComponent}>
           <Text style={[styles.labelButton, {textAlign: "right"}]}>
             {buttonRight.label}
           </Text>
@@ -57,7 +58,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, ...rest}: Props) 
 
         {buttonRight?.isIcon && (
     
-          <TouchableOpacity onPress={buttonLeft?.onPress} style={[styles.buttonComponent, {alignItems: "flex-end",}]}>
+          <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={[styles.buttonComponent, {alignItems: "flex-end",}]}>
           <Text style={[styles.labelButton, {textAlign: "left"}]}>
             {buttonRight.icon()}
           </Text>
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
 
   titleHeader: {
     fontFamily: 'Inter_600SemiBold',
-    color: '#FFF',
     width: "100%",
     textAlign: "center",
   },
