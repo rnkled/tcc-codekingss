@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useContext} from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import Button from '../../components/Button';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
+import AuthContext from "../../context/AuthContext";
 
 const Home: React.FC = () => {
   type Nav = {
@@ -16,6 +17,8 @@ const Home: React.FC = () => {
 
   const navigation = useNavigation<Nav>();
 
+  const {signOut} =  useContext(AuthContext);
+
   function handleNav() {
 
   }
@@ -23,6 +26,26 @@ const Home: React.FC = () => {
   function handleNewVideoCall(){
     navigation.navigate("videoCall");
     
+  }
+
+  function handleLogOut() {
+    console.log('Rodando')
+    Alert.alert(
+      "Sair",
+      "Tem certeza que deseja sair de sua conta?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => {}
+        },
+        {
+          text: "Sim",
+          onPress: () => {
+            signOut();
+          }
+        }
+      ],
+    );
   }
 
 
@@ -39,7 +62,7 @@ const Home: React.FC = () => {
         buttonRight={{
           isIcon: true,
           icon: () =><MaterialIcons name="logout" size={30} color="#8B97FF" />,
-          onPress: () => handleNav,
+          onPress: () => handleLogOut,
         }}
       />
       <View style={styles.contentPrimary}>

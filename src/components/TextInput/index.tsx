@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import {
   TextField,
   FilledTextField,
   OutlinedTextField,
 } from 'rn-material-ui-textfield';
-import { FontAwesome } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-// import { Container } from './styles';
+import { Entypo } from '@expo/vector-icons';
 
 type Props = {
   value: string;
@@ -18,7 +15,7 @@ type Props = {
 }
 
 const TextInput = ({setValue, value, label, secure=false, ...rest}: Props) => {
-  const [showingPassword, setShowingPassword] = useState(false);
+  const [showingPassword, setShowingPassword] = useState(secure);
 
   return(
     <View style={styles.container}>
@@ -36,12 +33,19 @@ const TextInput = ({setValue, value, label, secure=false, ...rest}: Props) => {
         labelOffset={{y0: -10, y1: -8}}
         contentInset={{top: 8, bottom: 0}}
         fontSize={18}
-        secureTextEntry={secure}
-        renderRightAccessory={() => (<TouchableOpacity style={{marginTop: -5}} onPress={() => {setShowingPassword(!showingPassword)}}>{secure ? showingPassword? <FontAwesome name="eye-slash" size={24} color="black" /> : <FontAwesome name="eye" size={24} color="#0C015088" /> : null}</TouchableOpacity>)}
+        secureTextEntry={showingPassword}
+        renderRightAccessory={() => ( secure ? 
+          <TouchableOpacity
+            style={{top: -10}}
+            onPress={() => {setShowingPassword(!showingPassword)}}>
+              {showingPassword ? 
+              <Entypo name="eye" size={24} color="#0C015088" /> : 
+              <Entypo name="eye-with-line" size={24} color="#0C015088" />}
+          </TouchableOpacity> : null)}
+        editable={true}
         {...rest}
-        
-        />
-      </View>
+      />
+    </View>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 //import { TextInput } from 'react-native-material-textinput';
@@ -16,15 +16,32 @@ const Login = () => {
   type Nav = {
     navigate: (value: string) => void;
   }
+  
 
-  //const {signed, setSigned} = useContext(AuthContext);
+  const {signed, signIn} =  useContext(AuthContext);
   const navigation = useNavigation<Nav>();
 
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
 
   function irParaRegistrar() {
     navigation.navigate('login.create');
+  }
+
+  async function handleLogin() {
+    if (!email || email == '') {
+      Alert.alert('Erro', 'Preencha o campo de e-mail');
+      return;
+    }
+
+    if (!password || password == '') {
+      Alert.alert('Erro', 'Preencha o campo de senha');
+      return;
+    }
+    setLoading(true);
+    let result = await signIn(email, password);
+    setLoading(false);
   }
 
   return (
@@ -37,13 +54,13 @@ const Login = () => {
           <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
           <View style={styles.form}>
             <TextInput label={"E-mail"} value={email} setValue={setEmail} />
-            <TextInput label={"Senha"} value={senha} setValue={setSenha} secure={true}/>
+            <TextInput label={"Senha"} value={password} setValue={setPassword} secure={true}/>
             <TouchableOpacity onPress={irParaRegistrar}>
               <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
-            <Button label={"Entrar"} onPress={() => {}}/>
+            <Button label={"Entrar"} onPress={handleLogin}/>
             <TouchableOpacity onPress={() => {}}>
               <Text style={styles.textoAzul}>Esqueci minha senha</Text>
             </TouchableOpacity>
@@ -57,14 +74,12 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   scrollViewContainer: {
     width: "100%",
     height: "100%",
-    flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
     paddingBottom: '8%',
