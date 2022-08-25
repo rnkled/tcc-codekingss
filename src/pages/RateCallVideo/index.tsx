@@ -1,15 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import Background from '../../components/Background';
 import Button from '../../components/Button';
+import { RouteStackParamList } from '../../routes';
 
 // import { Container } from './styles';
 
+type professionalScreenProps = NativeStackNavigationProp<RouteStackParamList, 'professionalProfile'>
+
 const RateCallVideo: React.FC = () => {
 
-  const navigation = useNavigation();
+  
+  const navigation = useNavigation<professionalScreenProps>();
 
   const [countRate, setCountRate] = useState(0);
   const [isDisableRate, setIsDisableRate] = useState(false);
@@ -28,11 +33,13 @@ const RateCallVideo: React.FC = () => {
 
   
   function goToHome(){
-    navigation.navigate("home.index");
+    navigation.navigate('home');
   }
 
   function goToProfessionalProfile(){
-    navigation.navigate("ProfessionalProfile")
+
+    // PASSAR POR PARAMETRO O ID PROFISSIONAL
+    navigation.navigate("professionalProfile");
   }
 
 
