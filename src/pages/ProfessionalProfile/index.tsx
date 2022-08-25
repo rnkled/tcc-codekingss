@@ -12,7 +12,21 @@ import { PropsCardComment } from '../../components/CardComment';
 
 const ProfessionalProfile: React.FC = () => {
   const navigation = useNavigation();
-  const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({} as DataProfileProfessional);
+  
+  const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
+    address: "Av. do Café, 2998, Vila Tibério, 14050-220",
+    city: "Ribeirão Preto",
+    clinicName: "Clínica Pense bem",
+    college: "Universidade Paulista",
+    course: "Neuropsicologia",
+    skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
+    when: "10/12/2021",
+    name: "Victoria Robertson",
+    legend: "Seja você a maior inspiração do mundo!",
+    rate: 4,
+    urlImage: ImageProfissional
+  } as DataProfileProfessional);
+
   const [dataComments, setDataComments] = useState<PropsCardComment[]>([
     {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
     {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
@@ -27,7 +41,7 @@ const ProfessionalProfile: React.FC = () => {
       <Header buttonLeft={{label: "Voltar", onPress: goToHome}} titlePage='Profissional' color='#0C0150' fontSize={30} />
       <View style={styles.contentPrimary}>
         <View style={styles.contentPhoto}>
-          <Image style={styles.imageStyled} source={ImageProfissional}/>
+          <Image style={styles.imageStyled} source={dataProfessional.urlImage && dataProfessional.urlImage }/>
         </View>  
       </View>
       <View style={styles.contentSecondary}>
@@ -37,16 +51,16 @@ const ProfessionalProfile: React.FC = () => {
             showRating={false}
             count={5}
             starContainerStyle={styles.rateStyled}
-            defaultRating={4}
+            defaultRating={dataProfessional.rate}
             isDisabled={true}
             selectedColor={"#FFB84E"}
             size={24}
           />
         </View>
         <View style={styles.contentMotivational}>
-          <Text style={styles.labelProfessionalName}>Victoria Robertson</Text>
+          <Text style={styles.labelProfessionalName}>{dataProfessional.name}</Text>
           <Text style={styles.motivationalDescription}>
-            Seja você a maior inspiração do mundo!
+            {dataProfessional.legend}
           </Text>
         </View>
         <View style={styles.contentDescription}>
