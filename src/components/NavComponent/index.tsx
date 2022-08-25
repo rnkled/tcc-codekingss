@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Tab, Text as TextTab, TabView } from '@rneui/themed';
-import CardComment from '../CardComment';
+import CardComment, { PropsCardComment } from '../CardComment';
 
 // import { Container } from './styles';
 
-type Props = {
-  data?: {
-    informationPersonal: {
+export type DataProfileProfessional = {
+  college: string,
+  course: string,
+  when: string,
+  name: string,
+  address: string,
+  city: string,
+  skills: string,
+}
 
-    },
-    evaluations: []
-  }
+type Props = {
+  dataProfessional: DataProfileProfessional,
+  dataComments: PropsCardComment[],
 }
 
 
-const NavComponent = ({data} : Props) => {
+const NavComponent = ({dataComments, dataProfessional}: Props) => {
   const [index, setIndex] = useState(0);
   return(
     <>
@@ -29,24 +35,27 @@ const NavComponent = ({data} : Props) => {
       <Tab.Item
         title="Avaliações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 0 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_400Regular"  }}
+        titleStyle={{ fontSize: 18, color: `${index === 0 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium"  }}
         containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? "#0C0150" : "#EEE"}`}]}
         
         /> 
       <Tab.Item
         title="Informações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 1 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_400Regular" }}
+        titleStyle={{ fontSize: 18, color: `${index === 1 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium" }}
         containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? "#0C0150" : "#EEE"}`}]}   
         />
       </Tab>
 
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={styles.contentDescription}>
-          <>
-            <CardComment />
-            <CardComment />
-          </>
+          <FlatList
+            data={dataComments}
+            renderItem={({item}) => (
+                <CardComment data={item}/>
+              )
+            }          
+          />
           
         </TabView.Item>
         <TabView.Item style={styles.contentDescription}>
