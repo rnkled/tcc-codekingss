@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Alert, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, ImageSourcePropType, Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Tab, Text as TextTab, TabView } from '@rneui/themed';
 import CardComment, { PropsCardComment } from '../CardComment';
+import { Feather } from '@expo/vector-icons';
 
 // import { Container } from './styles';
 
@@ -9,10 +10,14 @@ export type DataProfileProfessional = {
   college: string,
   course: string,
   when: string,
-  name: string,
   address: string,
   city: string,
   skills: string,
+  clinicName: string,
+  name: string,
+  legend: string,
+  rate: number,
+  urlImage: ImageSourcePropType;
 }
 
 type Props = {
@@ -23,6 +28,13 @@ type Props = {
 
 const NavComponent = ({dataComments, dataProfessional}: Props) => {
   const [index, setIndex] = useState(0);
+
+  async function openGps(){
+  
+  await Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${dataProfessional.address}`);
+}
+
+
   return(
     <>
     <Tab 
@@ -59,7 +71,28 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
           
         </TabView.Item>
         <TabView.Item style={styles.contentDescription}>
-          
+          <ScrollView style={styles.containerInformationPersonal}>
+            <Text style={styles.labelTitleInformation}>Formação Acadêmica</Text>
+            <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
+              Formou-se na {dataProfessional.college} no curso de {dataProfessional.course} em {dataProfessional.when}.
+            </Text>
+            
+            <Text style={styles.labelTitleInformation}>Competências e responsabilidades</Text>
+            <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
+              {dataProfessional.skills}
+            </Text>
+
+            <Text style={styles.labelTitleInformation}>Atendimento presencial</Text>
+            <Text style={styles.descriptionInformation}>Consultório {dataProfessional.clinicName}</Text>
+            <Text style={styles.descriptionInformation}>{dataProfessional.address}</Text>
+            
+            <View style={styles.contentRowLocale}>
+              <Text style={[styles.descriptionInformation, {marginRight: 10}]}>{dataProfessional.city}</Text>
+              <TouchableOpacity onPress={openGps}>
+                <Feather name="map-pin" size={24} color="#8B97FF" />
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </TabView.Item>
     </TabView>
      </>
@@ -89,6 +122,31 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     padding: 10,
+  },
+
+  containerInformationPersonal: {
+    width: '100%',
+    paddingHorizontal: 4,
+    height: "auto",
+  },
+
+  labelTitleInformation: {
+    fontSize: 20,
+    fontFamily: "Inter_500Medium",
+    color: "#FFF",
+  },
+
+  descriptionInformation: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#FFF",
+  },
+
+  contentRowLocale: {
+    width: "auto",
+    flexDirection: "row",
+    height: "auto",
+    alignItems: "center"
   }
 
 
