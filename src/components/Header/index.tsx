@@ -7,14 +7,14 @@ type Props = ViewProps & {
   buttonLeft?: { 
     label?: string, 
     onPress: Function,
-    isIcon: boolean,
-    icon: Function,
+    isIcon?: boolean,
+    icon?: Function,
   },
   buttonRight?: {
     label?: string, 
     onPress: Function,
-    isIcon: boolean,
-    icon: Function,
+    isIcon?: boolean,
+    icon?: Function,
   },
   titlePage?: string,
   fontSize?: number,
@@ -38,7 +38,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: 
         )}
         {buttonLeft?.isIcon && (
           <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
-          <Text style={[styles.labelButton, {textAlign: "left"}]}>
+          <Text style={[styles.labelButton, {textAlign: "left", color: color ? color : '#8B97FF',}]}>
             {buttonLeft.icon()}
           </Text>
         </TouchableOpacity>
@@ -50,7 +50,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: 
       <View style={styles.contentButton}>
         {buttonRight?.label && (
         <TouchableOpacity onPress={() => buttonRight?.onPress()} style={styles.buttonComponent}>
-          <Text style={[styles.labelButton, {textAlign: "right"}]}>
+          <Text style={[styles.labelButton, {textAlign: "right", color: color ? color : '#8B97FF', }]}>
             {buttonRight.label}
           </Text>
         </TouchableOpacity>
@@ -90,19 +90,18 @@ const styles = StyleSheet.create({
   },
 
   labelButton: {
-    color: '#8B97FF',
     textAlign: "center",
     fontFamily: 'Inter_500Medium'
   },
 
   contentTitle: {
-    width: "80%",
+    width: "76%",
     justifyContent: "center",
     alignItems: "center",
   },
   
   contentButton: {
-    width: "auto",
+    width: "12%",
     height: 150,
     
   },
