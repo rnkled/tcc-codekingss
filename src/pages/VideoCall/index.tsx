@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
-import AgoraUIKit, {VideoRenderMode,} from 'agora-rn-uikit';
+import AgoraUIKit from 'agora-rn-uikit';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,7 +20,7 @@ const VideoCall: React.FC = () => {
 
   useEffect(() => {
     return () => {
-
+      setVideoCall(false)
     }
   }, [])
 
@@ -41,7 +41,7 @@ const VideoCall: React.FC = () => {
   
   const rtcCallbacks = {
     EndCall: () => {
-      setVideoCall(false),
+      // setVideoCall(false),
       // PASSAR O ID DO PROFISSIONAL NA ROTA
       navigation.navigate("rateVideoCall")
     },
@@ -58,10 +58,6 @@ const VideoCall: React.FC = () => {
 
   return videoCall ? (
     <AgoraUIKit styleProps={{
-        // iconSize: 30,
-        // theme: "#0C0150",
-        // borderColor: "#8B97FF"
-        
         localBtnStyles:{
           muteLocalAudio: {backgroundColor: "#8B97FF", borderWidth: 0 },
           muteLocalVideo: {backgroundColor: "#8B97FF", borderWidth: 0 },
@@ -75,31 +71,10 @@ const VideoCall: React.FC = () => {
           paddingVertical: 10,
           height: 80,
           
+          
         },
 
-        
-        
-        UIKitContainer: {height: '94%'},
-      //   minViewContainer: {
-      //   bottom: 80,
-      //   top: undefined,
-      //   backgroundColor: '#fff',
-      //   borderWidth: 4,
-      //   height: '100%',
-      // },
-  
-        iconSize: 30,
-        videoMode: {
-          max: VideoRenderMode.Hidden,
-          min: VideoRenderMode.Hidden,
-        },
-        
-        // videoPlaceholderContainer: {backgroundColor: 'red'}
-
-
-        
-    
-        
+        iconSize: 30
       }}   
       settings={{
         mode: 2,
@@ -107,9 +82,8 @@ const VideoCall: React.FC = () => {
         activeSpeaker: true,
         initialDualStreamMode: 2,
         dual: true,
-       
+        displayUsername: true,
       
-        
         
 
       }}
