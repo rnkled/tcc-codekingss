@@ -8,13 +8,14 @@ import Button from '../../components/Button';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
+
+
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Home: React.FC = () => {
-  type Nav = {
-    navigate: (value: string) => void;
-  }
-
-  const navigation = useNavigation<Nav>();
+  const navigation = useNavigation<propsScreens>();
 
   function handleNav() {
     Alert.alert("Alerta")
