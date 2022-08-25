@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import ImageProfissional from "../../assets/th.jpg"
 import { AirbnbRating } from 'react-native-ratings';
-import NavComponent from '../../components/NavComponent';
+import NavComponent, { DataProfileProfessional } from '../../components/NavComponent';
+import Button from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+import { PropsCardComment } from '../../components/CardComment';
 
 // import { Container } from './styles';
 
 const ProfessionalProfile: React.FC = () => {
+  const navigation = useNavigation();
+  const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({} as DataProfileProfessional);
+  const [dataComments, setDataComments] = useState<PropsCardComment[]>([
+    {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
+    {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
+    {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
+  ])
+  function goToHome(){
+    navigation.navigate("home.index")
+  }
 
   return(
     <View style={styles.container}>
-      <Header titlePage='Profissional' color='#0C0150' fontSize={30} />
+      <Header buttonLeft={{label: "Voltar", onPress: goToHome}} titlePage='Profissional' color='#0C0150' fontSize={30} />
       <View style={styles.contentPrimary}>
         <View style={styles.contentPhoto}>
           <Image style={styles.imageStyled} source={ImageProfissional}/>
@@ -37,8 +50,9 @@ const ProfessionalProfile: React.FC = () => {
           </Text>
         </View>
         <View style={styles.contentDescription}>
-          <NavComponent />
+          <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
         </View>
+        <Button onPress={() => {}} label='Entrar em contato'/>
       </View>
     </View>
   );
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 5,
   },
 
   rateStyled: {
@@ -107,7 +121,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
     justifyContent: "center",
-    padding: 5,
+    paddingHorizontal: 5,
   },
 
   labelProfessionalName: {
@@ -134,7 +148,15 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     backgroundColor: "red"
-  }
+  },
+
+  labelButton: {
+    fontSize: 16,
+    color: "#8B97FF",
+    fontFamily: "Inter_600SemiBold",
+    marginTop: 20,
+    textAlign: "center"
+  },
 })
 
 export default ProfessionalProfile;
