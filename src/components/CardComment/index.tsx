@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
-import imagePacient from "../../assets/th.jpg";
+
 // import { Container } from './styles';
 
 export type PropsCardComment = {
