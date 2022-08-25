@@ -7,12 +7,17 @@ import NavComponent, { DataProfileProfessional } from '../../components/NavCompo
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { PropsCardComment } from '../../components/CardComment';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
 
 // import { Container } from './styles';
 
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+
 const ProfessionalProfile: React.FC = () => {
-  const navigation = useNavigation();
-  
+
+  const navigation = useNavigation<propsScreens>();
+
   const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
     address: "Av. do Café, 2998, Vila Tibério, 14050-220",
     city: "Ribeirão Preto",
@@ -32,8 +37,13 @@ const ProfessionalProfile: React.FC = () => {
     {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
     {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
   ])
+
   function goToHome(){
-    navigation.navigate("home.index")
+    navigation.navigate("home")
+  }
+
+  function goToChat(){
+    // navigation.navigate("chat")
   }
 
   return(
@@ -66,7 +76,7 @@ const ProfessionalProfile: React.FC = () => {
         <View style={styles.contentDescription}>
           <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
         </View>
-        <Button onPress={() => {}} label='Entrar em contato'/>
+        <Button onPress={goToChat} label='Entrar em contato'/>
       </View>
     </View>
   );
