@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
     height: "30%",
     
   },
