@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import Background from '../../components/Background';
@@ -11,14 +11,30 @@ const RateCallVideo: React.FC = () => {
 
   const navigation = useNavigation();
 
+  const [countRate, setCountRate] = useState(0);
+  const [isDisableRate, setIsDisableRate] = useState(false);
+
+  useEffect(() => {
+    console.log({countRate});
+    
+  }, [countRate])
+
+  function handleRateFinish(value){
+    setCountRate(value);
+    setIsDisableRate(true);
+
+
+  }
+
+  
   function goToHome(){
     navigation.navigate("home.index");
   }
 
   function goToProfessionalProfile(){
     navigation.navigate("ProfessionalProfile")
-
   }
+
 
   return(
     <View style={styles.container}>
@@ -28,9 +44,11 @@ const RateCallVideo: React.FC = () => {
             showRating={false}
             count={5}
             starContainerStyle={styles.rateStyled}
-            defaultRating={5}
+            isDisabled={isDisableRate}
+            defaultRating={countRate}
             selectedColor={"#FFB84E"}
             size={24}
+            onFinishRating={value => handleRateFinish(value)}
           />
         </View>
         <View style={styles.messageContent}>
