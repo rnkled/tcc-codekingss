@@ -3,27 +3,29 @@ import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native
 import imagePacient from "../../assets/th.jpg";
 // import { Container } from './styles';
 
-// type Props = {
-//   dataComment: {
-//     pacientName: string;
-//     sourceImg: ImageSourcePropType;
-//     description: string;
-//     timesTamp: string;
-//   }
-// }
+export type PropsCardComment = {
+  sourceImg?: ImageSourcePropType;
+  pacientName: string,
+  published_at: string,
+  comment: string,
+}
 
-const CardComment = ({ dataComment }: Props) => {
+type Props = {
+  data: PropsCardComment
+}
+
+const CardComment = ({ data }: Props) => {
   return(
     <View style={styles.container}>
       <View style={styles.contentImage}>
-        <Image style={styles.imageStyle} source={imagePacient} />
+        <Image style={styles.imageStyle} source={data.sourceImg && data.sourceImg} />
       </View>
       <View style={styles.contentDescription}>
         <View style={styles.contentInformationComment}>
-          <Text style={styles.labelName}>Maria</Text>
-          <Text style={styles.labelTimer}>8m atrás</Text>
+          <Text style={styles.labelName}>{data.pacientName}</Text>
+          <Text style={styles.labelTimer}>{data.published_at}</Text>
         </View>
-        <Text style={styles.labelComment}>Amei sua consulta!</Text>
+        <Text style={styles.labelComment}>{data.comment}</Text>
       </View>
     </View>
   );
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
   labelComment: {
     fontSize: 16,
     color: "#FFF",
-    lineHeight: 30,
+    marginTop: 2,
     fontFamily: "Inter_400Regular"
   },
 
