@@ -9,26 +9,6 @@ import NavComponent from '../../components/NavComponent';
 
 const ProfessionalProfile: React.FC = () => {
 
-  const [isButtonLeftPressed, setIsButtonLeftPressed] = useState(true);
-  const [isButtonRightPressed, setIsButtonRightPressed] = useState(false);
-
-
-  function handlePressLeftButton(){
-    if(isButtonRightPressed){
-      setIsButtonLeftPressed(true);
-      setIsButtonRightPressed(false);
-    }
-  }
-
-  function handlePressRightButton(){
-    if(isButtonLeftPressed){
-      setIsButtonRightPressed(true);
-      setIsButtonLeftPressed(false);
-    }
-
-  }
-
-
   return(
     <View style={styles.container}>
       <Header titlePage='Profissional' color='#0C0150' fontSize={30} />
@@ -57,20 +37,7 @@ const ProfessionalProfile: React.FC = () => {
           </Text>
         </View>
         <View style={styles.contentDescription}>
-          <NavComponent 
-            buttonLeftPressed={isButtonLeftPressed} 
-            onPressButtonLeft={() => handlePressLeftButton()} 
-            buttonRightPressed={isButtonRightPressed}
-            onPressButtonRight={() => handlePressRightButton()}
-          />
-          {isButtonLeftPressed && (
-            <View style={styles.contentEvaluation}>
-
-            </View>
-          )}
-          {/* {isButtonRightPressed && ()} */}
-
-
+          <NavComponent />
         </View>
       </View>
     </View>
