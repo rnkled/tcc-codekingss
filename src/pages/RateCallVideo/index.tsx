@@ -62,8 +62,8 @@ const RateCallVideo: React.FC = () => {
           <Text style={styles.titleMessage}>Avalie este atendimento</Text>
 
           <Text style={styles.message}>
-            Sua avaliacao é importante para o 
-            nosso servico pois ela nos permite mantermos a 
+            Sua avaliação é importante para o 
+            nosso serviço pois ela nos permite mantermos a 
             qualidade sempre em primeiro lugar!
           </Text>
 
