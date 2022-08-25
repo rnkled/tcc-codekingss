@@ -7,13 +7,22 @@ import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
 
+type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
 const VideoCall: React.FC = () => {
-  const navigation = useNavigation();
 
+  const navigation = useNavigation<rateScreenProps>();
   const [videoCall, setVideoCall] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
 
+  useEffect(() => {
+    return () => {
+
+    }
+  }, [])
 
 
   const connectionData = {
@@ -33,6 +42,7 @@ const VideoCall: React.FC = () => {
   const rtcCallbacks = {
     EndCall: () => {
       setVideoCall(false),
+      // PASSAR O ID DO PROFISSIONAL NA ROTA
       navigation.navigate("rateVideoCall")
     },
     // JoinChannelSuccess: (uid) => {
