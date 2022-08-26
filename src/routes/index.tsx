@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator<RouteStackParamList>();
 
 const Routes = () => {
 
-    let isSignedIn = false;
+    let isSignedIn = true;
     return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {!isSignedIn ? (
