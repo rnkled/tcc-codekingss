@@ -55,7 +55,7 @@ const Chat: React.FC = () => {
 
   return(
     <Background style={styles.container}>
-        <Header buttonLeft={{label: "Voltar", onPress: goBack}} buttonRight={{label: "Opções", onPress: goBack}} titlePage="Victoria" fontSize={24}/>
+        <Header buttonLeft={{label: "Voltar", onPress: goBack,}} buttonRight={{label: "Opções", onPress: goBack}} titlePage="Victoria" fontSize={24}/>
         <View style={styles.contentChatMessages}>
         <FlatList
           data={messages}
