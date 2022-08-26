@@ -12,7 +12,7 @@ import Chat from '../pages/Chat';
 export type RouteStackParamList = {
     login: undefined,
     home: undefined;
-    videoCall: {test: string,};
+    videoCall: undefined;
     rateVideoCall: {
         id_professional: string,
     },
