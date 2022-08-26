@@ -7,6 +7,7 @@ import HomeStack from './home.drawer.routes';
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import ProfessionalProfile from '../pages/ProfessionalProfile';
+import Chat from '../pages/Chat';
 
 export type RouteStackParamList = {
     login: undefined,
@@ -17,7 +18,8 @@ export type RouteStackParamList = {
     },
     professionalProfile: {
         id_professional: string;
-    }
+    },
+    chat: undefined,
 
 }
 
@@ -25,7 +27,7 @@ const Stack = createNativeStackNavigator<RouteStackParamList>();
 
 const Routes = () => {
 
-    let isSignedIn = true;
+    let isSignedIn = false;
     return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {!isSignedIn ? (
@@ -38,6 +40,8 @@ const Routes = () => {
                         <Stack.Screen name="videoCall" component={VideoCall} />
                         <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                         <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
+                        <Stack.Screen name="chat" component={Chat} />
+
 
                     </>
                 )}
