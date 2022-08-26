@@ -43,7 +43,7 @@ const ProfessionalProfile: React.FC = () => {
   }
 
   function goToChat(){
-    // navigation.navigate("chat")
+    navigation.navigate("chat")
   }
 
   return(
