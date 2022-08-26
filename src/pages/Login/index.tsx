@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     width: "100%",
     height: "100%",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    // justifyContent: "flex-start",
+    // alignItems: "center",
     paddingBottom: '8%',
     paddingTop: '8%',
   },

@@ -38,6 +38,7 @@ const ProfessionalProfile: React.FC = () => {
     {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
     {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
     {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
+  
   ])
 
   function goToHome(){

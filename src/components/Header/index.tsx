@@ -7,14 +7,14 @@ type Props = ViewProps & {
   buttonLeft?: { 
     label?: string, 
     onPress: Function,
-    isIcon: boolean,
+    isIcon?: boolean,
     icon?: Function,
     fontSize?: number,
   },
   buttonRight?: {
     label?: string, 
     onPress: Function,
-    isIcon: boolean,
+    isIcon?: boolean,
     icon?: Function,
     fontSize?: number,
   },
