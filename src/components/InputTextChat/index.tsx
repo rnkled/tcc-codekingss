@@ -5,13 +5,18 @@ import { AntDesign } from '@expo/vector-icons';
 
 // import { Container } from './styles';
 
-const InputTextChat: React.FC = () => {
+type Props = {
+  text:  string;
+  onChangeText: Function;
+  onPressButton: Function;
+}
+
+const InputTextChat = ({onChangeText, text, onPressButton}: Props) => {
   return(
     <View style={styles.container}>
-      {/* <View> */}
-        <TextInput placeholderTextColor={"#828282"} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
-      {/* </View> */}
-       <TouchableOpacity style={styles.buttonInput}>
+        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={"#828282"} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
+     
+       <TouchableOpacity activeOpacity={0.8} onPress={() => onPressButton()} style={styles.buttonInput}>
         <View>
           <AntDesign name="arrowup" size={24} color="black" />
         </View>
