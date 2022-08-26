@@ -56,7 +56,7 @@ const Home: React.FC = () => {
   return(
     <Background>
       <Header 
-        titlePage={"Bem-Vindo Mariana"}
+        titlePage={"Bem-Vindo Maria"}
         fontSize={20}
         buttonLeft={{
           isIcon: true,
