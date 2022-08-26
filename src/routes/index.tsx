@@ -12,6 +12,8 @@ import Chat from '../pages/Chat';
 export type RouteStackParamList = {
     login: undefined,
     home: undefined;
+    'home.index': undefined;
+    'home.search': undefined;
     videoCall: {test: string,};
     rateVideoCall: {
         id_professional: string,
@@ -20,7 +22,6 @@ export type RouteStackParamList = {
         id_professional: string;
     },
     chat: undefined,
-    'home.search': undefined,
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();

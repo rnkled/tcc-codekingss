@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 // import { Container } from './styles';
 
 export type DataProfileProfessional = {
+  id: string;
   college: string,
   course: string,
   when: string,
@@ -47,14 +48,14 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
       <Tab.Item
         title="Avaliações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 0 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium"  }}
+        titleStyle={{ fontSize: 18, color: `${index === 0 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium", top: -2.5 }}
         containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? "#0C0150" : "#EEE"}`}]}
         
         /> 
       <Tab.Item
         title="Informações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 1 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium" }}
+        titleStyle={{ fontSize: 18, color: `${index === 1 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium", top: -2.5 }}
         containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? "#0C0150" : "#EEE"}`}]}   
         />
       </Tab>
@@ -134,12 +135,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Inter_500Medium",
     color: "#FFF",
+    marginBottom: 3,
+    fontWeight: "bold",
   },
 
   descriptionInformation: {
     fontSize: 16,
     fontFamily: "Inter_400Regular",
-    color: "#FFF",
+    color: "#ABB7FF",
   },
 
   contentRowLocale: {

@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PropsCardComment } from '../../components/CardComment';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
+import Background from '../../components/Background';
 
 // import { Container } from './styles';
 
@@ -19,6 +20,7 @@ const ProfessionalProfile: React.FC = () => {
   const navigation = useNavigation<propsScreens>();
 
   const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
+    id: "1",
     address: "Av. do Café, 2998, Vila Tibério, 14050-220",
     city: "Ribeirão Preto",
     clinicName: "Clínica Pense bem",
@@ -48,13 +50,12 @@ const ProfessionalProfile: React.FC = () => {
 
   return(
     <View style={styles.container}>
-      <Header buttonLeft={{label: "Voltar", onPress: goToHome}} titlePage='Profissional' color='#0C0150' fontSize={30} />
-      <View style={styles.contentPrimary}>
+      <Header buttonLeft={{label: "Voltar", onPress: goToHome, isIcon: false}} titlePage='Profissional' color='#0C0150' fontSize={30} />
+      <View style={styles.contentPrimary}/>
+      <Background style={styles.contentSecondary}>
         <View style={styles.contentPhoto}>
           <Image style={styles.imageStyled} source={dataProfessional.urlImage && dataProfessional.urlImage }/>
         </View>  
-      </View>
-      <View style={styles.contentSecondary}>
         <View style={styles.rateContent}>
 
           <AirbnbRating
@@ -64,7 +65,7 @@ const ProfessionalProfile: React.FC = () => {
             defaultRating={dataProfessional.rate}
             isDisabled={true}
             selectedColor={"#FFB84E"}
-            size={24}
+            size={26}
           />
         </View>
         <View style={styles.contentMotivational}>
@@ -77,7 +78,7 @@ const ProfessionalProfile: React.FC = () => {
           <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
         </View>
         <Button onPress={goToChat} label='Entrar em contato'/>
-      </View>
+      </Background>
     </View>
   );
 }
@@ -91,32 +92,35 @@ const styles = StyleSheet.create({
   
   contentPrimary: {
     width: "100%",
-    height: "20%",
+    height: 90,
     backgroundColor: "#8B97FF",
-    paddingTop: 20,
+    paddingTop: 10,
     alignItems: "center",
     justifyContent: "flex-end",
   },
 
   contentSecondary: {
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
     flex: 1,
-    backgroundColor: "#0C0150",
+    // backgroundColor: "#0C0150",
     padding: 15,
-    zIndex: -10, 
+    paddingTop: 0,
+    zIndex: 10, 
   },
 
   contentPhoto: {
     width: 180,
     height: 180,
     borderRadius: 180/2,
-    bottom: -35,
-    zIndex: 10,
+    top: -90,
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: -70,
   },
-
   imageStyled: {
     width: "100%",
     height: "100%",
@@ -124,20 +128,16 @@ const styles = StyleSheet.create({
     borderColor: "#0C0150",
     borderWidth: 4,
   },
-
- 
-
   rateContent: {
     width: "100%",
     height: "auto",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
     marginBottom: 5,
   },
 
   rateStyled: {
-    width: "50%", 
+    width: "55%", 
     justifyContent: "space-between"
   },
 
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
 
   labelProfessionalName: {
-    fontSize: 26,
+    fontSize: 24,
     fontFamily: "Inter_500Medium",
     color: "#FFF",
     textAlign: "center",
@@ -157,7 +157,8 @@ const styles = StyleSheet.create({
   },
   
   motivationalDescription: {
-    fontSize: 20,
+    marginVertical: 5,
+    fontSize: 16,
     color: "#FFF",
     textAlign: "center",
   },

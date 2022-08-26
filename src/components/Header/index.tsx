@@ -23,7 +23,7 @@ type Props = ViewProps & {
   color?:string,
 }
 
-const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 12 : 64; 
+const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 0 : 64; 
 const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: Props) => {  
 
   return(
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 44,
     justifyContent: "space-between",
     alignItems: "center",
-    height: 85,
+    height: 70,
     marginBottom: "5%",
   },
 

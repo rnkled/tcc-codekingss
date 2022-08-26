@@ -3,46 +3,79 @@ import { View, TextInput, StyleSheet, FlatList } from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
 import { AntDesign } from '@expo/vector-icons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import SearchCard from '../../components/SearchCard';
+import { DataProfileProfessional } from '../../components/NavComponent';
+import ImageProfissional from "../../assets/th.jpg"
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
+import { useNavigation } from '@react-navigation/native';
 
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Search: React.FC = () => {
+
+  const navigation = useNavigation<propsScreens>();
   
   const [searchTerm, setSearchTerm] = useState('');
-
   const data = [
     {
       id: '1',
-      name: 'John Doe',
-      rating: 4.5,
-      image: '',
-      adress: 'Rua dois, nº 01',
-    },
-    { 
+      address: "Av. do Café, 2998, Vila Tibério, 14050-220",
+      city: "Ribeirão Preto - SP",
+      clinicName: "Clínica Pense bem",
+      college: "Universidade Paulista",
+      course: "Neuropsicologia",
+      skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
+      when: "10/12/2021",
+      name: "Victoria Robertson",
+      legend: "Seja você a maior inspiração do mundo!",
+      rate: 4,
+      urlImage: ImageProfissional
+    } as DataProfileProfessional,
+    {
       id: '2',
-      name: 'Joahna Doe',
-      rating: 2.5,
-      image: '',
-      adress: 'Rua tres, nº 02',
-    },
+      address: "Av. do Café, 2998, Vila Tibério, 14050-220",
+      city: "Ribeirão Preto - SP",
+      clinicName: "Clínica Pense bem",
+      college: "Universidade Paulista",
+      course: "Neuropsicologia",
+      skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
+      when: "10/12/2021",
+      name: "Annalise Robertson",
+      legend: "Seja você a maior inspiração do mundo!",
+      rate: 4,
+      urlImage: ImageProfissional
+    } as DataProfileProfessional,
     {
       id: '3',
-      name: 'Jane Doe',
-      rating: 3.5,
-      image: '',
-      adress: 'Rua quatro, nº 04',
-    }
+      address: "Av. do Café, 2998, Vila Tibério, 14050-220",
+      city: "Ribeirão Preto - SP",
+      clinicName: "Clínica Pense bem",
+      college: "Universidade Paulista",
+      course: "Neuropsicologia",
+      skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
+      when: "10/12/2021",
+      name: "Maria Robertson",
+      legend: "Seja você a maior inspiração do mundo!",
+      rate: 4,
+      urlImage: ImageProfissional
+    } as DataProfileProfessional,
   ];
+
+  function goToHome() {
+    navigation.navigate('home.index');
+  }
   
+
   return <Background>
-    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
     <Header
       titlePage={"Buscar"}
       fontSize={22}
       color={"#8B97FF"}
       buttonLeft={{
         label: 'Voltar',
-        onPress: () => {},
+        onPress: goToHome,
         isIcon: false,
         fontSize: 18
       }}
@@ -62,12 +95,12 @@ const Search: React.FC = () => {
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({item}) => <></>}
+        renderItem={({item}) => <SearchCard professionalData={item}/>}
         style={styles.list}
       />
     </View>
 
-    </KeyboardAwareScrollView>
+    </View>
   </Background>}
 
 const styles = StyleSheet.create({
@@ -78,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input: {
-    height: "6%",
+    height: 45,
     width: "90%",
     backgroundColor: "#FFF",
     borderRadius: 20,
@@ -92,7 +125,6 @@ const styles = StyleSheet.create({
   list: {
     width: "100%",
     marginTop: 20,
-    backgroundColor: "#F00",
     flex: 1,
   },
 })

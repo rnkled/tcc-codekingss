@@ -49,22 +49,23 @@ const styles = StyleSheet.create({
   },
 
   labelName: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#FFF",
     fontFamily: "Inter_500Medium"
   },
   
   labelComment: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#FFF",
     marginTop: 2,
     fontFamily: "Inter_400Regular"
   },
 
   labelTimer: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Inter_400Regular",
     color: "#828282",
+    top: 5
   },
 
   contentDescription: {
