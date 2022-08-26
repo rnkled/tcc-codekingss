@@ -31,14 +31,14 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: 
       <View style={styles.contentButton}>
         {buttonLeft?.label && (
         <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={styles.buttonComponent}>
-          <Text style={[styles.labelButton, {textAlign: "left"}]}>
+          <Text style={[styles.labelButton, {textAlign: "left", color: color ? color : '#8B97FF'}]}>
             {buttonLeft.label}
           </Text>
         </TouchableOpacity>
         )}
         {buttonLeft?.isIcon && (
           <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
-          <Text style={[styles.labelButton, {textAlign: "left", color: color ? color : '#8B97FF',}]}>
+          <Text style={[styles.labelButton, {textAlign: "left",}]}>
             {buttonLeft.icon()}
           </Text>
         </TouchableOpacity>
@@ -95,13 +95,13 @@ const styles = StyleSheet.create({
   },
 
   contentTitle: {
-    width: "76%",
+    width: "70%",
     justifyContent: "center",
     alignItems: "center",
   },
   
   contentButton: {
-    width: "12%",
+    width: "15%",
     height: 150,
     
   },
