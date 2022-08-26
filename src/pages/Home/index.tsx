@@ -20,6 +20,7 @@ const Home: React.FC = () => {
   const {signOut} =  useContext(AuthContext);
 
   function handleNav() {
+    Alert.alert("Alerta")
 
   }
 
@@ -29,7 +30,6 @@ const Home: React.FC = () => {
   }
 
   function handleLogOut() {
-    console.log('Rodando')
     Alert.alert(
       "Sair",
       "Tem certeza que deseja sair de sua conta?",
@@ -48,6 +48,9 @@ const Home: React.FC = () => {
     );
   }
 
+  function goToSearch() {
+    // navigation.navigate("home.search");
+  }
 
   return(
     <Background>
@@ -57,12 +60,12 @@ const Home: React.FC = () => {
         buttonLeft={{
           isIcon: true,
           icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
-          onPress: () => handleNav,
+          onPress: handleNav,
         }} 
         buttonRight={{
           isIcon: true,
           icon: () =><MaterialIcons name="logout" size={30} color="#8B97FF" />,
-          onPress: () => handleLogOut,
+          onPress: handleLogOut,
         }}
       />
       <View style={styles.contentPrimary}>
@@ -75,7 +78,7 @@ const Home: React.FC = () => {
       </View>
       <View style={styles.contentSecondary}>
         <Button label='Minhas consultas' onPress={() => {}} />
-        <Button label='Buscar profissionais' onPress={() => {}}/>
+        <Button label='Buscar profissionais' onPress={goToSearch}/>
       </View>
       <View style={styles.footer}>
         <Footer/>

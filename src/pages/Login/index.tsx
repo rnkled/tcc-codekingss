@@ -18,12 +18,12 @@ const Login = () => {
   }
   
 
-  const {signed, signIn} =  useContext(AuthContext);
+  const {signIn, loading} =  useContext(AuthContext);
   const navigation = useNavigation<Nav>();
 
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loadingLogin, setLoadingLogin] = useState(false);
 
   function irParaRegistrar() {
     navigation.navigate('login.create');
@@ -39,9 +39,14 @@ const Login = () => {
       Alert.alert('Erro', 'Preencha o campo de senha');
       return;
     }
-    setLoading(true);
+    setLoadingLogin(true);
     let result = await signIn(email, password);
-    setLoading(false);
+
+    if (!result) {
+      setEmail('');
+      setPassword('');
+      setLoadingLogin(false);
+    }
   }
 
   return (
@@ -60,7 +65,7 @@ const Login = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
-            <Button label={"Entrar"} onPress={handleLogin}/>
+            <Button label={"Entrar"} onPress={handleLogin} loading={loadingLogin}/>
             <TouchableOpacity onPress={() => {}}>
               <Text style={styles.textoAzul}>Esqueci minha senha</Text>
             </TouchableOpacity>

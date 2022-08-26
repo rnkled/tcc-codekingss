@@ -11,7 +11,7 @@ const Background = ({ children, ...rest }: props) => {
   return (
     <LinearGradient
         colors={['#0C0150', '#000']}
-        style={{width: "100%", flex: 1}}
+        style={{width: "100%", flex: 1, height: "100%"}}
         >
       
       <View {...rest}>

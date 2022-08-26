@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
@@ -7,6 +8,18 @@ import Button from '../../components/Button';
 // import { Container } from './styles';
 
 const RateCallVideo: React.FC = () => {
+
+  const navigation = useNavigation();
+
+  function goToHome(){
+    navigation.navigate("home.index");
+  }
+
+  function goToProfessionalProfile(){
+    navigation.navigate("ProfessionalProfile")
+
+  }
+
   return(
     <View style={styles.container}>
       <View style={styles.contentPrimary}>
@@ -14,8 +27,9 @@ const RateCallVideo: React.FC = () => {
           <AirbnbRating
             showRating={false}
             count={5}
-            starContainerStyle={{width: "50%", justifyContent: "space-between"}}
+            starContainerStyle={styles.rateStyled}
             defaultRating={5}
+            selectedColor={"#FFB84E"}
             size={24}
           />
         </View>
@@ -30,13 +44,13 @@ const RateCallVideo: React.FC = () => {
 
         </View>
         <View style={styles.contentButtons}>
-          <Button onPress={() => {}} label='Eu amei o atendimento!'/>
+          <Button onPress={() => goToProfessionalProfile()} label='Eu amei o atendimento!'/>
           <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
             <Text style={styles.labelButton}>
               Teve problemas técnicos? Nos avise!
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => goToHome()}>
             <Text style={styles.labelButton}>
               Avaliar depois
             </Text>
@@ -106,6 +120,11 @@ const styles = StyleSheet.create({
     color: "#8B97FF",
     fontFamily: "Inter_600SemiBold",
     marginTop: 20,
+  },
+
+  rateStyled: {
+    width: "50%", 
+    justifyContent: "space-between"
   }
 
 })
