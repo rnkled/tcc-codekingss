@@ -50,13 +50,15 @@ const Login = () => {
   }
 
   return (
-    <Background>
+    <Background style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+          <View style={styles.contentTitleIconPage}>
+            <Ionicons name="person-circle-outline" size={120} color="#8B97FF" />
+            <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
+          </View>
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
         >
-          <Ionicons name="person-circle-outline" size={120} color="#8B97FF" />
-          <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
           <View style={styles.form}>
             <TextInput label={"E-mail"} value={email} setValue={setEmail} />
             <TextInput label={"Senha"} value={password} setValue={setPassword} secure={true}/>
@@ -127,6 +129,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: "5%",
   },
+
+  contentTitleIconPage: {
+    width: "100%", 
+    height: "auto", 
+    justifyContent: "center", 
+    alignItems: "center", 
+    paddingTop: 10,
+  }
 });
 
 

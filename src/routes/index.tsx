@@ -7,9 +7,23 @@ import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import AuthContext from "../context/AuthContext";
 import ProfessionalProfile from '../pages/ProfessionalProfile';
+import Chat from '../pages/Chat';
 
+export type RouteStackParamList = {
+    login: undefined,
+    home: undefined;
+    videoCall: {test: string,};
+    rateVideoCall: {
+        id_professional: string,
+    },
+    professionalProfile: {
+        id_professional: string;
+    },
+    chat: undefined,
 
-const Stack = createNativeStackNavigator();
+}
+
+const Stack = createNativeStackNavigator<RouteStackParamList>();
 
 const Routes = () => {
 
@@ -26,7 +40,9 @@ const Routes = () => {
                         <Stack.Screen name="home" component={HomeStack} />
                         <Stack.Screen name="videoCall" component={VideoCall} />
                         <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
-                        <Stack.Screen name="ProfessionalProfile" component={ProfessionalProfile} />
+                        <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
+                        <Stack.Screen name="chat" component={Chat} />
+
 
                     </>
                 )}

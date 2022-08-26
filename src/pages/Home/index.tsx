@@ -9,13 +9,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
+
+
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Home: React.FC = () => {
-  type Nav = {
-    navigate: (value: string) => void;
-  }
-
-  const navigation = useNavigation<Nav>();
+  const navigation = useNavigation<propsScreens>();
 
   const {signOut} =  useContext(AuthContext);
 
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
     height: "30%",
     
   },

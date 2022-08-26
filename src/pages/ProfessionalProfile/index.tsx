@@ -1,40 +1,57 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import ImageProfissional from "../../assets/th.jpg"
 import { AirbnbRating } from 'react-native-ratings';
-import NavComponent from '../../components/NavComponent';
+import NavComponent, { DataProfileProfessional } from '../../components/NavComponent';
+import Button from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+import { PropsCardComment } from '../../components/CardComment';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteStackParamList } from '../../routes';
 
 // import { Container } from './styles';
 
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+
 const ProfessionalProfile: React.FC = () => {
 
-  const [isButtonLeftPressed, setIsButtonLeftPressed] = useState(true);
-  const [isButtonRightPressed, setIsButtonRightPressed] = useState(false);
+  const navigation = useNavigation<propsScreens>();
 
+  const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
+    address: "Av. do Café, 2998, Vila Tibério, 14050-220",
+    city: "Ribeirão Preto",
+    clinicName: "Clínica Pense bem",
+    college: "Universidade Paulista",
+    course: "Neuropsicologia",
+    skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
+    when: "10/12/2021",
+    name: "Victoria Robertson",
+    legend: "Seja você a maior inspiração do mundo!",
+    rate: 4,
+    urlImage: ImageProfissional
+  } as DataProfileProfessional);
 
-  function handlePressLeftButton(){
-    if(isButtonRightPressed){
-      setIsButtonLeftPressed(true);
-      setIsButtonRightPressed(false);
-    }
+  const [dataComments, setDataComments] = useState<PropsCardComment[]>([
+    {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
+    {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
+    {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
+  ])
+
+  function goToHome(){
+    navigation.navigate("home")
   }
 
-  function handlePressRightButton(){
-    if(isButtonLeftPressed){
-      setIsButtonRightPressed(true);
-      setIsButtonLeftPressed(false);
-    }
-
+  function goToChat(){
+    navigation.navigate("chat")
   }
-
 
   return(
     <View style={styles.container}>
-      <Header titlePage='Profissional' color='#0C0150' fontSize={30} />
+      <Header buttonLeft={{label: "Voltar", onPress: goToHome}} titlePage='Profissional' color='#0C0150' fontSize={30} />
       <View style={styles.contentPrimary}>
         <View style={styles.contentPhoto}>
-          <Image style={styles.imageStyled} source={ImageProfissional}/>
+          <Image style={styles.imageStyled} source={dataProfessional.urlImage && dataProfessional.urlImage }/>
         </View>  
       </View>
       <View style={styles.contentSecondary}>
@@ -44,34 +61,22 @@ const ProfessionalProfile: React.FC = () => {
             showRating={false}
             count={5}
             starContainerStyle={styles.rateStyled}
-            defaultRating={4}
+            defaultRating={dataProfessional.rate}
             isDisabled={true}
             selectedColor={"#FFB84E"}
             size={24}
           />
         </View>
         <View style={styles.contentMotivational}>
-          <Text style={styles.labelProfessionalName}>Victoria Robertson</Text>
+          <Text style={styles.labelProfessionalName}>{dataProfessional.name}</Text>
           <Text style={styles.motivationalDescription}>
-            Seja você a maior inspiração do mundo!
+            {dataProfessional.legend}
           </Text>
         </View>
         <View style={styles.contentDescription}>
-          <NavComponent 
-            buttonLeftPressed={isButtonLeftPressed} 
-            onPressButtonLeft={() => handlePressLeftButton()} 
-            buttonRightPressed={isButtonRightPressed}
-            onPressButtonRight={() => handlePressRightButton()}
-          />
-          {isButtonLeftPressed && (
-            <View style={styles.contentEvaluation}>
-
-            </View>
-          )}
-          {/* {isButtonRightPressed && ()} */}
-
-
+          <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
         </View>
+        <Button onPress={goToChat} label='Entrar em contato'/>
       </View>
     </View>
   );
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 5,
   },
 
   rateStyled: {
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
     justifyContent: "center",
-    padding: 5,
+    paddingHorizontal: 5,
   },
 
   labelProfessionalName: {
@@ -167,7 +172,15 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     backgroundColor: "red"
-  }
+  },
+
+  labelButton: {
+    fontSize: 16,
+    color: "#8B97FF",
+    fontFamily: "Inter_600SemiBold",
+    marginTop: 20,
+    textAlign: "center"
+  },
 })
 
 export default ProfessionalProfile;

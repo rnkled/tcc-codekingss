@@ -27,7 +27,7 @@ const Registrar = () => {
   }
 
   return (
-  <Background>
+  <Background style={styles.container}>
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     // backgroundColor: "#0C0150",
-    alignItems: "center",
+    // alignItems: "center",
+    paddingHorizontal: 10,
     justifyContent: "center",
   },
   scrollViewContainer: {
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: "relative",
+    width: "100%",
     bottom: 0,
     alignItems: "center",
     marginBottom: "5%",

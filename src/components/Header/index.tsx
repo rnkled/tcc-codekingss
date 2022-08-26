@@ -31,14 +31,14 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: 
       <View style={styles.contentButton}>
         {buttonLeft?.label && (
         <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={styles.buttonComponent}>
-          <Text style={[styles.labelButton, {textAlign: "left", fontSize:buttonLeft.fontSize}]}>
+          <Text style={[styles.labelButton, {textAlign: "left", fontSize:buttonLeft.fontSize, color: color ? color : '#8B97FF'}]}>
             {buttonLeft.label}
           </Text>
         </TouchableOpacity>
         )}
         {buttonLeft?.isIcon && (
           <TouchableOpacity onPress={() => buttonLeft?.onPress()} style={[styles.buttonComponent, {alignItems: "flex-start",}]}>
-          <Text style={[styles.labelButton, {textAlign: "left"}]}>
+          <Text style={[styles.labelButton, {textAlign: "left",}]}>
             {buttonLeft.icon()}
           </Text>
         </TouchableOpacity>
@@ -50,7 +50,7 @@ const Header = ({titlePage, buttonLeft, buttonRight, fontSize, color, ...rest}: 
       <View style={styles.contentButton}>
         {buttonRight?.label && (
         <TouchableOpacity onPress={() => buttonRight?.onPress()} style={styles.buttonComponent}>
-          <Text style={[styles.labelButton, {textAlign: "right"}]}>
+          <Text style={[styles.labelButton, {textAlign: "right", color: color ? color : '#8B97FF', }]}>
             {buttonRight.label}
           </Text>
         </TouchableOpacity>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 44,
     justifyContent: "space-between",
     alignItems: "center",
-    height: "10%",
+    height: 85,
     marginBottom: "5%",
   },
 
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
   },
 
   labelButton: {
-    color: '#8B97FF',
     textAlign: "center",
     fontFamily: 'Inter_500Medium'
   },

@@ -1,24 +1,47 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import Background from '../../components/Background';
 import Button from '../../components/Button';
+import { RouteStackParamList } from '../../routes';
 
 // import { Container } from './styles';
 
+type professionalScreenProps = NativeStackNavigationProp<RouteStackParamList, 'professionalProfile'>
+
 const RateCallVideo: React.FC = () => {
 
-  const navigation = useNavigation();
+  
+  const navigation = useNavigation<professionalScreenProps>();
 
+  const [countRate, setCountRate] = useState(0);
+  const [isDisableRate, setIsDisableRate] = useState(false);
+
+  useEffect(() => {
+    console.log({countRate});
+    
+  }, [countRate])
+
+  function handleRateFinish(value){
+    setCountRate(value);
+    setIsDisableRate(true);
+
+
+  }
+
+  
   function goToHome(){
-    navigation.navigate("home.index");
+    navigation.navigate('home');
   }
 
   function goToProfessionalProfile(){
-    navigation.navigate("ProfessionalProfile")
 
+    // PASSAR POR PARAMETRO O ID PROFISSIONAL
+    navigation.navigate("professionalProfile");
   }
+
 
   return(
     <View style={styles.container}>
@@ -28,17 +51,19 @@ const RateCallVideo: React.FC = () => {
             showRating={false}
             count={5}
             starContainerStyle={styles.rateStyled}
-            defaultRating={5}
+            isDisabled={isDisableRate}
+            defaultRating={countRate}
             selectedColor={"#FFB84E"}
             size={24}
+            onFinishRating={value => handleRateFinish(value)}
           />
         </View>
         <View style={styles.messageContent}>
           <Text style={styles.titleMessage}>Avalie este atendimento</Text>
 
           <Text style={styles.message}>
-            Sua avaliacao é importante para o 
-            nosso servico pois ela nos permite mantermos a 
+            Sua avaliação é importante para o 
+            nosso serviço pois ela nos permite mantermos a 
             qualidade sempre em primeiro lugar!
           </Text>
 
