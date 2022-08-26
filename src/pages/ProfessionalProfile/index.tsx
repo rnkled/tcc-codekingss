@@ -36,6 +36,7 @@ const ProfessionalProfile: React.FC = () => {
     {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
     {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
     {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
+  
   ])
 
   function goToHome(){
@@ -48,7 +49,7 @@ const ProfessionalProfile: React.FC = () => {
 
   return(
     <View style={styles.container}>
-      <Header buttonLeft={{label: "Voltar", onPress: goToHome}} titlePage='Profissional' color='#0C0150' fontSize={30} />
+      <Header buttonLeft={{label: "Voltar", onPress: goToHome,}} titlePage='Profissional' color='#0C0150' fontSize={30} />
       <View style={styles.contentPrimary}>
         <View style={styles.contentPhoto}>
           <Image style={styles.imageStyled} source={dataProfessional.urlImage && dataProfessional.urlImage }/>
