@@ -16,6 +16,8 @@ import { RouteStackParamList } from '../../routes';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Home: React.FC = () => {
+  
+
   const navigation = useNavigation<propsScreens>();
 
   const {signOut} =  useContext(AuthContext);
@@ -50,7 +52,7 @@ const Home: React.FC = () => {
   }
 
   function goToSearch() {
-    // navigation.navigate("home.search");
+    navigation.navigate("home.search");
   }
 
   return(

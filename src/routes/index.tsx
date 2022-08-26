@@ -20,7 +20,7 @@ export type RouteStackParamList = {
         id_professional: string;
     },
     chat: undefined,
-
+    'home.search': undefined,
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
