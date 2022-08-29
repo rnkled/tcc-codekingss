@@ -1,10 +1,13 @@
 import { createContext, useState, useEffect } from "react";
+import { Alert } from "react-native";
 import * as auth from "../../services/auth";
 import AsyncStorage from  '@react-native-community/async-storage';
+import api from "../../services/api";
+import userInterface from "./userInterface";
 
 interface AuthContextData {
   signed: boolean;
-  user: object | null;
+  user: userInterface | null;
   signIn(email: String, password: String): Promise<boolean>;
   signOut(): void;
   loading: boolean;
@@ -13,7 +16,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children } : any) => {
     
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<userInterface | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ export const AuthProvider = ({ children } : any) => {
 
       if (storagedUser && storagedToken) {
         setUser(JSON.parse(storagedUser));
-        // api.defaults.headers.Authorization = `Baerer ${storagedToken}`;
+        api.defaults.headers.common['Authorization'] = `Baerer ${storagedToken}`;
       }
       setLoading(false);
     }
@@ -32,15 +35,23 @@ export const AuthProvider = ({ children } : any) => {
 
 
   async function signIn(email: string, password: string) {
-    const response = await auth.signIn();
-    if (response) {
-      setUser(response.user);
-      await AsyncStorage.setItem('@user', JSON.stringify(response.user));
-      await AsyncStorage.setItem('@token', response.token);
+    auth.signIn(email, password).then(async (response) => {
+      setUser(response.data.user as userInterface);
+      api.defaults.headers.common['Authorization'] = `Baerer ${response.data.token}`;
+      await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
+      await AsyncStorage.setItem('@token', response.data.token);
       return true;
-    } else {
+    }).catch((error) => {
+      if (error.response && error.response.data) {
+        console.log(error.response);
+        Alert.alert("Erro", error.response.data.message);
+      } else {
+        console.log(error);
+      }
+      setUser(null);
       return false;
-    }
+    });
+    return false;
   }
 
   async function signOut() {

@@ -20,7 +20,7 @@ const Home: React.FC = () => {
 
   const navigation = useNavigation<propsScreens>();
 
-  const {signOut} =  useContext(AuthContext);
+  const {signOut, user} =  useContext(AuthContext);
 
   function handleNav() {
     Alert.alert("Alerta")
@@ -58,8 +58,8 @@ const Home: React.FC = () => {
   return(
     <Background>
       <Header 
-        titlePage={"Bem-Vindo Maria"}
-        fontSize={20}
+        titlePage={"Bem-Vindo " + user.name}
+        fontSize={18}
         buttonLeft={{
           isIcon: true,
           icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,

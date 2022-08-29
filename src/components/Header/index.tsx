@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 
   labelButton: {
     textAlign: "center",
-    fontFamily: 'Inter_500Medium'
+    fontFamily: 'Inter_500Medium',
   },
 
   contentTitle: {
@@ -110,9 +110,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     justifyContent: "center",
-
-    
-    
   }
 
 })

@@ -11,6 +11,7 @@ import Button from '../../components/Button';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
 import AuthContext from "../../context/AuthContext";
+import Loading from '../../components/Loading';
 
 const Login = () => {
   type Nav = {
@@ -49,8 +50,11 @@ const Login = () => {
     }
   }
 
-  return (
-    <Background style={styles.container}>
+  return ( 
+    loading ? 
+      <Loading /> 
+    : 
+      (<Background style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
           <View style={styles.contentTitleIconPage}>
             <Ionicons name="person-circle-outline" size={120} color="#8B97FF" />
@@ -74,7 +78,7 @@ const Login = () => {
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
-    </Background>);
+    </Background>));
 }
 
 const styles = StyleSheet.create({

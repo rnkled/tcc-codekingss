@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npx expo start",
+    "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web"
@@ -21,6 +21,7 @@
     "@rneui/themed": "^0.0.0-edge.2",
     "agora-react-native-rtm": "^1.5.0",
     "agora-rn-uikit": "^4.0.0",
+    "axios": "^0.27.2",
     "expo": "~46.0.7",
     "expo-linear-gradient": "~11.4.0",
     "expo-splash-screen": "~0.16.1",
@@ -28,7 +29,7 @@
     "expo-updates": "~0.14.4",
     "react": "^18.2.0",
     "react-dom": "18.0.0",
-    "react-native": "0.69.4",
+    "react-native": "^0.69.5",
     "react-native-agora": "^3.7.1",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^2.5.0",
