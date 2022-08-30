@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import AuthContext from '../../context/AuthContext';
 
 export type ChatBoxProps = {
   user_type: "pacient" | "professional",
@@ -14,8 +15,9 @@ type Props = {
 // import { Container } from './styles';
 
 const ChatBoxMessage = ({data}: Props) => {
+  const {user} = useContext(AuthContext);
   return(
-    <View style={[styles.container, data.user_type === "pacient" ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
+    <View style={[styles.container, data.user_type === user.role ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
       <Text style={styles.textMessage}>
         {data.message}
       </Text>
