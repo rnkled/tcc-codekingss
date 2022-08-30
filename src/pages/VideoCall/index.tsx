@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
+import AuthContext from '../../context/AuthContext';
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
@@ -16,35 +17,28 @@ const VideoCall: React.FC = () => {
 
   const navigation = useNavigation<rateScreenProps>();
   const [videoCall, setVideoCall] = useState(false);
-  const [isMounted, setIsMounted] = useState(true);
+  const {user} = useContext(AuthContext);
 
-  useEffect(() => {
-    return () => {
-      setVideoCall(false)
-    }
-  }, [])
 
 
   const connectionData = {
     appId: '885ca3cade8f4a3e81c7550a827300a2',
     channel: 'test',
-    rtmUid: "1234",
-    rtcUid: 1234,
-    username: "Joao",
-    disableAudio: true
-
+    rtmToken: user._id + Date.now(),
+    rtmUid: user._id
+    
   };
 
 
 
+  async function goToNextScreen(){
+    navigation.navigate("rateVideoCall", {id_professional: "1"})
+    // setVideoCall(false);
+  }
 
   
   const rtcCallbacks = {
-    EndCall: () => {
-      // setVideoCall(false),
-      // PASSAR O ID DO PROFISSIONAL NA ROTA
-      navigation.navigate("rateVideoCall")
-    },
+    EndCall: async() => await goToNextScreen(),
     // JoinChannelSuccess: (uid) => {
       
     //   uid.UserMuteAudio(uid);
@@ -78,17 +72,11 @@ const VideoCall: React.FC = () => {
       }}   
       settings={{
         mode: 2,
-        role: 1, // analisar o acesso do psicologo aqui
-        activeSpeaker: true,
-        initialDualStreamMode: 2,
-        dual: true,
-        displayUsername: true,
-      
-        
-
+        role: 1, // analisar o acesso do psicologo aqui  
       }}
-      connectionData={connectionData} 
-      rtcCallbacks={rtcCallbacks}
+      rtcProps={connectionData} 
+      callbacks={rtcCallbacks}
+      // rtmCallbacks={{}}
 
   
     
