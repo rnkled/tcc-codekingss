@@ -28,6 +28,8 @@ const Chat: React.FC = () => {
   
   useEffect(() => {
     getMessage();
+    console.log({user});
+    
     
   }, [])
 
@@ -66,11 +68,11 @@ const Chat: React.FC = () => {
     if(message){
       const newReferenceMessage = database().ref(`/chats/${user._id}/${route.params.id_professional}/messages`).push();
       const messageObject = {
-        id_user: 4,
+        id_user: user._id,
         id: Date.now(),
         message,
         sent: new Date(Date.now()),
-        user_type: "pacient"
+        user_type: user.role
       }
       newReferenceMessage.set(messageObject).then(() => setMessage(""));
     }
@@ -84,7 +86,7 @@ const Chat: React.FC = () => {
           data={messages}
           contentContainerStyle={{width: "100%",}}
           renderItem={({item}) => (
-            <View style={{alignItems: item.user_type === "pacient" ? "flex-end" : "flex-start",}}>
+            <View style={{alignItems: item.user_type === user.role && item.id_user === user._id ? "flex-end" : "flex-start",}}>
               <ChatBoxMessage data={item} />
             </View>  
           )}
