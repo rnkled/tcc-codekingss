@@ -20,7 +20,7 @@
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
     "agora-react-native-rtm": "^1.5.0",
-    "agora-rn-uikit": "^4.0.0",
+    "agora-rn-uikit": "^3.3.0",
     "axios": "^0.27.2",
     "expo": "~46.0.7",
     "expo-linear-gradient": "~11.4.0",
