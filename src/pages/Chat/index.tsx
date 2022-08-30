@@ -28,9 +28,7 @@ const Chat: React.FC = () => {
   
   useEffect(() => {
     getMessage();
-    console.log({user});
-    
-    
+
   }, [])
 
   function goBack(){
@@ -52,14 +50,6 @@ const Chat: React.FC = () => {
         setMessages(messagesArr) 
       
 
-      //   const dataMessages = [];
-      //   dataMessages.push(snapshot.val());
-      //   let objectMessage = Object.keys(dataMessages[0]).map(key => dataMessages[0][key]);
-      //   console.log({objectMessage});
-        
-        
-      // }else{
-      //   setMessages([])
   })
   
   }
@@ -87,7 +77,7 @@ const Chat: React.FC = () => {
           contentContainerStyle={{width: "100%",}}
           renderItem={({item}) => (
             <View style={{alignItems: item.user_type === user.role && item.id_user === user._id ? "flex-end" : "flex-start",}}>
-              <ChatBoxMessage data={item} />
+              <ChatBoxMessage user_role={user.role} data={item} />
             </View>  
           )}
         />
