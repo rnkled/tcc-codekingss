@@ -10,14 +10,14 @@ export type ChatBoxProps = {
 
 type Props = {
   data: ChatBoxProps;
+  user_role: string;
 }
 
 // import { Container } from './styles';
 
-const ChatBoxMessage = ({data}: Props) => {
-  const {user} = useContext(AuthContext);
+const ChatBoxMessage = ({data, user_role}: Props) => {
   return(
-    <View style={[styles.container, data.user_type === user.role ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
+    <View style={[styles.container, data.user_type === user_role ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
       <Text style={styles.textMessage}>
         {data.message}
       </Text>
