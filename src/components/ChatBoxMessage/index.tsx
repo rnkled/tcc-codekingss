@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export type ChatBoxProps = {
-  user: "pacient" | "professional",
+  user_type: "pacient" | "professional",
   message: string;
+  id_user: string;
 }
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
 
 const ChatBoxMessage = ({data}: Props) => {
   return(
-    <View style={[styles.container, data.user === "pacient" ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
+    <View style={[styles.container, data.user_type === "pacient" ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: "#8B97FF"} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: "#EEEEEE"}]}>
       <Text style={styles.textMessage}>
         {data.message}
       </Text>
