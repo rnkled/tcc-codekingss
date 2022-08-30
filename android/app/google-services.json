@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "877384828496",
+    "firebase_url": "https://app-codekingss-default-rtdb.firebaseio.com",
+    "project_id": "app-codekingss",
+    "storage_bucket": "app-codekingss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877384828496:android:c9718e4aef6021dd343355",
+        "android_client_info": {
+          "package_name": "com.tcccodekingss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877384828496-tost9bc4nm07nul2a0adqskilobrc9r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATKLKb957I8wrn2e0znSuQsvT2DI3oRYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877384828496-tost9bc4nm07nul2a0adqskilobrc9r1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
