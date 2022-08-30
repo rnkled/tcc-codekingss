@@ -5,7 +5,7 @@ import ImageProfissional from "../../assets/th.jpg"
 import { AirbnbRating } from 'react-native-ratings';
 import NavComponent, { DataProfileProfessional } from '../../components/NavComponent';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PropsCardComment } from '../../components/CardComment';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
@@ -18,9 +18,10 @@ type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 const ProfessionalProfile: React.FC = () => {
 
   const navigation = useNavigation<propsScreens>();
+  const route = useRoute<RouteProp<RouteStackParamList, "professionalProfile">>()
 
   const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
-    id: "1",
+    id: route.params.id_professional,
     address: "Av. do Café, 2998, Vila Tibério, 14050-220",
     city: "Ribeirão Preto",
     clinicName: "Clínica Pense bem",
@@ -46,7 +47,7 @@ const ProfessionalProfile: React.FC = () => {
   }
 
   function goToChat(){
-    navigation.navigate("chat")
+    navigation.navigate("chat", {id_professional: dataProfessional.id })
   }
 
   return(
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     borderRadius: 180/2,
-    top: -90,
+    top: -80,
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
