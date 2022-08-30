@@ -2125,10 +2125,10 @@ agora-react-native-rtm@^1.5.0:
   resolved "https://registry.yarnpkg.com/agora-react-native-rtm/-/agora-react-native-rtm-1.5.0.tgz#fe650a9a61db0c94cb804180eb4c1020da092c10"
   integrity sha512-8LApJVTK21a6/JkOPwzkatrFrcvD/t4WUJNdc55BybBadrlSSE1yzz/1Ts/8tHVdzsX9Pya9pjMZ+UQBGovong==
 
-agora-rn-uikit@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/agora-rn-uikit/-/agora-rn-uikit-4.0.0.tgz#0cd7754f5bfd0ed37a28b65e080860001b619daf"
-  integrity sha512-Oo7Kt84eSez5nc2Rdb/ftmgkX6Cze2MVtkR+HdJD3ey8uepXDNr7Kk5JlWmvP0417YnV8Q/mF9Rt1YVe3fR8Yg==
+agora-rn-uikit@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/agora-rn-uikit/-/agora-rn-uikit-3.3.0.tgz#a7820ec49a36a7e88da4cf59e016ad03b4d7afd8"
+  integrity sha512-KuhTBOwRpHDYYDwSLliGnQqrCTSkAIlTLqRn0/KveLgjiTaGpi6zGUAa7yjOasorHYa/oFUt+euvk2MAoom/+Q==
 
 anser@^1.4.9:
   version "1.4.10"
