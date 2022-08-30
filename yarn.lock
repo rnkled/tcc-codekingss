@@ -6000,6 +6000,11 @@ react-native-agora@^3.7.1:
   resolved "https://registry.yarnpkg.com/react-native-agora/-/react-native-agora-3.7.1.tgz#04362c3a02186e36d0255f042a0d28a94de6fd64"
   integrity sha512-meArJ8YQoZZb4UP2qZEAGWtEJYu/LrOcD/d0sH5BIhwKWZzuLYwN6E/hzlYnd4iWDbuPvaW0dgKCN/RgsoAr3A==
 
+react-native-autoscroll-flatlist@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/react-native-autoscroll-flatlist/-/react-native-autoscroll-flatlist-1.11.1.tgz#0552db096f9c2a298ac47e9991dafce9253fe3dd"
+  integrity sha512-FPMkLzehY7YVcOaGZ4C/OAXPExhHV4m6uoPlDDR/QU7UrKA+e5Ornbq1P9V7j2kK5QH9q+KhvvG6zed0q2ZZrg==
+
 react-native-codegen@^0.69.2:
   version "0.69.2"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.69.2.tgz#e33ac3b1486de59ddae687b731ddbfcef8af0e4e"
