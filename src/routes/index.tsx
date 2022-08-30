@@ -14,14 +14,16 @@ export type RouteStackParamList = {
     home: undefined;
     'home.index': undefined;
     'home.search': undefined;
-    videoCall: {test: string,};
+    videoCall: undefined;
     rateVideoCall: {
         id_professional: string,
     },
     professionalProfile: {
         id_professional: string;
     },
-    chat: undefined,
+    chat: {
+        id_professional: string;
+    },
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
