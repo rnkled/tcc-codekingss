@@ -42,9 +42,9 @@ const RateCallVideo: React.FC = () => {
   }
 
   function goToProfessionalProfile(){
-
     //navigation.navigate("professionalProfile", {id_professional: id});
     navigation.navigate("professionalProfile", {id_professional: '630bfccfd7c33a229c57f04c'})
+
   }
 
 
