@@ -1,46 +1,64 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
-import { DataProfileProfessional } from '../../components/NavComponent';
+import userInterface from '../../interfaces/userInterface';
 import { RouteStackParamList } from '../../routes';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { LinearGradient, } from 'expo-linear-gradient';
+import Loading from '../Loading';
+import { Ionicons } from '@expo/vector-icons';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 type CardPrams = {
-    professionalData: DataProfileProfessional,
+    dataProfessional: userInterface,
 }
 
-const SearchCard = ({ professionalData } :CardPrams) => {
+const SearchCard = ({ dataProfessional } :CardPrams) => {
+
+    let [loadingImage, setLoadingImage] = useState(true);
 
     const navigation = useNavigation<propsScreens>();
 
     function goToProfessional() {
-        navigation.navigate("professionalProfile", {id_professional: professionalData.id});
+        navigation.navigate("professionalProfile", {id_professional: dataProfessional._id});
     }
 
   return ( 
     <TouchableOpacity onPress={goToProfessional}>
-        <View style={styles.container}>
+        <LinearGradient colors={['#8B97FFDD', '#8B97FF','#8B97FFDD' ]} style={styles.container}>
             <View style={styles.image}>
-                <Image style={styles.imageStyled} source={professionalData.urlImage && professionalData.urlImage }/>
+                { dataProfessional.profilePhoto ? (<>
+                    <Image 
+                        style={[styles.imageStyled, {display: (loadingImage ? 'none' : 'flex')}]} 
+                        source={{uri: dataProfessional.profilePhoto } as ImageSourcePropType} 
+                        onLoad={() => setLoadingImage(false)}
+                    /> 
+                    <ActivityIndicator
+                        color={'#0C015088'}
+                        size={30}
+                        style={{ display: (loadingImage ? 'flex' : 'none') }}
+                    /> 
+                    </>) : ( 
+                    <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+                        <Ionicons name="person-circle-outline" size={80} color="#0C0150" />
+                    </View> )} 
             </View>
             <View style={styles.content}>
-                <Text style={styles.title}>{professionalData.name}</Text>
+                <Text style={styles.title}>{dataProfessional.name}</Text>
                 <AirbnbRating
                 showRating={false}
                 count={5}
-                defaultRating={professionalData.rate}
+                defaultRating={dataProfessional.rate}
                 isDisabled={true}
                 selectedColor={"#FFB84E"}
                 size={16}
             />
-                <Text style={styles.address}>{professionalData.address}</Text>
-                <Text style={styles.address}>{professionalData.city}</Text>
+                <Text numberOfLines={1} style={styles.address}>{dataProfessional.address.street}, {dataProfessional.address.number}, {dataProfessional.address.neighborhood}, {dataProfessional.address.postalCode}</Text>
+                <Text numberOfLines={1} style={styles.address}>{dataProfessional.address.city}</Text>
             </View>
-        </View>
+        </LinearGradient>
     </TouchableOpacity>);
 }
 
@@ -51,14 +69,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: '#8B97FF',
-        marginBottom: 10,
-        borderRadius: 10,
+        marginBottom: 5,
+        borderRadius: 8,
     },
     image: {
         width: '25%',
         height: '100%',
         padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     content: {
         width: '75%',
@@ -72,7 +91,7 @@ const styles = StyleSheet.create({
         height: "100%",
         borderRadius: 180/2,
         borderColor: "#0C0150",
-        borderWidth: 4,
+        borderWidth: 1,
     },
     title: {
         fontSize: 20,

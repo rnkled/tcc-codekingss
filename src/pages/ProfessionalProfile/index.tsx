@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import Header from '../../components/Header';
 import ImageProfissional from "../../assets/th.jpg"
 import { AirbnbRating } from 'react-native-ratings';
-import NavComponent, { DataProfileProfessional } from '../../components/NavComponent';
+import NavComponent from '../../components/NavComponent';
+import userInterface from '../../interfaces/userInterface';
 import Button from '../../components/Button';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PropsCardComment } from '../../components/CardComment';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import Background from '../../components/Background';
-
-// import { Container } from './styles';
+import Loading from '../../components/Loading';
+import api from '../../services/api';
+import { Ionicons } from '@expo/vector-icons';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -19,21 +21,11 @@ const ProfessionalProfile: React.FC = () => {
 
   const navigation = useNavigation<propsScreens>();
   const route = useRoute<RouteProp<RouteStackParamList, "professionalProfile">>()
-
-  const [dataProfessional, setDataProfessional] = useState<DataProfileProfessional>({
-    id: route.params.id_professional,
-    address: "Av. do Café, 2998, Vila Tibério, 14050-220",
-    city: "Ribeirão Preto",
-    clinicName: "Clínica Pense bem",
-    college: "Universidade Paulista",
-    course: "Neuropsicologia",
-    skills: "Capaz de dialogar profundamente sobre a vida dos pacientes que estão a sua procura para melhor entende-lo as suas necessidades e soluciona-los os seus problemas!",
-    when: "10/12/2021",
-    name: "Victoria Robertson",
-    legend: "Seja você a maior inspiração do mundo!",
-    rate: 4,
-    urlImage: ImageProfissional
-  } as DataProfileProfessional);
+  const id = route.params.id_professional
+  const [loading, setLoading] = useState(true)
+  const [loadingImage, setLoadingImage] = useState(true)
+  
+  const [dataProfessional, setDataProfessional] = useState<userInterface>();
 
   const [dataComments, setDataComments] = useState<PropsCardComment[]>([
     {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
@@ -42,46 +34,77 @@ const ProfessionalProfile: React.FC = () => {
   
   ])
 
+
+  useEffect(() => {
+    async function getDataProfessional() {
+      api.get(`/user/list/${id}`).then(response => {
+        setDataProfessional(response.data[0])
+        setLoading(false)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    getDataProfessional()
+  } , [id])
+
   function goToHome(){
     navigation.navigate("home")
   }
 
   function goToChat(){
-    navigation.navigate("chat", {id_professional: dataProfessional.id })
+    navigation.navigate("chat", {id_professional: dataProfessional._id })
   }
 
   return(
-    <View style={styles.container}>
-      <Header buttonLeft={{label: "Voltar", onPress: goToHome, isIcon: false}} titlePage='Profissional' color='#0C0150' fontSize={30} />
-      <View style={styles.contentPrimary}/>
-      <Background style={styles.contentSecondary}>
-        <View style={styles.contentPhoto}>
-          <Image style={styles.imageStyled} source={dataProfessional.urlImage && dataProfessional.urlImage }/>
-        </View>  
-        <View style={styles.rateContent}>
-
-          <AirbnbRating
-            showRating={false}
-            count={5}
-            starContainerStyle={styles.rateStyled}
-            defaultRating={dataProfessional.rate}
-            isDisabled={true}
-            selectedColor={"#FFB84E"}
-            size={26}
-          />
-        </View>
-        <View style={styles.contentMotivational}>
-          <Text style={styles.labelProfessionalName}>{dataProfessional.name}</Text>
-          <Text style={styles.motivationalDescription}>
-            {dataProfessional.legend}
-          </Text>
-        </View>
-        <View style={styles.contentDescription}>
-          <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
-        </View>
-        <Button onPress={goToChat} label='Entrar em contato'/>
-      </Background>
-    </View>
+    loading ? 
+      <Loading/> 
+      :
+      (<View style={styles.container}>
+        <Header buttonLeft={{label: "Voltar", onPress: goToHome, isIcon: false}} titlePage='Profissional' color='#0C0150' fontSize={30} />
+        <View style={styles.contentPrimary}/>
+        <Background style={styles.contentSecondary}>
+        { dataProfessional.profilePhoto ? 
+          (<>
+            <View style={styles.contentPhoto}>
+              <Image 
+                  style={[styles.imageStyled, {display: (loadingImage ? 'none' : 'flex')}]} 
+                  source={{uri: dataProfessional.profilePhoto } as ImageSourcePropType} 
+                  onLoad={() => setLoadingImage(false)}
+              /> 
+              <ActivityIndicator
+                  color={'#8B97FF'}
+                  size={100}
+                  style={{ display: (loadingImage ? 'flex' : 'none'), backgroundColor: '#0C0150', borderRadius: 100 }}
+              /> 
+            </View>  
+            </>) : ( 
+            <View style={[styles.contentPhoto, {backgroundColor: '#8B97FF', borderRadius: 100}]}>
+                <Ionicons name="person-circle" size={170} color="#0C0150" style={{marginLeft: 10}} />
+          </View> )} 
+          <View style={styles.rateContent}>
+            <AirbnbRating
+              showRating={false}
+              count={5}
+              starContainerStyle={styles.rateStyled}
+              defaultRating={dataProfessional.rate}
+              isDisabled={true}
+              selectedColor={"#FFB84E"}
+              size={26}
+            />
+          </View>
+          <View style={styles.contentMotivational}>
+            <Text style={styles.labelProfessionalName}>{dataProfessional.name}</Text>
+            <Text style={styles.motivationalDescription}>
+              {dataProfessional.description}
+            </Text>
+          </View>
+          <View style={styles.contentDescription}>
+            <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
+          </View>
+          <Button onPress={goToChat} label='Entrar em contato'/>
+        </Background>
+      </View>
+    )
   );
 }
 

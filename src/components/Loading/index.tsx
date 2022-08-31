@@ -4,12 +4,22 @@ import Background from '../Background';
 
 // import { Container } from './styles';
 
-const Loading: React.FC = () => {
+type props = {
+  transparent?: boolean,
+  color?: string,
+}
+
+const Loading = ({transparent, color} :props) => {
   return(
-    <Background style={styles.container}>
-      <ActivityIndicator size={25} color="#8B97FF"/>
-    </Background>
-  );
+    !transparent ? 
+    (<Background style={styles.container}>
+      <ActivityIndicator size={25} color={color ? color : "#8B97FF"}/>
+    </Background>)
+    :
+    (<View style={styles.container}>
+      <ActivityIndicator size={25} color={color ? color : "#8B97FF"}/>
+    </View>)
+);
 }
 
 const styles = StyleSheet.create({

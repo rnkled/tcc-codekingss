@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import * as auth from "../../services/auth";
 import AsyncStorage from  '@react-native-community/async-storage';
 import api from "../../services/api";
-import userInterface from "./userInterface";
+import userInterface from "../../interfaces/userInterface";
 
 interface AuthContextData {
   signed: boolean;

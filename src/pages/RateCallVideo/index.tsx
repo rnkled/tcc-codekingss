@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -15,7 +15,12 @@ const RateCallVideo: React.FC = () => {
 
   
   const navigation = useNavigation<professionalScreenProps>();
+  const route = useRoute<RouteProp<RouteStackParamList, "professionalProfile">>()
+  
+  
+  const id = route.params.id_professional
 
+  
   const [countRate, setCountRate] = useState(0);
   const [isDisableRate, setIsDisableRate] = useState(false);
 
@@ -28,7 +33,7 @@ const RateCallVideo: React.FC = () => {
     setCountRate(value);
     setIsDisableRate(true);
 
-
+    
   }
 
   
@@ -38,8 +43,8 @@ const RateCallVideo: React.FC = () => {
 
   function goToProfessionalProfile(){
 
-    // PASSAR POR PARAMETRO O ID PROFISSIONAL
-    navigation.navigate("professionalProfile");
+    //navigation.navigate("professionalProfile", {id_professional: id});
+    navigation.navigate("professionalProfile", {id_professional: '630bfccfd7c33a229c57f04c'})
   }
 
 

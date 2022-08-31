@@ -1,3 +1,5 @@
+import {ImageSourcePropType} from 'react-native';
+
 
 interface UserInterface {
     "_id": string,

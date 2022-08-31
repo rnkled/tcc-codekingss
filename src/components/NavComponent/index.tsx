@@ -1,28 +1,15 @@
 import React, { useState } from 'react';
-import { Alert, FlatList, ImageSourcePropType, Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Tab, Text as TextTab, TabView } from '@rneui/themed';
 import CardComment, { PropsCardComment } from '../CardComment';
 import { Feather } from '@expo/vector-icons';
-
+import userInterface from '../../interfaces/userInterface';
 // import { Container } from './styles';
 
-export type DataProfileProfessional = {
-  id: string;
-  college: string,
-  course: string,
-  when: string,
-  address: string,
-  city: string,
-  skills: string,
-  clinicName: string,
-  name: string,
-  legend: string,
-  rate: number,
-  urlImage: ImageSourcePropType;
-}
+
 
 type Props = {
-  dataProfessional: DataProfileProfessional,
+  dataProfessional: userInterface,
   dataComments: PropsCardComment[],
 }
 
@@ -34,7 +21,6 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
   
   await Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${dataProfessional.address}`);
 }
-
 
   return(
     <>
@@ -75,20 +61,20 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
           <ScrollView style={styles.containerInformationPersonal}>
             <Text style={styles.labelTitleInformation}>Formação Acadêmica</Text>
             <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
-              Formou-se na {dataProfessional.college} no curso de {dataProfessional.course} em {dataProfessional.when}.
+              {dataProfessional.degree.description}
             </Text>
             
             <Text style={styles.labelTitleInformation}>Competências e responsabilidades</Text>
             <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
-              {dataProfessional.skills}
+              {dataProfessional.description}
             </Text>
 
             <Text style={styles.labelTitleInformation}>Atendimento presencial</Text>
-            <Text style={styles.descriptionInformation}>Consultório {dataProfessional.clinicName}</Text>
-            <Text style={styles.descriptionInformation}>{dataProfessional.address}</Text>
+            <Text style={styles.descriptionInformation}>{dataProfessional.clinicName}</Text>
+            <Text style={styles.descriptionInformation}>{dataProfessional.address.street}, {dataProfessional.address.number}, {dataProfessional.address.neighborhood}, {dataProfessional.address.postalCode}</Text>
             
             <View style={styles.contentRowLocale}>
-              <Text style={[styles.descriptionInformation, {marginRight: 10}]}>{dataProfessional.city}</Text>
+              <Text style={[styles.descriptionInformation, {marginRight: 10}]}>{dataProfessional.address.city}</Text>
               <TouchableOpacity onPress={openGps}>
                 <Feather name="map-pin" size={24} color="#8B97FF" />
               </TouchableOpacity>
