@@ -15,10 +15,10 @@ const RateCallVideo: React.FC = () => {
 
   
   const navigation = useNavigation<professionalScreenProps>();
-  const route = useRoute<RouteProp<RouteStackParamList, "professionalProfile">>()
+  const route = useRoute<RouteProp<RouteStackParamList, "rateVideoCall">>()
   
   
-  const id = route.params.id_professional
+  
 
   
   const [countRate, setCountRate] = useState(0);
@@ -26,6 +26,7 @@ const RateCallVideo: React.FC = () => {
 
   useEffect(() => {
     console.log({countRate});
+    
     
   }, [countRate])
 
@@ -42,8 +43,7 @@ const RateCallVideo: React.FC = () => {
   }
 
   function goToProfessionalProfile(){
-    //navigation.navigate("professionalProfile", {id_professional: id});
-    navigation.navigate("professionalProfile", {id_professional: '630bfccfd7c33a229c57f04c'})
+    navigation.navigate("professionalProfile", {id_professional: route.params.id_professional})
 
   }
 
