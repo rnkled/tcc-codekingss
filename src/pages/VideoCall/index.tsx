@@ -16,7 +16,7 @@ type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideo
 const VideoCall: React.FC = () => {
 
   const navigation = useNavigation<rateScreenProps>();
-  const [videoCall, setVideoCall] = useState(false);
+  const [videoCall, setVideoCall] = useState(true);
   const {user} = useContext(AuthContext);
 
 
@@ -33,7 +33,7 @@ const VideoCall: React.FC = () => {
 
   async function goToNextScreen(){
     navigation.navigate("rateVideoCall", {id_professional: "1"})
-    // setVideoCall(false);
+    setVideoCall(false);
   }
 
   
@@ -70,6 +70,7 @@ const VideoCall: React.FC = () => {
 
         iconSize: 30
       }}   
+    
       settings={{
         mode: 2,
         role: 1, // analisar o acesso do psicologo aqui  
@@ -89,17 +90,18 @@ const VideoCall: React.FC = () => {
           <Ionicons name="videocam-outline" size={90} color="#8B97FF" />
         </View>
         <View style={styles.messageContent}>
-          <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo da chamada somente se sentir-se confortável.</Text>
+          {/* <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo da chamada somente se sentir-se confortável.</Text> */}
+          <Text style={styles.message}>Para sua melhor comodidade, iremos te notificar a hora que um profissional entrar e perguntar se você realmente deseja ingressar nessa chamada!</Text>
         </View>
-        <View style={styles.buttonsContent}>
-          <TouchableOpacity onPress={() => setVideoCall(!videoCall)} activeOpacity={0.8} style={styles.buttonRadio}>
+        {/* <View style={styles.buttonsContent}> */}
+          {/* <TouchableOpacity onPress={() => setVideoCall(!videoCall)} activeOpacity={0.8} style={styles.buttonRadio}>
             <Feather name="mic-off" size={30} color="#0C0150" />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} style={styles.buttonRadio}>
             <Feather name="video-off" size={30} color="#0C0150" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-        </View>
+        {/* </View> */}
 
       </View>
     </Background>
@@ -140,7 +142,9 @@ const styles = StyleSheet.create({
 
   messageContent: {
     width: "100%",
-    height: "auto",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 10
   },
   message: {
