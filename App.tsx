@@ -1,16 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, LogBox } from 'react-native';
+import { StyleSheet, Text, View, LogBox, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from "./src/routes/index";
 import { useFonts, Inter_600SemiBold, Inter_300Light, Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
 import Loading from './src/components/Loading';
 import * as Updates from "expo-updates";
 import { AuthProvider } from './src/context/AuthContext';
+import messaging from '@react-native-firebase/messaging';
+
 
 
 export default function App() {
   LogBox.ignoreLogs(['new NativeEventEmitter']); 
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`);
+    });
+
+    return unsubscribe;
+  }, []);
 
     useEffect(() => {
     
