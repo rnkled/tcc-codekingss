@@ -39,7 +39,7 @@ const ProfessionalProfile: React.FC = () => {
     async function getDataProfessional() {
       api.get(`/user/list/${id}`).then(response => {
         setDataProfessional(response.data[0]);
-        console.log(response.data);
+        //console.log(response.data);
         
         setLoading(false)
       }).catch(err => {

@@ -41,8 +41,8 @@ export const AuthProvider = ({ children } : any) => {
       api.defaults.headers.common['Authorization'] = `Baerer ${response.data.token}`;
       await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
       await AsyncStorage.setItem('@token', response.data.token);
-      if(!user.tokenPush){
-        await requestUserNotificationPermission(user._id);
+      if(!response.data.tokenPush){
+        await requestUserNotificationPermission(response.data._id);
       }
       return true;
     }).catch((error) => {

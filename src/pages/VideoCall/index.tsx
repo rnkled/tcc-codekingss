@@ -56,14 +56,13 @@ const VideoCall: React.FC = () => {
 
 
 
-  async function goToNextScreen(){
+  function goToNextScreen(){
     navigation.navigate("rateVideoCall", {id_professional: idProfessional || "630bfccfd7c33a229c57f04c"})
-    setVideoCall(false);
   }
 
   
   const rtcCallbacks = {
-    EndCall: async() => await goToNextScreen(),
+    EndCall: () => goToNextScreen(),
     // JoinChannelSuccess: (uid) => {
       
     //   uid.UserMuteAudio(uid);
