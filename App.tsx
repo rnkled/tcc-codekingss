@@ -16,7 +16,9 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`);
+      if(remoteMessage.data.type && remoteMessage.data.type !== "call"){
+        Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`);
+      }
     });
 
     return unsubscribe;
