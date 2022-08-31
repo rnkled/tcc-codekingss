@@ -27,7 +27,8 @@ interface UserInterface {
     "createdAt": Date,
     "updatedAt": Date,
     "__v": number,
-    "role": string
+    "role": string,
+    "tokenPush"?: string;
 }
 
 export default UserInterface;
