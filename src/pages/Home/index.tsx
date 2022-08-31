@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons } from '@expo/vector-icons';
@@ -11,13 +11,13 @@ import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
+import { requestUserNotificationPermission } from '../../services/notificationService';
 
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Home: React.FC = () => {
   
-
   const navigation = useNavigation<propsScreens>();
 
   const {signOut, user} =  useContext(AuthContext);
