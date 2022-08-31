@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
 import AgoraUIKit from 'agora-rn-uikit';
@@ -10,16 +10,16 @@ import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import AuthContext from '../../context/AuthContext';
+import messaging from '@react-native-firebase/messaging';
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
 const VideoCall: React.FC = () => {
 
   const navigation = useNavigation<rateScreenProps>();
-  const [videoCall, setVideoCall] = useState(true);
+  const [videoCall, setVideoCall] = useState(false);
+  const [idProfessional, setIdProfessional] = useState("");
   const {user} = useContext(AuthContext);
-
-
 
   const connectionData = {
     appId: '885ca3cade8f4a3e81c7550a827300a2',
@@ -29,10 +29,35 @@ const VideoCall: React.FC = () => {
     
   };
 
+    useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "call"){
+        Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`, [
+          {text: "Não", onPress: () => handleCancelCall(), style: "cancel"},
+          {text: "Sim", onPress: () => handleCall(remoteMessage.data?.id_professional), style: "default"}
+        ]);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+
+  function handleCancelCall(){
+    navigation.navigate("home");
+  }
+
+  function handleCall(id_professional: string){
+    console.log({id_professional});
+    
+    setIdProfessional(id_professional);
+    setVideoCall(true);
+  }
+
 
 
   async function goToNextScreen(){
-    navigation.navigate("rateVideoCall", {id_professional: "1"})
+    navigation.navigate("rateVideoCall", {id_professional: idProfessional})
     setVideoCall(false);
   }
 
@@ -70,11 +95,10 @@ const VideoCall: React.FC = () => {
 
         iconSize: 30
       }}   
-    
-      settings={{
-        mode: 2,
-        role: 1, // analisar o acesso do psicologo aqui  
-      }}
+      // settings={{
+      //   mode: 2,
+      //   role: 1, // analisar o acesso do psicologo aqui  
+      // }}
       rtcProps={connectionData} 
       callbacks={rtcCallbacks}
       // rtmCallbacks={{}}
