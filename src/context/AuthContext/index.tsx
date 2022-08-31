@@ -4,6 +4,7 @@ import * as auth from "../../services/auth";
 import AsyncStorage from  '@react-native-community/async-storage';
 import api from "../../services/api";
 import userInterface from "../../interfaces/userInterface";
+import { removePermissionNotification, requestUserNotificationPermission } from "../../services/notificationService";
 
 interface AuthContextData {
   signed: boolean;
@@ -40,6 +41,9 @@ export const AuthProvider = ({ children } : any) => {
       api.defaults.headers.common['Authorization'] = `Baerer ${response.data.token}`;
       await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
       await AsyncStorage.setItem('@token', response.data.token);
+      if(!user.tokenPush){
+        await requestUserNotificationPermission(user._id);
+      }
       return true;
     }).catch((error) => {
       if (error.response && error.response.data) {
@@ -57,6 +61,7 @@ export const AuthProvider = ({ children } : any) => {
   async function signOut() {
     await AsyncStorage.removeItem('@user');
     await AsyncStorage.removeItem('@token');
+    removePermissionNotification(user._id);
     setUser(null);
   }
 
