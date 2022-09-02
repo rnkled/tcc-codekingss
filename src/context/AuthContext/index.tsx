@@ -12,6 +12,7 @@ interface AuthContextData {
   signIn(email: String, password: String): Promise<boolean>;
   signOut(): void;
   loading: boolean;
+  updateLocalUser(): void;
 }
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
@@ -65,8 +66,17 @@ export const AuthProvider = ({ children } : any) => {
     setUser(null);
   }
 
+  async function updateLocalUser() {
+    api.get(`/user/list/${user._id}`).then(async response => {
+      setUser(response.data[0]);
+      await AsyncStorage.setItem('@user', JSON.stringify(response.data[0]));
+    }).catch(err => {
+      console.log(err)
+    });
+
+  }
   return(
-  <AuthContext.Provider value={{signed: !!user, user, signIn, signOut, loading }}>
+  <AuthContext.Provider value={{signed: !!user, user, signIn, signOut, loading, updateLocalUser }}>
     {children}
   </AuthContext.Provider>)
 };

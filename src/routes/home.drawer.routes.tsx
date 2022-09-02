@@ -19,7 +19,7 @@ return (
         <DrawerItem
             label="Perfil"
             style={styles.item}
-            onPress={() => goTo('home.settings')}
+            onPress={() => goTo('settings')}
             labelStyle={styles.label}
         />
         
@@ -31,10 +31,10 @@ return (
 
 const HomeStack = () => {
     return <>
-        <Drawer.Navigator initialRouteName="home.index" screenOptions={{headerShown: false}} drawerContent={CustomDrawerContent}>
-            <Drawer.Screen name="home.index" component={Home} />
-            <Drawer.Screen name="home.search" component={Search} />
-            <Drawer.Screen name="home.settings" component={Settings} />
+        <Drawer.Navigator initialRouteName="index" screenOptions={{headerShown: false}} drawerContent={CustomDrawerContent}>
+            <Drawer.Screen name="index" component={Home} />
+            <Drawer.Screen name="search" component={Search} />
+            <Drawer.Screen name="settings" component={Settings} />
         </Drawer.Navigator>
     </>
 }

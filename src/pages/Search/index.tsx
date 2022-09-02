@@ -23,7 +23,7 @@ const Search: React.FC = () => {
   const [data, setData] = useState<UserInterface[]>([]);
 
   function goToHome() {
-    navigation.navigate('home.index');
+    navigation.navigate('home');
   }
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
-import { EvilIcons } from '@expo/vector-icons';
+import { EvilIcons, Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
@@ -21,10 +21,6 @@ const Home: React.FC = () => {
   const navigation = useNavigation<propsScreens>();
 
   const {signOut, user} =  useContext(AuthContext);
-
-  function handleNav() {
-    navigation.openDrawer();
-  }
 
   function handleNewVideoCall(){
     navigation.navigate("videoCall");
@@ -51,7 +47,11 @@ const Home: React.FC = () => {
   }
 
   function goToSearch() {
-    navigation.navigate("home.search");
+    navigation.navigate("search");
+  }
+
+  function goToSettings() {
+    navigation.navigate("settings");
   }
 
 
@@ -62,8 +62,8 @@ const Home: React.FC = () => {
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
-          onPress: handleNav,
+          icon: () => <Ionicons name="settings-outline"  size={35} color="#8B97FF"/>,
+          onPress: goToSettings,
         }} 
         buttonRight={{
           isIcon: true,

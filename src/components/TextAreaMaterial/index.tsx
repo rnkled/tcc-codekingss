@@ -17,8 +17,7 @@ type Props = {
   baseColor?: string;
 }
 
-const TextAreaMaterial = ({setValue, value, label, secure=false, containerStyle, textColor, baseColor, ...rest}: Props) => {
-  const [showingPassword, setShowingPassword] = useState(secure);
+const TextAreaMaterial = ({setValue, value, label, containerStyle, textColor, baseColor, ...rest}: Props) => {
 
   return(
     <View style={{...styles.container, ...containerStyle}}>
@@ -28,7 +27,7 @@ const TextAreaMaterial = ({setValue, value, label, secure=false, containerStyle,
         placeholderTextColor="#0C015044"
         containerStyle={styles.input}
         value={value}
-        onEndEditing={(data :any) => {setValue(data.nativeEvent.text)}}
+        onChange={(data :any) => {setValue(data.nativeEvent.text)}}
         labelActiveColor="#FFF0"
         baseColor={baseColor ? baseColor : "#0C015088"}
         titleTextStyle={{color: "#fff"}}
@@ -40,6 +39,8 @@ const TextAreaMaterial = ({setValue, value, label, secure=false, containerStyle,
         fontSize={18}
         editable={true}
         multiline={true}
+        numberOfLines={6}
+        maxLength={200}
         {...rest}
       />
     </View>
@@ -52,19 +53,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFF",
-    height: 120,
+    height: 'auto',
+    minHeight: 100,
+    maxHeight: 160,
     paddingTop: 0,
     paddingBottom: 0,
     marginTop: 10,
     borderRadius: 10,
-    overflow: "hidden",
-    characterRestriction: 120,
+    overflow: 'scroll',
   },
 
   input: {
     width: "95%",
     backgroundColor: "#FFF0",
-    height: 100,
+    height: 'auto',
+    maxHeight: 140,
+    minHeight: 90,
   },
 })
 

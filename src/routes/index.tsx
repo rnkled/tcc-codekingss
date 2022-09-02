@@ -2,19 +2,20 @@ import React, {useContext} from 'react';
 import LoginStack from './login.stack.routes'
 import { Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeStack from './home.drawer.routes';
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import AuthContext from "../context/AuthContext";
 import ProfessionalProfile from '../pages/ProfessionalProfile';
 import Chat from '../pages/Chat';
+import Home from '../pages/Home'
+import Search from '../pages/Search';
+import Settings from '../pages/Settings';
 
 export type RouteStackParamList = {
     login: undefined,
     home: undefined;
-    'home.index': undefined;
-    'home.search': undefined;
-    'home.settings': undefined;
+    search: undefined;
+    settings: undefined;
     videoCall: undefined;
     rateVideoCall: {
         id_professional: string,
@@ -41,11 +42,14 @@ const Routes = () => {
                     </>
                     ) : (
                     <>
-                        <Stack.Screen name="home" component={HomeStack} />
+                        <Stack.Screen name="home" component={Home} />
+                        <Stack.Screen name="search" component={Search} />
+                        <Stack.Screen name="settings" component={Settings} />
                         <Stack.Screen name="videoCall" component={VideoCall} />
                         <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                         <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
                         <Stack.Screen name="chat" component={Chat} />
+
 
 
                     </>
