@@ -32,7 +32,7 @@ export const AuthProvider = ({ children } : any) => {
       setLoading(false);
     }
     loadStorageData();
-  });
+  }, []);
 
 
   async function signIn(email: string, password: string) {
@@ -41,8 +41,8 @@ export const AuthProvider = ({ children } : any) => {
       api.defaults.headers.common['Authorization'] = `Baerer ${response.data.token}`;
       await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
       await AsyncStorage.setItem('@token', response.data.token);
-      if(!response.data.tokenPush){
-        await requestUserNotificationPermission(response.data._id);
+      if(!response.data.user.tokenPush){    
+        await requestUserNotificationPermission(response.data.user._id);
       }
       return true;
     }).catch((error) => {
