@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, TouchableOpacity, StyleSheetProperties } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, StyleSheetProperties,  } from 'react-native';
 import {
   TextField,
   FilledTextField,
   OutlinedTextField,
+
 } from 'rn-material-ui-textfield';
 import { Entypo } from '@expo/vector-icons';
 
@@ -28,7 +29,7 @@ const TextAreaMaterial = ({setValue, value, label, secure=false, containerStyle,
         placeholderTextColor="#0C015044"
         containerStyle={styles.input}
         value={value}
-        onEndEditing={(data :any) => {setValue(data.nativeEvent.text)}}
+        onChange={(data :any) => {setValue(data.nativeEvent.text)}}
         labelActiveColor="#FFF0"
         baseColor={baseColor ? baseColor : "#0C015088"}
         titleTextStyle={{color: "#fff"}}
@@ -39,7 +40,7 @@ const TextAreaMaterial = ({setValue, value, label, secure=false, containerStyle,
         contentInset={{top: 8, bottom: 0}}
         fontSize={18}
         editable={true}
-        multiline={true}
+        multiline={false}
         {...rest}
       />
     </View>
