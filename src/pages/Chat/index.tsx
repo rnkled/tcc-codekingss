@@ -10,6 +10,7 @@ import InputTextChat from '../../components/InputTextChat';
 import { RouteStackParamList } from '../../routes';
 import database from '@react-native-firebase/database';
 import AuthContext from '../../context/AuthContext';
+import { sendNotificationTo } from '../../services/notificationService';
 
 // import { Container } from './styles';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -36,7 +37,8 @@ const Chat: React.FC = () => {
   }
 
   function getMessage(){
-    database().ref(`/chats/${user._id}/${route.params.id_professional}/messages/`).orderByChild('id').on("value", snapshot => {
+    if(user.role === "user"){
+      database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByChild('id').on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
           let objMessage = childSnapshot.val();
@@ -46,25 +48,66 @@ const Chat: React.FC = () => {
             return true;
           }
         });
+        
+        setMessages(messagesArr)   
+      })
+    }
 
-        setMessages(messagesArr) 
-      
+    if(user.role === "professional"){
+      database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByChild('id').on("value", snapshot => {
+        var messagesArr = [];
+        snapshot && snapshot.forEach((childSnapshot) => {
+          let objMessage = childSnapshot.val();
+          messagesArr.push(objMessage);
+          if(childSnapshot.numChildren() <= 0){      
+            setMessages([]);
+            return true;
+          }
+        });
+        
+        setMessages(messagesArr)   
+      })
 
-  })
+    }
+
+    if(user.role === "admin"){
+
+    }
+
+
   
   }
 
-  function handleChatMessage(){
+  async function handleChatMessage(){
     if(message){
-      const newReferenceMessage = database().ref(`/chats/${user._id}/${route.params.id_professional}/messages`).push();
-      const messageObject = {
-        id_user: user._id,
-        id: Date.now(),
-        message,
-        sent: new Date(Date.now()),
-        user_type: user.role
+      console.log(user.role);
+      
+      if(user.role === "user"){
+
+        const newReferenceMessage = database().ref(`/chats/${route.params.id_professional}/${user._id}/messages`).push();
+        const messageObject = {
+          id_user: user._id,
+          id: Date.now(),
+          message,
+          sent: new Date(Date.now()),
+          user_type: user.role
+        }
+        newReferenceMessage.set(messageObject).then(() => setMessage(""));
+        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, null, user._id, "other")
       }
-      newReferenceMessage.set(messageObject).then(() => setMessage(""));
+
+      if(user.role === "professional"){
+        const newReferenceMessage = database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages`).push();
+        const messageObject = {
+          id_user: user._id,
+          id: Date.now(),
+          message,
+          sent: new Date(Date.now()),
+          user_type: user.role
+        }
+        newReferenceMessage.set(messageObject).then(() => setMessage(""));
+        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, user._id, null, "other")
+      }
     }
   }
 
