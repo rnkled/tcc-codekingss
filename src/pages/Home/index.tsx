@@ -9,12 +9,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteStackParamList } from '../../routes';
 import { requestUserNotificationPermission } from '../../services/notificationService';
 
 
-type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+type propsScreens = DrawerNavigationProp<RouteStackParamList>
 
 const Home: React.FC = () => {
   
@@ -23,8 +23,7 @@ const Home: React.FC = () => {
   const {signOut, user} =  useContext(AuthContext);
 
   function handleNav() {
-    Alert.alert("Alerta")
-
+    navigation.openDrawer();
   }
 
   function handleNewVideoCall(){
@@ -54,6 +53,7 @@ const Home: React.FC = () => {
   function goToSearch() {
     navigation.navigate("home.search");
   }
+
 
   return(
     <Background>

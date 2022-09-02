@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground} from 'react-native';
+import React, {useState, useContext} from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Alert} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 //import { TextInput } from 'react-native-material-textinput';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
-import TextInput from '../../components/TextInput';
+import TextInputMaterial from '../../components/TextInputMaterial';
 import Button from '../../components/Button';
-import Header from '../../components/Header';
 import Background from '../../components/Background';
+import api from '../../services/api';
+import AuthContext from "../../context/AuthContext";
 
 const Registrar = () => {
 
@@ -17,13 +18,43 @@ const Registrar = () => {
   }
   const navigation = useNavigation<Nav>();
 
+  const {signIn} =  useContext(AuthContext);
+
+  const [loading, setLoading] = useState(false);
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [senhaConfirma, setSenhaConfirma] = useState(''); 
 
-  function irParaLogin() {
+  function goToLogin() {
+    cleanFields();
     navigation.navigate('login.index');
+  }
+
+  function register() {
+    setLoading(true);
+    api.post('/user/create', {
+      "name": nome,
+      "email": email,
+      "password": senha,
+      "role": "user"
+    }).then((response) => {
+      setLoading(false);
+      console.log(response.data);
+      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
+      signIn(email, senha);
+    }).catch((error) => {
+      setLoading(false);
+      console.log(error.data);
+      Alert.alert('Erro', 'Erro ao cadastrar usuário!');
+    });
+  }
+
+  function cleanFields() {
+    setNome('');
+    setEmail('');
+    setSenha('');
+    setSenhaConfirma('');
   }
 
   return (
@@ -37,23 +68,23 @@ const Registrar = () => {
           </View>
           <Text style={[styles.textoAzul, {fontSize: 20}]}>Primeira vez por aqui? Crie uma conta.</Text>
           <View style={styles.form}>
-            <TextInput
+            <TextInputMaterial
               label="Nome"
               value={nome}
               setValue={setNome}
             />
-            <TextInput
+            <TextInputMaterial
               label={"E-mail"} 
               value={email} 
               setValue={setEmail}
             />
-            <TextInput
+            <TextInputMaterial
               label={"Senha"} 
               value={senha} 
               setValue={setSenha} 
               secure={true}
             />
-            <TextInput
+            <TextInputMaterial
               label="Confirme sua senha"
               value={senhaConfirma}
               setValue={setSenhaConfirma} 
@@ -61,8 +92,8 @@ const Registrar = () => {
             />
           </View>
           <View style={styles.footer}>
-            <Button label={"Cadastrar"} onPress={() => {}}/>
-            <TouchableOpacity onPress={irParaLogin}>
+            <Button label={"Cadastrar"} onPress={register} loading={loading}/>
+            <TouchableOpacity onPress={goToLogin}>
               <Text style={[styles.textoAzul, {fontSize: 20}]}>Voltar</Text>
             </TouchableOpacity>
           </View>

@@ -14,6 +14,7 @@ export type RouteStackParamList = {
     home: undefined;
     'home.index': undefined;
     'home.search': undefined;
+    'home.settings': undefined;
     videoCall: undefined;
     rateVideoCall: {
         id_professional: string,

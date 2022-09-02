@@ -3,16 +3,16 @@ import {ImageSourcePropType} from 'react-native';
 
 interface UserInterface {
     "_id": string,
-    "cpf": string,
+    "cpf"?: string,
     "name": string,
     "email": string,
-    "profilePhoto": string,
-    "degree": {
+    "profilePhoto"?: string,
+    "degree"?: {
         "description": string,
         "crp": string
     },
-    "description": string,
-    "clinicName": string,
+    "description"?: string,
+    "clinicName"?: string,
     "address": {
         "street": string,
         "number": number,
@@ -22,13 +22,13 @@ interface UserInterface {
         "state": string,
         "postalCode": string
     },
-    "rate": number,
-    "active": false,
+    "rate"?: number,
+    "active": boolean,
     "createdAt": Date,
     "updatedAt": Date,
-    "__v": number,
     "role": string,
     "tokenPush"?: string;
+    "skills"?: string;
 }
 
 export default UserInterface;

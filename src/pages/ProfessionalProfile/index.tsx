@@ -97,7 +97,7 @@ const ProfessionalProfile: React.FC = () => {
           <View style={styles.contentMotivational}>
             <Text style={styles.labelProfessionalName}>{dataProfessional.name}</Text>
             <Text style={styles.motivationalDescription}>
-              {dataProfessional.description}
+              {dataProfessional.skills}
             </Text>
           </View>
           <View style={styles.contentDescription}>

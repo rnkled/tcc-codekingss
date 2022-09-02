@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
-import TextInput from '../../components/TextInput';
+import TextInputMaterial from '../../components/TextInputMaterial';
 import Button from '../../components/Button';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
@@ -64,8 +64,8 @@ const Login = () => {
           contentContainerStyle={styles.scrollViewContainer}
         >
           <View style={styles.form}>
-            <TextInput label={"E-mail"} value={email} setValue={setEmail} />
-            <TextInput label={"Senha"} value={password} setValue={setPassword} secure={true}/>
+            <TextInputMaterial label={"E-mail"} value={email} setValue={setEmail} />
+            <TextInputMaterial label={"Senha"} value={password} setValue={setPassword} secure={true}/>
             <TouchableOpacity onPress={irParaRegistrar}>
               <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
             </TouchableOpacity>
