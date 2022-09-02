@@ -13,16 +13,21 @@ type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 type CardPrams = {
     dataProfessional: userInterface,
+    type_user?: string;
 }
 
-const SearchCard = ({ dataProfessional } :CardPrams) => {
+const SearchCard = ({ dataProfessional, type_user="user" } :CardPrams) => {
 
     let [loadingImage, setLoadingImage] = useState(true);
 
     const navigation = useNavigation<propsScreens>();
 
     function goToProfessional() {
-        navigation.navigate("professionalProfile", {id_professional: dataProfessional._id});
+        if(type_user === "user"){
+            navigation.navigate("professionalProfile", {id_professional: dataProfessional._id});
+        }else{
+            navigation.navigate("chat", {id_professional: null, id_pacient: dataProfessional._id, pushNotification: dataProfessional.tokenPush});
+        }
     }
 
   return ( 
