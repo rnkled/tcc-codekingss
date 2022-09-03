@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
-import LoginStack from './login.stack.routes'
-import { Text, View } from 'react-native';
+import LoginStack from './login.stack.routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
@@ -10,6 +9,8 @@ import Chat from '../pages/Chat';
 import Home from '../pages/Home'
 import Search from '../pages/Search';
 import Settings from '../pages/Settings';
+import HomeProfessional from '../pages/HomeProfessional';
+import SearchProfessional from '../pages/SearchProfessional';
 
 export type RouteStackParamList = {
     login: undefined,
@@ -25,14 +26,18 @@ export type RouteStackParamList = {
     },
     chat: {
         id_professional: string;
+        id_pacient: string;
+        pushNotification: string;
     },
+    homeProfessional: undefined;
+    searchProfessional: undefined;
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
 
 const Routes = () => {
 
-    const {signed } =  useContext(AuthContext);
+    const {signed, user } =  useContext(AuthContext);
 
     return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -40,20 +45,24 @@ const Routes = () => {
                     <>
                         <Stack.Screen name="login" component={LoginStack}/>
                     </>
-                    ) : (
+                    ) : user.role === "user" ? (
+                        
                     <>
                         <Stack.Screen name="home" component={Home} />
                         <Stack.Screen name="search" component={Search} />
-                        <Stack.Screen name="settings" component={Settings} />
-                        <Stack.Screen name="videoCall" component={VideoCall} />
-                        <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
-                        <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
-                        <Stack.Screen name="chat" component={Chat} />
-
-
+                    </>
+                ) : (
+                     <>
+                        <Stack.Screen name="homeProfessional" component={HomeProfessional} />       
+                        <Stack.Screen name="searchProfessional" component={SearchProfessional} />
 
                     </>
                 )}
+                <Stack.Screen name="settings" component={Settings} />
+                <Stack.Screen name="videoCall" component={VideoCall} />
+                <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
+                <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
+                <Stack.Screen name="chat" component={Chat} />
             </Stack.Navigator>)
 }
 
