@@ -12,9 +12,11 @@ import AuthContext from "../../context/AuthContext";
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteStackParamList } from '../../routes';
 import { requestUserNotificationPermission } from '../../services/notificationService';
+import { Notifier, Easing } from 'react-native-notifier';
+import messaging from '@react-native-firebase/messaging';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-
-type propsScreens = DrawerNavigationProp<RouteStackParamList>
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const HomeProfessional: React.FC = () => {
   
@@ -22,8 +24,47 @@ const HomeProfessional: React.FC = () => {
 
   const {signOut, user} =  useContext(AuthContext);
 
+  useEffect(() => {
+    console.log({user});
+    
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            if(user.role === "professional"){
+              navigation.navigate("chat", {
+                id_pacient: remoteMessage.data.id_pacient,
+                pushNotification: remoteMessage.data.tokenPush,
+                id_professional: undefined,
+                name: remoteMessage.data.name
+              })
+            }
+  
+            if(user.role === "admin"){
+              
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   function handleNav() {
-    navigation.openDrawer();
+    // navigation.openDrawer();
   }
 
   function handleNewVideoCall(){
