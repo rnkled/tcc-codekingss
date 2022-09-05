@@ -1,13 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, LogBox, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import Routes from "./src/routes/index";
 import { useFonts, Inter_600SemiBold, Inter_300Light, Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
 import Loading from './src/components/Loading';
 import * as Updates from "expo-updates";
 import { AuthProvider } from './src/context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
+import { NotifierWrapper } from 'react-native-notifier';
+
 
 
 
@@ -16,7 +18,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage.data.type && remoteMessage.data.type !== "call"){
+      if(remoteMessage.data.type && remoteMessage.data.type !== "call" && remoteMessage.data.type !== "chat"){
         Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`);
       }
     });
@@ -60,7 +62,9 @@ export default function App() {
     <View style={{ flex: 1, width: '100%'}}>
         <NavigationContainer>
           <AuthProvider>
-            <Routes/>
+            <NotifierWrapper>
+              <Routes/>
+            </NotifierWrapper>
           </AuthProvider>
         </NavigationContainer>
       </View>
