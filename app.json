@@ -13,6 +13,7 @@
     "ios": {},
     "updates": {
       "url": "https://u.expo.dev/79d0be34-f233-4b60-8346-89bd18f708ac"
-    }
+    },
+    "plugins": ["expo-image-picker"]
   }
 }
