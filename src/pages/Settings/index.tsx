@@ -94,7 +94,7 @@ const Settings: React.FC = () => {
             updateLocalUser();
             setLoadingSave(false);
             Alert.alert("Sucesso", "Dados atualizados com sucesso!");
-            navigation.navigate("home");
+            user.role === "professional" ? navigation.navigate('homeProfessional') : navigation.navigate('home')
         }).catch((error) => {
             setLoadingSave(false);
             console.log(error.response.data);

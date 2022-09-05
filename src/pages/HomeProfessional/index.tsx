@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
-import { EvilIcons } from '@expo/vector-icons';
+import { EvilIcons, Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
@@ -53,17 +53,19 @@ const HomeProfessional: React.FC = () => {
   function goToSearch() {
     navigation.navigate("searchProfessional");
   }
-
+  function goToSettings() {
+    navigation.navigate("settings");
+  }
 
   return(
-    <Background>
+    <Background style={{alignItems: 'center'}}>
       <Header 
-        titlePage={"Bem-Vindo " + user.name}
+        titlePage={"Bem-Vindo " + user.name.split(" ")[0]}
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <EvilIcons name="navicon" size={35} color="#8B97FF"/>,
-          onPress: handleNav,
+          icon: () => <Ionicons name="settings-outline"  size={35} color="#8B97FF"/>,
+          onPress: goToSettings,
         }} 
         buttonRight={{
           isIcon: true,
@@ -85,7 +87,7 @@ const HomeProfessional: React.FC = () => {
 
 const styles = StyleSheet.create({
   contentPrimary: {
-    width: "100%",
+    width: "80%",
     height: "70%",
     justifyContent: "center",
     paddingTop: 25,

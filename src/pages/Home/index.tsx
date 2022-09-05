@@ -58,7 +58,7 @@ const Home: React.FC = () => {
   return(
     <Background>
       <Header 
-        titlePage={"Bem-Vindo " + user.name}
+        titlePage={"Bem-Vindo " + user.name.split(" ")[0]}
         fontSize={18}
         buttonLeft={{
           isIcon: true,
@@ -73,9 +73,12 @@ const Home: React.FC = () => {
       />
       <View style={styles.contentPrimary}>
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
-          <View style={styles.contentBorderButton}>
-            <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
-          </View>
+          <LinearGradient
+            colors={['#8B97FF', '#5566fc']}
+            style={styles.contentBorderButton}
+          >
+                <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
+          </LinearGradient>
         </TouchableOpacity>
 
       </View>
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
   buttonCircle: {
     width: 190,
     height: 190,
-    backgroundColor: "#8B97FF",
+    backgroundColor: "#6877fd",
     borderRadius: 190 / 2,
     justifyContent: "center",
     alignItems: "center",

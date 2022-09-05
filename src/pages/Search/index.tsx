@@ -31,6 +31,7 @@ const Search: React.FC = () => {
       await getData();
       setLoading(false);
     }
+    setLoading(true);
     getFirstData();
   } , [])
   

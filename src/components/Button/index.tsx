@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 
@@ -11,9 +12,14 @@ type Props = {
 
 const Button = ({label, onPress, loading, containerStyle,  ...rest}: Props) => {
   return(
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{...styles.button, ...containerStyle}}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{...{justifyContent: 'center', alignItems:'center', width: '100%', height: 'auto'}, ...containerStyle}}>
+      <LinearGradient
+        colors={['#8B97FF', '#6677ff']}
+        style={{...styles.button, ...containerStyle}}
+      >
       <Text style={styles.text}>{label}</Text>
       {loading && (<ActivityIndicator style={styles.loading} size={25} color="#0C0150"/>)}
+      </LinearGradient>
     </TouchableOpacity>
   );
 }

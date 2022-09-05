@@ -41,28 +41,22 @@ const Routes = () => {
 
     return (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {!signed ? (
-                    <>
-                        <Stack.Screen name="login" component={LoginStack}/>
-                    </>
-                    ) : user.role === "user" ? (
-                        
-                    <>
-                        <Stack.Screen name="home" component={Home} />
-                        <Stack.Screen name="search" component={Search} />
-                    </>
-                ) : (
-                     <>
-                        <Stack.Screen name="homeProfessional" component={HomeProfessional} />       
-                        <Stack.Screen name="searchProfessional" component={SearchProfessional} />
-
-                    </>
-                )}
-                <Stack.Screen name="settings" component={Settings} />
-                <Stack.Screen name="videoCall" component={VideoCall} />
-                <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
-                <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
-                <Stack.Screen name="chat" component={Chat} />
+                {!signed ? 
+                    (
+                            <Stack.Screen name="login" component={LoginStack}/>
+                    ) : (
+                        <>
+                            <Stack.Screen name="home" component={user.role === "professional" ? HomeProfessional : Home} />
+                            <Stack.Screen name="search" component={Search} />
+                            <Stack.Screen name="searchProfessional" component={SearchProfessional} />
+                            <Stack.Screen name="settings" component={Settings} />
+                            <Stack.Screen name="videoCall" component={VideoCall} />
+                            <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
+                            <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
+                            <Stack.Screen name="chat" component={Chat} />
+                        </>
+                        )
+                    }
             </Stack.Navigator>)
 }
 
