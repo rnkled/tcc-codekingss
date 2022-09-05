@@ -93,7 +93,7 @@ const Chat: React.FC = () => {
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
-        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, null, user._id, "other")
+        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, null, user._id, "chat", user.name, user.tokenPush)
       }
 
       if(user.role === "professional"){
@@ -106,14 +106,14 @@ const Chat: React.FC = () => {
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
-        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, user._id, null, "other")
+        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, user._id, null, "chat", user.name, user.tokenPush)
       }
     }
   }
 
   return(
     <Background style={styles.container}>
-        <Header buttonLeft={{label: "Voltar", onPress: goBack,}} buttonRight={{label: "Opções", onPress: goBack}} titlePage="Victoria" fontSize={24}/>
+        <Header buttonLeft={{label: "Voltar", onPress: goBack,}} buttonRight={{label: "Opções", onPress: goBack}} titlePage={route.params.name} fontSize={24}/>
         <View style={styles.contentChatMessages}>
         <AutoScrollFlatList
           data={messages}
