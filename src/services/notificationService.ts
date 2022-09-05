@@ -17,6 +17,7 @@ export const requestUserNotificationPermission = async (id: string) => {
     const response = await api.put(`/user/update/${id}`, { tokenPush: fcmToken });
     if (response.status == 200) {
       console.log("notificacao concedida");
+      return fcmToken
     } else {
       console.log("notificacao não concedida");
     }
@@ -35,7 +36,7 @@ export const removePermissionNotification = async (id: string) => {
 }
 
 
-export const sendNotificationTo = async (token: string, title: string, body: string, id_professional: string, id_pacient: string, type: string) => {
+export const sendNotificationTo = async (token: string, title: string, body: string, id_professional: string, id_pacient: string, type: string, name: string, tokenSecondary: string) => {
   if (token && title && body) {
 
     await axios.post(
@@ -50,7 +51,9 @@ export const sendNotificationTo = async (token: string, title: string, body: str
         data: {
           id_professional: id_professional,
           id_pacient: id_pacient,
-          type: type
+          type: type,
+          name: name,
+          tokenPush: tokenSecondary
         },
       },
 
