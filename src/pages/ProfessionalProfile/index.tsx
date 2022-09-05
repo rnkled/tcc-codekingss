@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Image, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import Header from '../../components/Header';
 import ImageProfissional from "../../assets/th.jpg"
@@ -14,6 +14,9 @@ import Background from '../../components/Background';
 import Loading from '../../components/Loading';
 import api from '../../services/api';
 import { Ionicons } from '@expo/vector-icons';
+import { Notifier, Easing } from 'react-native-notifier';
+import messaging from '@react-native-firebase/messaging';
+import AuthContext from '../../context/AuthContext';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -24,7 +27,7 @@ const ProfessionalProfile: React.FC = () => {
   const id = route.params.id_professional
   const [loading, setLoading] = useState(true)
   const [loadingImage, setLoadingImage] = useState(true)
-  
+  const {user} =  useContext(AuthContext);
   const [dataProfessional, setDataProfessional] = useState<userInterface>();
 
   const [dataComments, setDataComments] = useState<PropsCardComment[]>([
@@ -33,6 +36,42 @@ const ProfessionalProfile: React.FC = () => {
     {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
   
   ])
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            if(user.role === "user"){
+              navigation.navigate("chat", {
+                id_professional: remoteMessage.data.id_professional,
+                pushNotification: remoteMessage.data.tokenPush,
+                id_pacient: undefined,
+                name: remoteMessage.data.name
+              })
+            }
+            if(user.role === "admin"){
+              
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
 
   useEffect(() => {
@@ -58,7 +97,12 @@ const ProfessionalProfile: React.FC = () => {
   }
 
   function goToChat(){
-    navigation.navigate("chat", {id_professional: dataProfessional._id, id_pacient: null, pushNotification: dataProfessional.tokenPush })
+    navigation.navigate("chat", {
+      id_professional: dataProfessional._id,
+      id_pacient: null, 
+      pushNotification: dataProfessional.tokenPush,
+      name: dataProfessional.name 
+    })
   }
 
   return(
