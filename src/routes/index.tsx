@@ -28,6 +28,7 @@ export type RouteStackParamList = {
         id_professional: string;
         id_pacient: string;
         pushNotification: string;
+        name: string;
     },
     homeProfessional: undefined;
     searchProfessional: undefined;
