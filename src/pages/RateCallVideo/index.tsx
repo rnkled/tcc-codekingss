@@ -1,11 +1,14 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState, useContext } from 'react';
+import { RouteProp, useNavigation, useRoute, } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import Background from '../../components/Background';
 import Button from '../../components/Button';
+import AuthContext from '../../context/AuthContext';
 import { RouteStackParamList } from '../../routes';
+import { Notifier, Easing } from 'react-native-notifier';
+import messaging from '@react-native-firebase/messaging';
 
 // import { Container } from './styles';
 
@@ -16,13 +19,46 @@ const RateCallVideo: React.FC = () => {
   
   const navigation = useNavigation<professionalScreenProps>();
   const route = useRoute<RouteProp<RouteStackParamList, "rateVideoCall">>()
-  
-  
-  
-
+  const {user} =  useContext(AuthContext);
   
   const [countRate, setCountRate] = useState(0);
   const [isDisableRate, setIsDisableRate] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            if(user.role === "user"){
+              navigation.navigate("chat", {
+                id_professional: remoteMessage.data.id_professional,
+                pushNotification: remoteMessage.data.tokenPush,
+                id_pacient: undefined,
+                name: remoteMessage.data.name
+              })
+            }
+            if(user.role === "admin"){
+              
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     console.log({countRate});
