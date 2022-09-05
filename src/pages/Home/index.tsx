@@ -13,7 +13,7 @@ import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
