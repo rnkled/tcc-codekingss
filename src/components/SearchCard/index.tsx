@@ -26,7 +26,7 @@ const SearchCard = ({ dataProfessional, type_user="user" } :CardPrams) => {
         if(type_user === "user"){
             navigation.navigate("professionalProfile", {id_professional: dataProfessional._id});
         }else{
-            navigation.navigate("chat", {id_professional: null, id_pacient: dataProfessional._id, pushNotification: dataProfessional.tokenPush});
+            navigation.navigate("chat", {id_professional: null, id_pacient: dataProfessional._id, pushNotification: dataProfessional.tokenPush, name: dataProfessional.name});
         }
     }
 

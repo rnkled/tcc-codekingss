@@ -43,7 +43,9 @@ export const AuthProvider = ({ children } : any) => {
       await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
       await AsyncStorage.setItem('@token', response.data.token);
       if(!response.data.user.tokenPush){    
-        await requestUserNotificationPermission(response.data.user._id);
+        let token = await requestUserNotificationPermission(response.data.user._id);
+        response.data.user.tokenPush = token;
+        setUser(response.data.user as userInterface);    
       }
       return true;
     }).catch((error) => {

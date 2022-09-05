@@ -5,22 +5,64 @@ import { EvilIcons, Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteStackParamList } from '../../routes';
-import { requestUserNotificationPermission } from '../../services/notificationService';
+import { Notifier, Easing } from 'react-native-notifier';
+import messaging from '@react-native-firebase/messaging';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 
-type propsScreens = DrawerNavigationProp<RouteStackParamList>
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+
+
 
 const Home: React.FC = () => {
   
   const navigation = useNavigation<propsScreens>();
 
   const {signOut, user} =  useContext(AuthContext);
+
+
+   useEffect(() => {
+    
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            if(user.role === "user"){
+              navigation.navigate("chat", {
+                id_professional: remoteMessage.data.id_professional,
+                pushNotification: user.tokenPush,
+                id_pacient: undefined,
+                name: remoteMessage.data.name
+              })
+            }
+            if(user.role === "admin"){
+              
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
 
   function handleNewVideoCall(){
     navigation.navigate("videoCall");
@@ -62,7 +104,7 @@ const Home: React.FC = () => {
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <Ionicons name="settings-outline"  size={35} color="#8B97FF"/>,
+          icon: () => <Ionicons name="settings-outline"  size={30} color="#8B97FF"/>,
           onPress: goToSettings,
         }} 
         buttonRight={{

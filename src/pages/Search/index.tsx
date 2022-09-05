@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef, useContext } from 'react';
 import { View, TextInput, StyleSheet, FlatList } from 'react-native';
 import Background from '../../components/Background';
 import Header from '../../components/Header';
@@ -11,6 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import Loading from '../../components/Loading';
 import UserInterface from '../../interfaces/userInterface';
+import { Notifier, Easing } from 'react-native-notifier';
+import messaging from '@react-native-firebase/messaging';
+import AuthContext from '../../context/AuthContext';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -21,11 +24,47 @@ const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<UserInterface[]>([]);
+  const {user} =  useContext(AuthContext);
+  let refSearch = useRef<TextInput>(null);
 
-  function goToHome() {
-    navigation.navigate('home');
-  }
 
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            if(user.role === "user"){
+              navigation.navigate("chat", {
+                id_professional: remoteMessage.data.id_professional,
+                pushNotification: remoteMessage.data.tokenPush,
+                id_pacient: undefined,
+                name: remoteMessage.data.name
+              })
+            }
+            if(user.role === "admin"){
+              
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+  
+  
   useEffect(() => {
     async function getFirstData() {
       await getData();
@@ -35,7 +74,9 @@ const Search: React.FC = () => {
     getFirstData();
   } , [])
   
-  let refSearch = useRef<TextInput>(null);
+  function goToHome() {
+    navigation.navigate('home');
+  }
   async function getData(){
     setLoading(true);
     refSearch.current?.blur();
