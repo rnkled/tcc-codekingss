@@ -15,10 +15,6 @@ import { sendNotificationTo } from '../../services/notificationService';
 // import { Container } from './styles';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
-type paramsRoute = {
-  id_professional: string;
-}
-
 const Chat: React.FC = () => {
   const navigation = useNavigation<propsScreens>();
 
@@ -29,7 +25,6 @@ const Chat: React.FC = () => {
   
   useEffect(() => {
     getMessage();
-
   }, [])
 
   function goBack(){
@@ -38,10 +33,11 @@ const Chat: React.FC = () => {
 
   function getMessage(){
     if(user.role === "user"){
-      database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByChild('id').on("value", snapshot => {
+      const onValueChange = database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByChild('id').on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
           let objMessage = childSnapshot.val();
+          
           messagesArr.push(objMessage);
           if(childSnapshot.numChildren() <= 0){      
             setMessages([]);
@@ -51,13 +47,15 @@ const Chat: React.FC = () => {
         
         setMessages(messagesArr)   
       })
+      return () => database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).off('value', onValueChange);
     }
 
     if(user.role === "professional"){
-      database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByChild('id').on("value", snapshot => {
+      const onValueChange = database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByChild('id').on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
           let objMessage = childSnapshot.val();
+
           messagesArr.push(objMessage);
           if(childSnapshot.numChildren() <= 0){      
             setMessages([]);
@@ -67,6 +65,7 @@ const Chat: React.FC = () => {
         
         setMessages(messagesArr)   
       })
+      return () => database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).off('value', onValueChange);
 
     }
 
@@ -74,13 +73,10 @@ const Chat: React.FC = () => {
 
     }
 
-
-  
   }
 
   async function handleChatMessage(){
     if(message){
-      console.log(user.role);
       
       if(user.role === "user"){
 
