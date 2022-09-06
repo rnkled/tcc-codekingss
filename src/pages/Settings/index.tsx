@@ -39,7 +39,7 @@ const Settings: React.FC = () => {
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [cpf, setCpf] = useState(user.cpf);
-    const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto);
+    const [profilePhoto, setProfilePhoto] = useState("");
 
     const [degreeDescription, setDegreeDescription] = useState(
         user.degree.description
@@ -62,7 +62,7 @@ const Settings: React.FC = () => {
         user.address.postalCode
     );
 
-    const [loadingImage, setLoadingImage] = useState(!profilePhoto);
+    const [loadingImage, setLoadingImage] = useState(true);
 
     const [openProfissionalInfo, setOpenProfissionalInfo] = useState(false);
     const [openAddressInfo, setOpenAddressInfo] = useState(false);
@@ -209,6 +209,7 @@ const Settings: React.FC = () => {
             result.items.forEach(async (ref) => {
                 let url = await ref.getDownloadURL();
                 setProfilePhoto(url);
+                setLoadingImage(false);
             });
 
             
