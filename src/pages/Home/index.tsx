@@ -27,6 +27,7 @@ const Home: React.FC = () => {
 
 
    useEffect(() => {
+    console.log(user);
     
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
