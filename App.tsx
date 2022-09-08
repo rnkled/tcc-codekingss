@@ -9,7 +9,9 @@ import * as Updates from "expo-updates";
 import { AuthProvider } from './src/context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
 import { NotifierWrapper } from 'react-native-notifier';
-
+import moment from "moment";
+import "moment/locale/pt-br"; // without this line it didn't work
+moment.locale('pt-br');
 
 
 
