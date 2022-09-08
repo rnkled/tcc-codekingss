@@ -208,7 +208,11 @@ const Settings: React.FC = () => {
         await reference.listAll().then(result => {
             result.items.forEach(async (ref) => {
                 let url = await ref.getDownloadURL();
-                setProfilePhoto(url);
+                if(!!url){
+                    setProfilePhoto(url);
+                }else{
+                    setProfilePhoto(user.profilePhoto)
+                }
                 setLoadingImage(false);
             });
 
@@ -231,7 +235,23 @@ const Settings: React.FC = () => {
                     }}
                 />
                 <View style={styles.contentPrimary}>
-                    {profilePhoto ? (
+                    {loadingImage && (
+                        <>
+                            <TouchableOpacity style={styles.contentPhoto} onPress={findPhoto}>
+                                
+                                <ActivityIndicator
+                                    color={"#8B97FF"}
+                                    size={100}
+                                    style={{
+                                        display: loadingImage ? "flex" : "none",
+                                        backgroundColor: "#0C0150",
+                                        borderRadius: 100,
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </>
+                    )}
+                    {profilePhoto && (
                         <>
                             <TouchableOpacity style={styles.contentPhoto} onPress={findPhoto}>
                                 <Image
@@ -253,7 +273,8 @@ const Settings: React.FC = () => {
                                 />
                             </TouchableOpacity>
                         </>
-                    ) : (
+                    )}  
+                    {!loadingImage && !profilePhoto && (
                         <TouchableOpacity
                             onPress={findPhoto}
                             style={[
