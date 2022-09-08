@@ -8,6 +8,7 @@ import {
     Image,
     ActivityIndicator,
     ImageSourcePropType,
+    PermissionsAndroid,
     TextInput,
 } from "react-native";
 import Header from "../../components/Header";
@@ -24,6 +25,9 @@ import TextInputMaterial from "../../components/TextInputMaterial";
 import TextAreaMaterial from "../../components/TextAreaMaterial";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import api from "../../services/api";
+import {launchCamera, launchImageLibrary, CameraOptions, ImageLibraryOptions} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
+
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
@@ -35,7 +39,7 @@ const Settings: React.FC = () => {
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [cpf, setCpf] = useState(user.cpf);
-    const [profilePhoto, setProfilePhoto] = useState(user.profilePhoto);
+    const [profilePhoto, setProfilePhoto] = useState("");
 
     const [degreeDescription, setDegreeDescription] = useState(
         user.degree.description
@@ -65,6 +69,10 @@ const Settings: React.FC = () => {
 
     const [loadingSave, setLoadingSave] = useState(false);
 
+    useEffect(() => {
+        getPhotoFirestore();
+    }, [])
+
     function save() {
         setLoadingSave(true);
 
@@ -87,14 +95,19 @@ const Settings: React.FC = () => {
                 "state": addressState,
                 "postalCode": addressPostalCode 
             },
-            "skills": skills
+            "skills": skills,
+            "profilePhoto": profilePhoto
+        }
+
+        if(profilePhoto !== user.profilePhoto){
+            savePhotoFireStore()
         }
 
         api.put("/user/update/"+user._id, data).then((response) => {
             updateLocalUser();
             setLoadingSave(false);
             Alert.alert("Sucesso", "Dados atualizados com sucesso!");
-            user.role === "professional" ? navigation.navigate('homeProfessional') : navigation.navigate('home')
+            navigation.navigate('home')
         }).catch((error) => {
             setLoadingSave(false);
             console.log(error.response.data);
@@ -105,9 +118,105 @@ const Settings: React.FC = () => {
     function goBack() {
         navigation.navigate("home");
     }
+
     function findPhoto() {
-        Alert.alert('Ainda não implementado', 'Aqui vai abrir pra escolher uma foto ou tirar uma foto');
+        Alert.alert('Upload de imagem', "Por onde deseja carregar sua foto?", [
+            {text: "Cancelar", onPress: () => {}, style: "cancel"},
+            {text: "Câmera", onPress: () => getPermissionCamera(), style: "destructive"},
+            {text: "Galeria", onPress: () => getPermissionGalery(), style: "default"},
+
+        ]);
     }
+
+    async function getPermissionCamera(){
+        try {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+                title: "Permissao da câmera",
+                message:"O app precisa acessar sua câmera",
+                buttonNeutral: "Me pergunte depois",
+                buttonNegative: "Cancelar",
+                buttonPositive: "OK"
+            }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+                let options: CameraOptions = {
+                    mediaType: "photo",
+                    maxHeight: 180,
+                    maxWidth: 180,
+                    saveToPhotos: true,            
+                    presentationStyle: "fullScreen"
+                }
+
+                await launchCamera(options, (response) => {
+                    console.log('Response = ', response);
+                        if(response.errorCode){
+                            console.log(response.errorMessage);
+                        }
+
+                        const { uri, type, fileName, fileSize } = response.assets[0];
+                        if(!!uri){
+                            setProfilePhoto(uri)
+                            setLoadingImage(false);
+                        }
+
+                });
+        
+            } else {
+                console.log("Camera permission denied");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
+    async function getPermissionGalery(){
+        let options: ImageLibraryOptions = {
+            mediaType: "photo",
+            maxHeight: 180,
+            maxWidth: 180,
+            presentationStyle: "fullScreen",  
+        };
+
+        await launchImageLibrary(options, (response) => {
+            if(response.errorCode){
+                console.log(response.errorMessage);
+            }
+
+            const { uri, type, fileName, fileSize } = response.assets[0];
+            if(!!uri){
+                console.log({uri});
+                
+                setProfilePhoto(uri)
+                setLoadingImage(false);
+            }
+        })
+    };
+
+    async function savePhotoFireStore(){
+        console.log("enviando");
+        
+        const reference = storage().ref(`/images/${user._id}/img_profile.png`);
+        await reference.putFile(profilePhoto);
+    }
+
+    async function getPhotoFirestore(){
+        const reference = storage().ref(`/images/${user._id}/`);
+
+        await reference.listAll().then(result => {
+            result.items.forEach(async (ref) => {
+                let url = await ref.getDownloadURL();
+                setProfilePhoto(url);
+                setLoadingImage(false);
+            });
+
+            
+        })
+ 
+    }
+    
     return (
         <Background>
             <KeyboardAwareScrollView nestedScrollEnabled={true} contentContainerStyle={{alignItems: "center"}}>
@@ -130,8 +239,8 @@ const Settings: React.FC = () => {
                                         styles.imageStyled,
                                         { display: loadingImage ? "none" : "flex" },
                                     ]}
-                                    source={{ uri: profilePhoto } as ImageSourcePropType}
-                                    onLoad={() => setLoadingImage(false)}
+                                    source={{ uri: profilePhoto, } as ImageSourcePropType}
+                                    // onLoad={() => setLoadingImage(false)}
                                 />
                                 <ActivityIndicator
                                     color={"#8B97FF"}
@@ -355,6 +464,7 @@ const styles = StyleSheet.create({
         width: 180,
         height: 180,
         backgroundColor: "transparent",
+ 
         justifyContent: "center",
         alignItems: "center",
     },
@@ -364,6 +474,7 @@ const styles = StyleSheet.create({
         borderRadius: 180 / 2,
         borderColor: "#0C0150",
         borderWidth: 2,
+        
     },
     inputName: {
         width: "100%",

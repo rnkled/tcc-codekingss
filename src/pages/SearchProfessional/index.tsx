@@ -31,7 +31,7 @@ const SearchProfessional: React.FC = () => {
 
 
   function goToHome() {
-    navigation.navigate('homeProfessional');
+    navigation.navigate('home');
   }
 
   useEffect(() => {
@@ -107,6 +107,7 @@ const SearchProfessional: React.FC = () => {
     setLoading(true);
     refSearch.current?.blur();
     api.get(`/user/search/${searchTerm}?role=user`).then(response => {
+      
       var arrUsers = [];
       messagesExisting.map(item => {
       response.data.map(user => {
@@ -123,6 +124,8 @@ const SearchProfessional: React.FC = () => {
       }) 
      
       setData(arrUsers);
+
+      
       setLoading(false);
     }).catch(err => {
       console.log(err);
