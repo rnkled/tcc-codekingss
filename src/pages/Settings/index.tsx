@@ -204,21 +204,27 @@ const Settings: React.FC = () => {
 
     async function getPhotoFirestore(){
         const reference = storage().ref(`/images/${user._id}/`);
-
+        
         await reference.listAll().then(result => {
-            result.items.forEach(async (ref) => {
-                let url = await ref.getDownloadURL();
-                if(!!url){
-                    setProfilePhoto(url);
-                }else{
-                    setProfilePhoto(user.profilePhoto)
-                }
-                setLoadingImage(false);
-            });
+            if(result.items.length > 0){
 
-            
-        })
- 
+                result.items.forEach(async (ref) => {
+                    let url = await ref.getDownloadURL();
+                    if(!!url){
+                        setProfilePhoto(url);
+                        setLoadingImage(false);
+                        
+                    }else{
+                        setProfilePhoto(user.profilePhoto)
+                        setLoadingImage(false);
+                        
+                    }
+                });
+            }else{
+                setProfilePhoto(user.profilePhoto)
+                setLoadingImage(false); 
+            }
+        }) 
     }
     
     return (
