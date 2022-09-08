@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { AutoScrollFlatList } from 'react-native-autoscroll-flatlist';
 import Background from '../../components/Background';
@@ -9,11 +9,14 @@ import Header from '../../components/Header';
 import InputTextChat from '../../components/InputTextChat';
 import { RouteStackParamList } from '../../routes';
 import database from '@react-native-firebase/database';
+import moment from "moment";
 import AuthContext from '../../context/AuthContext';
 import { sendNotificationTo } from '../../services/notificationService';
 
 // import { Container } from './styles';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+
+
 
 const Chat: React.FC = () => {
   const navigation = useNavigation<propsScreens>();
@@ -21,7 +24,10 @@ const Chat: React.FC = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatBoxProps[]>([]);
   const route = useRoute<RouteProp<RouteStackParamList, "chat">>();
+
   const {user} = useContext(AuthContext);
+
+
   
   useEffect(() => {
     getMessage();
@@ -33,7 +39,7 @@ const Chat: React.FC = () => {
 
   function getMessage(){
     if(user.role === "user"){
-      const onValueChange = database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByChild('id').on("value", snapshot => {
+      const onValueChange = database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByKey().on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
           //console.log(childSnapshot.val());
@@ -45,14 +51,15 @@ const Chat: React.FC = () => {
             return true;
           }
         });
-        console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
-        setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
+        setMessages(messagesArr)
+        // console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
+        // setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
       })
       return () => database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).off('value', onValueChange);
     }
 
     if(user.role === "professional"){
-      const onValueChange = database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByChild('id').on("value", snapshot => {
+      const onValueChange = database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByKey().on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
           ///console.log(childSnapshot.val());
@@ -64,9 +71,9 @@ const Chat: React.FC = () => {
             return true;
           }
         });
-        console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
-        
-        setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse())   
+        setMessages(messagesArr)
+        // console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
+        // setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse())   
       })
       return () => database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).off('value', onValueChange);
 
@@ -88,7 +95,7 @@ const Chat: React.FC = () => {
           id_user: user._id,
           id: Date.now(),
           message,
-          sent: new Date(Date.now()),
+          sent: moment(new Date().toLocaleTimeString("pt-BR"), "HH:mm:ss").subtract(3, "hours").format("DD/MM/YYYY-HH:mm"),
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
@@ -101,7 +108,7 @@ const Chat: React.FC = () => {
           id_user: user._id,
           id: Date.now(),
           message,
-          sent: new Date(Date.now()),
+          sent: moment(new Date().toLocaleTimeString("pt-BR"), "HH:mm:ss").subtract(3, "hours").format("DD/MM/YYYY-HH:mm"),
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
