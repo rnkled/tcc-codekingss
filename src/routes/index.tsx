@@ -11,6 +11,7 @@ import Search from '../pages/Search';
 import Settings from '../pages/Settings';
 import HomeProfessional from '../pages/HomeProfessional';
 import SearchProfessional from '../pages/SearchProfessional';
+import Calendar from '../pages/Calendar';
 
 export type RouteStackParamList = {
     login: undefined,
@@ -32,6 +33,7 @@ export type RouteStackParamList = {
     },
     homeProfessional: undefined;
     searchProfessional: undefined;
+    calendar: undefined;
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
@@ -55,6 +57,8 @@ const Routes = () => {
                             <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                             <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
                             <Stack.Screen name="chat" component={Chat} />
+                            <Stack.Screen name="calendar" component={Calendar} />
+
                         </>
                         )
                     }

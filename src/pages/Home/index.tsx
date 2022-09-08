@@ -13,6 +13,7 @@ import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -96,6 +97,10 @@ const Home: React.FC = () => {
     navigation.navigate("settings");
   }
 
+  function goToCalendar() {
+    navigation.navigate("calendar");
+  }
+
 
   return(
     <Background>
@@ -125,7 +130,7 @@ const Home: React.FC = () => {
 
       </View>
       <View style={styles.contentSecondary}>
-        <Button label='Minhas consultas' onPress={() => {}} />
+        <Button label='Minhas consultas' onPress={() => goToCalendar} />
         <Button label='Buscar profissionais' onPress={goToSearch}/>
       </View>
       <View style={styles.footer}>

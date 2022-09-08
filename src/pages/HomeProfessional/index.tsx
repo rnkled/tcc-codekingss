@@ -25,8 +25,6 @@ const HomeProfessional: React.FC = () => {
   const {signOut, user} =  useContext(AuthContext);
 
   useEffect(() => {
-    console.log({user});
-    
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
         Notifier.showNotification({
@@ -97,6 +95,9 @@ const HomeProfessional: React.FC = () => {
   function goToSettings() {
     navigation.navigate("settings");
   }
+  function goToCalendar() {
+    navigation.navigate("calendar");
+  }
 
   return(
     <Background style={{alignItems: 'center'}}>
@@ -116,7 +117,7 @@ const HomeProfessional: React.FC = () => {
       />
       
       <View style={styles.contentPrimary}>
-        <Button label='Minha agenda' onPress={() => {}} />
+        <Button label='Minha agenda' onPress={goToCalendar} />
         <Button label='Meus pacientes' onPress={goToSearch}/>
       </View>
       <View style={styles.footer}>

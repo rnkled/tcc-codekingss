@@ -41,6 +41,7 @@ const Chat: React.FC = () => {
       database().ref(`/chats/${route.params.id_professional}/${user._id}/messages/`).orderByChild('id').on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
+          //console.log(childSnapshot.val());
           let objMessage = childSnapshot.val();
           messagesArr.push(objMessage);
           if(childSnapshot.numChildren() <= 0){      
@@ -48,8 +49,8 @@ const Chat: React.FC = () => {
             return true;
           }
         });
-        
-        setMessages(messagesArr)   
+        console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
+        setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
       })
     }
 
@@ -57,6 +58,7 @@ const Chat: React.FC = () => {
       database().ref(`/chats/${user._id}/${route.params.id_pacient}/messages/`).orderByChild('id').on("value", snapshot => {
         var messagesArr = [];
         snapshot && snapshot.forEach((childSnapshot) => {
+          ///console.log(childSnapshot.val());
           let objMessage = childSnapshot.val();
           messagesArr.push(objMessage);
           if(childSnapshot.numChildren() <= 0){      
@@ -64,8 +66,9 @@ const Chat: React.FC = () => {
             return true;
           }
         });
+        console.log(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse());
         
-        setMessages(messagesArr)   
+        setMessages(messagesArr.sort((a, b) => (new Date(b.id) as any) - (new Date(a.id) as any)).reverse())   
       })
 
     }
