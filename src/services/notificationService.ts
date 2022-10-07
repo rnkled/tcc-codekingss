@@ -46,7 +46,7 @@ const messageSound = {
 }
 
 export type SendNotificationProps = {
-  token: string;
+  token: string | string[];
   title: string;
   body: string;
   id_professional: string;
@@ -54,37 +54,40 @@ export type SendNotificationProps = {
   type: string;
   name: string;
   tokenSecondary: string;
-  sounds: "call" | "message"
+  sounds: "call" | "message";
+  channel_id?: string;
+
 }
 
 
 
 type props = {
-  data: SendNotificationProps
+  dataNotification: SendNotificationProps
 }
 
 
-export const sendNotificationTo = async ({ data }: props) => {
-  if (data.token && data.title && data.body) {
+export const sendNotificationTo = async ({ dataNotification }: props) => {
+  if (dataNotification.token && dataNotification.title && dataNotification.body) {
 
     await axios.post(
       "https://fcm.googleapis.com/fcm/send",
       {
-        to: data.token,
+        to: dataNotification.token,
         notification: {
-          title: data.title,
-          body: data.body,
+          title: dataNotification.title,
+          body: dataNotification.body,
 
-          sound: data.sounds === "call" ? callSound.soundName : data.sounds === "message" ? messageSound.soundName : "default",
-          android_channel_id: data.sounds === "call" ? callSound.soundId : data.sounds === "message" ? messageSound.soundId : ""
+          sound: dataNotification.sounds === "call" ? callSound.soundName : dataNotification.sounds === "message" ? messageSound.soundName : "default",
+          android_channel_id: dataNotification.sounds === "call" ? callSound.soundId : dataNotification.sounds === "message" ? messageSound.soundId : ""
 
         },
         data: {
-          id_professional: data.id_professional,
-          id_pacient: data.id_pacient,
-          type: data.type,
-          name: data.name,
-          tokenPush: data.tokenSecondary
+          id_professional: dataNotification.id_professional,
+          id_pacient: dataNotification.id_pacient,
+          type: dataNotification.type,
+          name: dataNotification.name,
+          tokenPush: dataNotification.tokenSecondary,
+          channel: dataNotification.channel_id,
         },
       },
 
