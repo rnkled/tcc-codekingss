@@ -56,19 +56,36 @@ const HomeProfessional: React.FC = () => {
           }
         });
       }
+
+      if(remoteMessage.data.type && remoteMessage.data.type === "call"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            
+            navigation.navigate("videoCall", {channel_id: remoteMessage.data.channel})
+           
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+      }
+
+      
+
     });
 
     return unsubscribe;
   }, []);
 
-  function handleNav() {
-    // navigation.openDrawer();
-  }
-
-  function handleNewVideoCall(){
-    navigation.navigate("videoCall");
-    
-  }
 
   function handleLogOut() {
     Alert.alert(
