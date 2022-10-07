@@ -45,7 +45,7 @@ export const AuthProvider = ({ children } : any) => {
       if(!response.data.user.tokenPush){    
         let token = await requestUserNotificationPermission(response.data.user._id);
         if(!!token){
-          updateLocalUser();
+          updateLocalUser(response.data.user._id);
         }  
       }
       return true;
@@ -69,8 +69,10 @@ export const AuthProvider = ({ children } : any) => {
     setUser(null);
   }
 
-  async function updateLocalUser() {
-    api.get(`/user/list/${user._id}`).then(async response => {
+  async function updateLocalUser(id?: string) { 
+    const userId = id || user._id
+    
+    api.get(`/user/list/${userId}`).then(async response => {
       setUser(response.data[0]);
       await AsyncStorage.setItem('@user', JSON.stringify(response.data[0]));
     }).catch(err => {
