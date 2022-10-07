@@ -35,25 +35,56 @@ export const removePermissionNotification = async (id: string) => {
   }
 }
 
+const callSound = {
+  soundName: "lovingly.mp3",
+  soundId: "sound_channel2"
+}
 
-export const sendNotificationTo = async (token: string, title: string, body: string, id_professional: string, id_pacient: string, type: string, name: string, tokenSecondary: string) => {
-  if (token && title && body) {
+const messageSound = {
+  soundName: "lovingly.mp3",
+  soundId: "sound_channel2"
+}
+
+export type SendNotificationProps = {
+  token: string;
+  title: string;
+  body: string;
+  id_professional: string;
+  id_pacient: string;
+  type: string;
+  name: string;
+  tokenSecondary: string;
+  sounds: "call" | "message"
+}
+
+
+
+type props = {
+  data: SendNotificationProps
+}
+
+
+export const sendNotificationTo = async ({ data }: props) => {
+  if (data.token && data.title && data.body) {
 
     await axios.post(
       "https://fcm.googleapis.com/fcm/send",
       {
-        to: token,
+        to: data.token,
         notification: {
-          title: title,
-          body: body,
-          mutable_content: true,
+          title: data.title,
+          body: data.body,
+
+          sound: data.sounds === "call" ? callSound.soundName : data.sounds === "message" ? messageSound.soundName : "default",
+          android_channel_id: data.sounds === "call" ? callSound.soundId : data.sounds === "message" ? messageSound.soundId : ""
+
         },
         data: {
-          id_professional: id_professional,
-          id_pacient: id_pacient,
-          type: type,
-          name: name,
-          tokenPush: tokenSecondary
+          id_professional: data.id_professional,
+          id_pacient: data.id_pacient,
+          type: data.type,
+          name: data.name,
+          tokenPush: data.tokenSecondary
         },
       },
 
