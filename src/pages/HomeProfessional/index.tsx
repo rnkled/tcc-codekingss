@@ -113,6 +113,8 @@ const HomeProfessional: React.FC = () => {
     navigation.navigate("settings");
   }
   function goToCalendar() {
+    console.log('teste');
+    
     navigation.navigate("calendar");
   }
 

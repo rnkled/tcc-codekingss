@@ -312,6 +312,7 @@ const Settings: React.FC = () => {
                         containerStyle={styles.inputMaterial}
                         textColor="#fff"
                         baseColor="#8B97FF"
+                        editable={false}
                     />
                     <TextInputMaterial
                         value={cpf}
