@@ -36,6 +36,7 @@ const Search: React.FC = () => {
           description: `${remoteMessage.notification.body}`,
           duration: 10000,
           showAnimationDuration: 800,
+          translucentStatusBar: true,
           showEasing: Easing.bounce,
           onHidden: () => console.log('Hidden'),
           onPress: () => {
