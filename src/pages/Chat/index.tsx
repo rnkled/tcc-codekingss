@@ -11,7 +11,7 @@ import { RouteStackParamList } from '../../routes';
 import database from '@react-native-firebase/database';
 import moment from "moment";
 import AuthContext from '../../context/AuthContext';
-import { sendNotificationTo } from '../../services/notificationService';
+import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 
 // import { Container } from './styles';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -24,18 +24,18 @@ const Chat: React.FC = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatBoxProps[]>([]);
   const route = useRoute<RouteProp<RouteStackParamList, "chat">>();
-
   const {user} = useContext(AuthContext);
-
 
   
   useEffect(() => {
     getMessage();
+   
   }, [])
 
   function goBack(){
     navigation.goBack();
   }
+
 
   function getMessage(){
     if(user.role === "user"){
@@ -99,7 +99,19 @@ const Chat: React.FC = () => {
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
-        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, null, user._id, "chat", user.name, user.tokenPush)
+        const data: SendNotificationProps = {
+          token: route.params.pushNotification,
+          title: "Mensagem",
+          body: message,
+          id_pacient: user._id,
+          id_professional: null,
+          type: "chat",
+          name: user.name,
+          tokenSecondary: user.tokenPush,
+          sounds: "message"
+        }
+
+        await sendNotificationTo({data});
       }
 
       if(user.role === "professional"){
@@ -112,7 +124,22 @@ const Chat: React.FC = () => {
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
-        await sendNotificationTo(route.params.pushNotification, "Mensagem", message, user._id, null, "chat", user.name, user.tokenPush)
+
+        const data: SendNotificationProps = {
+          token: route.params.pushNotification,
+          title: "Mensagem",
+          body: message,
+          id_pacient: null,
+          id_professional: user._id,
+          type: "chat",
+          name: user.name,
+          tokenSecondary: user.tokenPush,
+          sounds: "message"
+        }
+
+        await sendNotificationTo({data})
+      
+      
       }
     }
   }
