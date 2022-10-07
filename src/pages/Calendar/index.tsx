@@ -21,7 +21,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import api from "../../services/api";
 import Loading from '../../components/Loading';
 import {Calendar, Agenda, AgendaEntry, DateData} from 'react-native-calendars';
-import localization from './localization';
+import localization from '../../services/calendarLocalization';
 import appointmentInterface from '../../interfaces/appointmentInterface';
 import AppointmentItem from '../../components/AppointmentItem/AppointmentItem';
 import { Ionicons } from '@expo/vector-icons';
@@ -42,103 +42,44 @@ const CalendarComponent: React.FC = () => {
     const [selectedDay, setSelectedDay] = useState<DateData>({dateString: '0000-00-00'} as DateData);
 
     useEffect(() => {
-        setTimeout(() => {
-            formatData();
-            setLoading(false);
-        }, 2000);
+        formatData();
     }, []);
 
     function formatData() {
-
-        const APIData = {
-            '2022-09-09': [
-                {
-                    name: 'Consulta com Juliano',
-                    time: '10:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de esquizofrenia',
-                    pacient_id: 11,
-                    color: '#f88'
-                }, 
-                {
-                    name: 'Consulta com Larissa',
-                    time: '15:00',
-                    status: 'a confirmar',
-                    note: 'Paciente com quadro de Psicose Pos Parto',
-                    pacient_id: 12,
-                    color: '#88f'
-                },
-                {
-                    name: 'Consulta com Amanda',
-                    time: '16:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de esquizofrenia e Psicose delirante aguda com sintomas bipolares',
-                    pacient_id: 13,
-                    color: '#f88'
-                },
-                {
-                    name: 'Consulta com Eliana',
-                    time: '18:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de TOC e Psicose',
-                    pacient_id: 14,
-                    color: '#ff0'
-                }
-            ],
-            '2022-09-10': [
-                {
-                    name: 'Consulta com Juliana',
-                    time: '11:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de Psicose, com risco de suicídio',
-                    pacient_id: 15,
-                    color: '#88f'
-                }, 
-                {
-                    name: 'Consulta com Marieta',
-                    time: '15:00',
-                    status: 'a confirmar',
-                    note: 'Paciente com quadro de Psicose, com delirios de perseguição',
-                    pacient_id: 16,
-                    color: '#88f'
-                },
-                {
-                    name: 'Consulta com Claire',
-                    time: '18:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de TOC',
-                    pacient_id: 17,
-                    color: '#ff0'
-                },
-                {
-                    name: 'Consulta com Eliana',
-                    time: '19:00',
-                    status: 'confirmado',
-                    note: 'Paciente com quadro de TOC',
-                    pacient_id: 18,
-                    color: '#ff0'
-                }
-            ]
-        }
-
-        
-        let dataObject = {};
-        APIData && Object.keys(APIData).map((key) => {
-            dataObject[key] = {
-                customStyles: {
-                    container: {
-                        backgroundColor: 'white',
-                        elevation: 2
-                    },
-                    text: {
-                        color: 'blue'
+        setLoading(true);
+        api.get('/appointment/list/' + user._id).then(response => {
+            console.log(response.data);
+            
+            const APIData = response.data.appointments;
+            let dataObject = {};
+            APIData && Object.keys(APIData).map((key) => {
+                dataObject[key] = {
+                    customStyles: {
+                        container: {
+                            backgroundColor: 'white',
+                            elevation: 2
+                        },
+                        text: {
+                            color: 'blue'
+                        }
                     }
                 }
-            }
-        })
-        
-        setApiData(APIData);
-        setData(dataObject as AgendaEntry);
+            })
+            setApiData(APIData);
+            setData(dataObject as AgendaEntry);
+            setLoading(false);
+        }).catch(error => {
+            console.log(error);
+            console.log(error.response.data);
+            setLoading(false);
+        });
+
+    }
+
+    function goToNewAppointment() {
+        navigation.navigate('newAppointment', {
+            date: selectedDay.dateString
+        });
     }
 
     return (
@@ -184,7 +125,7 @@ const CalendarComponent: React.FC = () => {
                                     <Text style={styles.titleAppointments}>Nenhum agendamento</Text>
                                 )
                             }
-                            <TouchableOpacity style={styles.buttonAddAppointment} onPress={() => {}}>
+                            <TouchableOpacity style={styles.buttonAddAppointment} onPress={goToNewAppointment}>
                                 <Ionicons name="add-circle-outline" size={24} color="#8B97FF88" />
                                 <Text style={styles.textAddAppointment}>Adicionar agendamento</Text>
                             </TouchableOpacity>
@@ -197,8 +138,8 @@ const CalendarComponent: React.FC = () => {
 };
 
 const calendarTheme = {
-    backgroundColor: '#ffffff88',
-    calendarBackground: '#ffffff88',
+    backgroundColor: '#ffffff00',
+    calendarBackground: '#ffffff00',
     textSectionTitleColor: '#b6c1cd',
     textSectionTitleDisabledColor: '#d9e1e8',
     selectedDayBackgroundColor: '#00adf5',

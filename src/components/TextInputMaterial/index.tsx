@@ -15,9 +15,10 @@ type Props = {
   containerStyle?: object;
   textColor?: string;
   baseColor?: string;
+  editable?: boolean;
 }
 
-const TextInput = ({setValue, value, label, secure=false, containerStyle, textColor, baseColor, ...rest}: Props) => {
+const TextInput = ({setValue, value, label, secure=false, containerStyle, textColor, baseColor, editable, ...rest}: Props) => {
   const [showingPassword, setShowingPassword] = useState(secure);
 
   return(
@@ -47,7 +48,7 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
               <Entypo name="eye" size={24} color="#0C015088" /> : 
               <Entypo name="eye-with-line" size={24} color="#0C015088" />}
           </TouchableOpacity> : null)}
-        editable={true}
+        editable={editable? editable : true}
         {...rest}
       />
     </View>
