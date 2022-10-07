@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
-import AgoraUIKit from 'agora-rn-uikit';
+import AgoraUIKit, {PropsInterface} from 'agora-rn-uikit';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +11,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import AuthContext from '../../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
+import api from '../../services/api';
+import UserInterface from '../../interfaces/userInterface';
+import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
@@ -19,15 +22,73 @@ const VideoCall: React.FC = () => {
   const navigation = useNavigation<rateScreenProps>();
   const [videoCall, setVideoCall] = useState(false);
   const [idProfessional, setIdProfessional] = useState("");
+  const [isEnableAudio, setIsEnableAudio] = useState(false);
+  const [isEnableVideo, setIsEnableVideo] = useState(false);
   const {user} = useContext(AuthContext);
 
-  const connectionData = {
-    appId: '885ca3cade8f4a3e81c7550a827300a2',
-    channel: 'test',
-    rtmToken: user._id + Date.now(),
-    rtmUid: user._id
-    
+ 
+  const props: PropsInterface = {
+    rtcProps: {
+      appId: '885ca3cade8f4a3e81c7550a827300a2',
+      channel: 'teste',
+      enableAudio: user.role === "user" ? isEnableAudio : true,
+      enableVideo: user.role === "user" ? isEnableVideo : true,
+      mode: 2,
+      role: 1
+
+    },
+    callbacks: {
+      EndCall: () => goToNextScreen(),
+
+    },
+    styleProps: {
+      localBtnStyles:{
+          muteLocalAudio: {backgroundColor: "#8B97FF", borderWidth: 0 },
+          muteLocalVideo: {backgroundColor: "#8B97FF", borderWidth: 0 },
+          switchCamera: {backgroundColor: "#8B97FF", borderWidth: 0 },
+          endCall: {backgroundColor: '#f66', borderWidth: 0, },
+
+        },
+        localBtnContainer: {
+          backgroundColor: '#0C0150',
+          bottom: 0,
+          paddingVertical: 10,
+          height: 80,
+          
+          
+        },
+
+        iconSize: 30
+    }
+    // connectionData: {
+    //   appId: '<Agora App ID>',
+    //   channel: 'test',
+    // },
+    // rtcCallbacks: {
+    //   EndCall: () => setVideoCall(false),
+    // },
   };
+
+    useEffect(() => {
+      handleSendNotificationCall();
+    },[]);
+
+    async function handleSendNotificationCall(){
+      
+      const { data } = await api.get("/user/list?role=professional");
+     
+      const tokenPush = [];
+      data.length > 0 && data.map((item: UserInterface) => item.tokenPush && tokenPush.push(item.tokenPush))
+      
+      const dataNotification: SendNotificationProps = {
+        title: "Atendimento com urgencia"
+      }
+      
+      await sendNotificationTo()
+      
+      
+
+    }
 
     useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -60,50 +121,18 @@ const VideoCall: React.FC = () => {
     navigation.navigate("rateVideoCall", {id_professional: idProfessional || "630bfccfd7c33a229c57f04c"})
   }
 
-  
-  const rtcCallbacks = {
-    EndCall: () => goToNextScreen(),
-    // JoinChannelSuccess: (uid) => {
-      
-    //   uid.UserMuteAudio(uid);
-    //   uid.UserMuteVideo();
-    // },
-    
-    
-    
-  };
+
   
 
   return videoCall ? (
-    <AgoraUIKit styleProps={{
-        localBtnStyles:{
-          muteLocalAudio: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          muteLocalVideo: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          switchCamera: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          endCall: {backgroundColor: '#f66', borderWidth: 0, },
-
-        },
-        localBtnContainer: {
-          backgroundColor: '#0C0150',
-          bottom: 0,
-          paddingVertical: 10,
-          height: 80,
-          
-          
-        },
-
-        iconSize: 30
-      }}   
+    <AgoraUIKit 
+      styleProps={props.styleProps}   
+      rtcProps={props.rtcProps} 
+      callbacks={props.callbacks}
       // settings={{
       //   mode: 2,
       //   role: 1, // analisar o acesso do psicologo aqui  
       // }}
-      rtcProps={connectionData} 
-      callbacks={rtcCallbacks}
-      // rtmCallbacks={{}}
-
-  
-    
     />
   ) : (
     <Background style={styles.container}> 
@@ -113,18 +142,26 @@ const VideoCall: React.FC = () => {
           <Ionicons name="videocam-outline" size={90} color="#8B97FF" />
         </View>
         <View style={styles.messageContent}>
-          {/* <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo da chamada somente se sentir-se confortável.</Text> */}
-          <Text style={styles.message}>Para sua melhor comodidade, iremos te notificar a hora que um profissional entrar e perguntar se você realmente deseja ingressar nessa chamada!</Text>
+          <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo e audio da chamada somente se sentir-se confortável.</Text>
+          {/* <Text style={styles.message}>Para sua melhor comodidade, iremos te notificar a hora que um profissional entrar e perguntar se você realmente deseja ingressar nessa chamada!</Text> */}
         </View>
-        {/* <View style={styles.buttonsContent}> */}
-          {/* <TouchableOpacity onPress={() => setVideoCall(!videoCall)} activeOpacity={0.8} style={styles.buttonRadio}>
-            <Feather name="mic-off" size={30} color="#0C0150" />
+        <View style={styles.buttonsContent}>
+          <TouchableOpacity onPress={() => setIsEnableAudio(!isEnableAudio)} activeOpacity={0.8} style={styles.buttonRadio}>
+            {isEnableAudio ? (
+              <Feather name="mic" size={30} color="#0C0150" />
+            ) : (
+              <Feather name="mic-off" size={30} color="#0C0150" />
+            )}
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} style={styles.buttonRadio}>
-            <Feather name="video-off" size={30} color="#0C0150" />
-          </TouchableOpacity> */}
-
-        {/* </View> */}
+          <TouchableOpacity onPress={() => setIsEnableVideo(!isEnableVideo)} activeOpacity={0.8} style={styles.buttonRadio}>
+            {isEnableVideo ? (
+              <Feather name="video" size={30} color="#0C0150" />
+            ) : (
+              <Feather name="video-off" size={30} color="#0C0150" />
+            )}
+            
+          </TouchableOpacity>
+        </View>
 
       </View>
     </Background>

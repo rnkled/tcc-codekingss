@@ -35,6 +35,7 @@ const Home: React.FC = () => {
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
           duration: 10000,
+          translucentStatusBar: true,
           showAnimationDuration: 800,
           showEasing: Easing.bounce,
           onHidden: () => console.log('Hidden'),
