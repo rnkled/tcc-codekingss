@@ -72,6 +72,8 @@ const Routes = () => {
     useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
         messaging().onNotificationOpenedApp(async (remoteMessage) => {
+            console.log("app segundo plano");
+            
             const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
             if(storagedUser && storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
                 console.log("aqqqq");
@@ -79,14 +81,14 @@ const Routes = () => {
                 
                 
                 const dataNotification: SendNotificationProps = {
-                    token: remoteMessage.data.tokenSecondary,
+                    token: remoteMessage.data.tokenPush,
                     title: "Encontramos um profissional",
                     body: "Você realmente deseja entrar nessa consulta?",
                     id_professional: storagedUser._id,
                     id_pacient: null,
                     name: storagedUser.name,
                     sounds: "message",
-                    tokenSecondary: user.tokenPush,
+                    tokenSecondary: storagedUser.tokenPush,
                     type: "requestCall",
                     multiplesToken: false,
                 }
@@ -102,20 +104,22 @@ const Routes = () => {
         messaging()
         .getInitialNotification()
         .then(async(remoteMessage) => {
-            const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
+            console.log("app fechado");
             setLoading(true);
+            const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
             if(storagedUser && storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
             console.log("aqqq34");
+            console.log({aa: remoteMessage.data});
             
             const dataNotification: SendNotificationProps = {
-                token: remoteMessage.data.tokenSecondary,
+                token: remoteMessage.data.tokenPush,
                 title: "Encontramos um profissional",
                 body: "Você realmente deseja entrar nessa consulta?",
                 id_professional: storagedUser._id,
                 id_pacient: null,
                 name: storagedUser.name,
                 sounds: "message",
-                tokenSecondary: user.tokenPush,
+                tokenSecondary: storagedUser.tokenPush,
                 type: "requestCall",
                 multiplesToken: false
             }
