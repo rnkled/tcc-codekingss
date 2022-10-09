@@ -99,7 +99,7 @@ const Chat: React.FC = () => {
           user_type: user.role
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
-        const data: SendNotificationProps = {
+        const dataNotification: SendNotificationProps = {
           token: route.params.pushNotification,
           title: "Mensagem",
           body: message,
@@ -108,10 +108,11 @@ const Chat: React.FC = () => {
           type: "chat",
           name: user.name,
           tokenSecondary: user.tokenPush,
-          sounds: "message"
+          sounds: "message",
+          multiplesToken: false,
         }
-
-        await sendNotificationTo({data});
+        
+        await sendNotificationTo({dataNotification});
       }
 
       if(user.role === "professional"){
@@ -125,7 +126,7 @@ const Chat: React.FC = () => {
         }
         newReferenceMessage.set(messageObject).then(() => setMessage(""));
 
-        const data: SendNotificationProps = {
+        const dataNotification: SendNotificationProps = {
           token: route.params.pushNotification,
           title: "Mensagem",
           body: message,
@@ -134,10 +135,11 @@ const Chat: React.FC = () => {
           type: "chat",
           name: user.name,
           tokenSecondary: user.tokenPush,
-          sounds: "message"
+          sounds: "message",
+          multiplesToken: false
         }
 
-        await sendNotificationTo({data})
+        await sendNotificationTo({dataNotification})
       
       
       }
