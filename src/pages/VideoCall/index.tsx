@@ -93,6 +93,7 @@ const VideoCall: React.FC = () => {
       
       const dataNotification: SendNotificationProps = {
         token: tokenPush,
+        multiplesToken: true,
         title: "Emergência",
         body: "Olá Dr. (a), temos um paciente esperando pelo seu atendimento. Toque para atendê-lo",
         id_professional: null,
@@ -159,6 +160,7 @@ const VideoCall: React.FC = () => {
         sounds: "message",
         tokenSecondary: null,
         type: "responseCall",
+        multiplesToken: false
         
       }
       await sendNotificationTo({dataNotification})
