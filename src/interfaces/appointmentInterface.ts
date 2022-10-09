@@ -3,8 +3,8 @@ interface AppointmentInterface {
     time: string,
     status: string,
     note: string,
-    pacient_id: String,
-    color: String
+    user_id: string,
+    color: string
 }
 
 export default AppointmentInterface;

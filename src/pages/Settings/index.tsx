@@ -36,44 +36,42 @@ const Settings: React.FC = () => {
 
     const { user, updateLocalUser } = useContext(AuthContext);
 
-    const [name, setName] = useState(user.name);
-    const [email, setEmail] = useState(user.email);
-    const [cpf, setCpf] = useState(user.cpf);
-    const [profilePhoto, setProfilePhoto] = useState("");
+    const [name, setName] = useState<string>(user.name);
+    const [email, setEmail] = useState<string>(user.email);
+    const [cpf, setCpf] = useState<string>(user.cpf);
+    const [profilePhoto, setProfilePhoto] = useState<string>("");
 
-    const [degreeDescription, setDegreeDescription] = useState(
-        user.degree.description
-    );
-    const [degreeCrp, setDegreeCrp] = useState(user.degree.crp);
-    const [clinicName, setClinicName] = useState(user.clinicName);
-    const [skills, setSkills] = useState(user.skills);
+    const [degreeDescription, setDegreeDescription] = useState<string>(user.degree.description);
+    const [degreeCrp, setDegreeCrp] = useState<string>(user.degree.crp);
+    const [clinicName, setClinicName] = useState<string>(user.clinicName);
+    const [skills, setSkills] = useState<string>(user.skills);
 
-    const [addressStreet, setAddressStreet] = useState(user.address.street);
-    const [addressNumber, setAddressNumber] = useState(String(user.address.number));
-    const [addressComplement, setAddressComplement] = useState(
+    const [addressStreet, setAddressStreet] = useState<string>(user.address.street);
+    const [addressNumber, setAddressNumber] = useState<string>(String(user.address.number));
+    const [addressComplement, setAddressComplement] = useState<string>(
         user.address.complement
     );
-    const [addressNeighborhood, setAddressNeighborhood] = useState(
+    const [addressNeighborhood, setAddressNeighborhood] = useState<string>(
         user.address.neighborhood
     );
-    const [addressCity, setAddressCity] = useState(user.address.city);
-    const [addressState, setAddressState] = useState(user.address.state);
-    const [addressPostalCode, setAddressPostalCode] = useState(
+    const [addressCity, setAddressCity] = useState<string>(user.address.city);
+    const [addressState, setAddressState] = useState<string>(user.address.state);
+    const [addressPostalCode, setAddressPostalCode] = useState<string>(
         user.address.postalCode
     );
 
-    const [loadingImage, setLoadingImage] = useState(true);
+    const [loadingImage, setLoadingImage] = useState<boolean>(true);
 
-    const [openProfissionalInfo, setOpenProfissionalInfo] = useState(false);
-    const [openAddressInfo, setOpenAddressInfo] = useState(false);
+    const [openProfissionalInfo, setOpenProfissionalInfo] = useState<boolean>(false);
+    const [openAddressInfo, setOpenAddressInfo] = useState<boolean>(false);
 
-    const [loadingSave, setLoadingSave] = useState(false);
+    const [loadingSave, setLoadingSave] = useState<boolean>(false);
 
     useEffect(() => {
         getPhotoFirestore();
     }, [])
 
-    function save() {
+    function handleSave() {
         setLoadingSave(true);
 
         let data = {
@@ -444,7 +442,7 @@ const Settings: React.FC = () => {
                             </>
                         }  
                     </View>
-                    <Button label="Salvar" onPress={save} loading={loadingSave} containerStyle={{marginTop: 40}}/>
+                    <Button label="Salvar" onPress={handleSave} loading={loadingSave} containerStyle={{marginTop: 40}}/>
                 </View>
             </KeyboardAwareScrollView>
         </Background>

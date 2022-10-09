@@ -14,9 +14,11 @@ type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 type CardPrams = {
     data: userInterface,
     type_user?: string;
+    altFunction?: Function;
+    marginTop?: number;
 }
 
-const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
+const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop } :CardPrams) => {
 
     let [loadingImage, setLoadingImage] = useState(true);
 
@@ -31,8 +33,8 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
     }
 
   return ( 
-    <TouchableOpacity onPress={goTo}>
-        <LinearGradient colors={['#8B97FFDD', '#8B97FF','#8B97FFDD' ]} style={styles.container}>
+    <TouchableOpacity onPress={() => altFunction ? altFunction() : goTo()}>
+        <View style={{...styles.container, marginTop: marginTop ? marginTop : 0}}>
             <View style={styles.image}>
                 { data.profilePhoto ? (<>
                     <Image 
@@ -46,13 +48,13 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                         style={{ display: (loadingImage ? 'flex' : 'none') }}
                     /> 
                     </>) : ( 
-                    <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
-                        <Ionicons name="person-circle-outline" size={80} color="#0C0150" />
+                    <View style={{justifyContent: 'center', alignItems:'center'}}>
+                        <Ionicons name="person-circle-outline" size={60} color="#8B97FF66" />
                     </View> )} 
             </View>
             <View style={styles.content}>
                 <Text style={styles.title}>{data.name}</Text>
-                {type_user === "professional" && <>
+                {type_user === "professional" ? <>
                     <AirbnbRating
                     showRating={false}
                     count={5}
@@ -61,28 +63,27 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                     selectedColor={"#FFB84E"}
                     size={16}
                     />
-                    <Text numberOfLines={1} style={styles.address}>{data.address.street}, {data.address.number}, {data.address.neighborhood}, {data.address.postalCode}</Text>
-                    <Text numberOfLines={1} style={styles.address}>{data.address.city}</Text>
-                </>}
+                </> : 
+                <Text numberOfLines={1} style={styles.subTitle}>{data.cpf}</Text>}
             </View>
-        </LinearGradient>
+        </View>
     </TouchableOpacity>);
 }
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 90,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         marginBottom: 5,
-        borderRadius: 8,
+        backgroundColor: '#8B97FF22',
+        borderRadius: 10,
     },
     image: {
         width: '25%',
         height: '100%',
-        padding: 5,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -94,20 +95,22 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
     },
     imageStyled: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 180/2,
-        borderColor: "#0C0150",
-        borderWidth: 1,
+        width: 50,
+        height: 50,
+        borderRadius: 100,
     },
     title: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '500',
+        color: '#8B97FF',
+        marginLeft: 5,
     },
-    address:{
+    subTitle:{
         fontSize: 12,
         fontWeight: '500',
         flexWrap: 'nowrap',
+        color: '#8B97FFaa',
+        marginLeft: 5,
     }
 });
-export default SearchCard;
+export default SearchCardLite;
