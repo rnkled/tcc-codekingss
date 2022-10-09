@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
 import AgoraUIKit, {PropsInterface} from 'agora-rn-uikit';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { RouteStackParamList } from '../../routes';
 import AuthContext from '../../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
 import api from '../../services/api';
+import { Notifier, Easing } from 'react-native-notifier';
 import UserInterface from '../../interfaces/userInterface';
 import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 
@@ -20,17 +21,27 @@ type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideo
 const VideoCall: React.FC = () => {
 
   const navigation = useNavigation<rateScreenProps>();
-  const [videoCall, setVideoCall] = useState(false);
   const [idProfessional, setIdProfessional] = useState("");
   const [isEnableAudio, setIsEnableAudio] = useState(false);
   const [isEnableVideo, setIsEnableVideo] = useState(false);
   const {user} = useContext(AuthContext);
+  const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
+  const channel = route.params?.channel_id;
+  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channel);
 
+  if(user.role === "professional" && !channel){
+    console.log({channel});
+    
+    Alert.alert("Atenção", "Não foi possível se conectar com a chamada de video!")
+    navigation.navigate("home");
+    return 
+
+  }
  
   const props: PropsInterface = {
     rtcProps: {
       appId: '885ca3cade8f4a3e81c7550a827300a2',
-      channel: 'teste',
+      channel: channel,
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
       mode: 2,
@@ -81,10 +92,20 @@ const VideoCall: React.FC = () => {
       data.length > 0 && data.map((item: UserInterface) => item.tokenPush && tokenPush.push(item.tokenPush))
       
       const dataNotification: SendNotificationProps = {
-        title: "Atendimento com urgencia"
+        token: tokenPush,
+        title: "Emergência",
+        body: "Olá Dr. (a), temos um paciente esperando pelo seu atendimento. Toque para atendê-lo",
+        id_professional: null,
+        id_pacient: user._id,
+        name: user.name,
+        sounds: "call",
+        tokenSecondary: user.tokenPush,
+        type: "call",
+        channel_id: String(Date.now())
+
       }
       
-      await sendNotificationTo()
+      await sendNotificationTo({dataNotification})
       
       
 
@@ -92,11 +113,33 @@ const VideoCall: React.FC = () => {
 
     useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage.data.type && remoteMessage.data.type === "call"){
+      if(remoteMessage.data.type && remoteMessage.data.type === "requestCall"){
         Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`, [
-          {text: "Não", onPress: () => handleCancelCall(), style: "cancel"},
+          {text: "Não", onPress: () => handleCancelCall(remoteMessage.data?.tokenSecondary), style: "cancel"},
           {text: "Sim", onPress: () => handleCall(remoteMessage.data?.id_professional), style: "default"}
         ]);
+      }
+
+      if(user.role === "professional" && remoteMessage.data.type && remoteMessage.data.type === "responseCall"){
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          translucentStatusBar:true,
+          onHidden: () => console.log('Hidden'),
+          onPress: () => {
+            console.log("press");
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            descriptionStyle: {fontFamily: "Inter_400Regular"},
+            containerStyle: {backgroundColor: "#EEE"}
+          }
+        });
+        navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home")
       }
     });
 
@@ -104,10 +147,25 @@ const VideoCall: React.FC = () => {
   }, []);
 
 
-  function handleCancelCall(){
+  async function handleCancelCall(token: string){
+    if(!!token){
+      const dataNotification: SendNotificationProps = {
+        token,
+        title: "Chamada encerrada",
+        body: "O paciente desistiu de entrar na chamada!",
+        id_pacient: null,
+        id_professional: null,
+        name: "",
+        sounds: "message",
+        tokenSecondary: null,
+        type: "responseCall",
+        
+      }
+      await sendNotificationTo({dataNotification})
+    }
     navigation.navigate("home");
   }
-
+  
   function handleCall(id_professional: string){
     console.log({id_professional});
     
@@ -118,8 +176,11 @@ const VideoCall: React.FC = () => {
 
 
   function goToNextScreen(){
-    navigation.navigate("rateVideoCall", {id_professional: idProfessional || "630bfccfd7c33a229c57f04c"})
-  }
+    user.role === "user" ?
+      navigation.navigate("rateVideoCall", {id_professional: idProfessional || "630bfccfd7c33a229c57f04c"}) :
+      navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home")
+  
+    }
 
 
   

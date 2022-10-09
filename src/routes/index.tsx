@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import LoginStack from './login.stack.routes';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import AuthContext from "../context/AuthContext";
@@ -14,13 +14,21 @@ import HomeProfessional from '../pages/HomeProfessional';
 import SearchProfessional from '../pages/SearchProfessional';
 import Calendar from '../pages/Calendar';
 import AppointmentInterface from '../interfaces/appointmentInterface';
+import messaging from '@react-native-firebase/messaging';
+import UserInterface from '../interfaces/userInterface';
+import AsyncStorage from '@react-native-community/async-storage';
+import { SendNotificationProps, sendNotificationTo } from '../services/notificationService';
+import { useNavigation } from '@react-navigation/native';
+
 
 export type RouteStackParamList = {
     login: undefined,
     home: undefined;
     search: undefined;
     settings: undefined;
-    videoCall: undefined;
+    videoCall: {
+        channel_id?: string;
+    };
     rateVideoCall: {
         id_professional: string,
     },
@@ -44,13 +52,89 @@ export type RouteStackParamList = {
 }
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
+export type propsRouteInitial = {
+    initialRoute?: string;
+}
+
+type propsCallRoute = NativeStackNavigationProp<RouteStackParamList, 'videoCall'>
+
+
 
 const Routes = () => {
 
     const {signed, user } =  useContext(AuthContext);
+    const [initialRoute, setInitialRoute] = useState("home");
+    const [loading, setLoading] = useState(true);
+    const [channel, setChannel] = useState("");
+    const navigation = useNavigation<propsCallRoute>();
+
+
+    useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+        messaging().onNotificationOpenedApp(async (remoteMessage) => {
+            const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
+            if(storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
+                console.log("aqqqq");
+                console.log(remoteMessage.data.navigate);
+                
+                
+                const dataNotification: SendNotificationProps = {
+                token: remoteMessage.data.tokenSecondary,
+                title: "Encontramos um profissional",
+                body: "Você realmente deseja entrar nessa consulta?",
+                id_professional: storagedUser._id,
+                id_pacient: null,
+                name: storagedUser.name,
+                sounds: "message",
+                tokenSecondary: user.tokenPush,
+                type: "requestCall",
+                }
+                await sendNotificationTo({dataNotification});
+            
+                
+                navigation.navigate("videoCall", {channel_id: remoteMessage.data.channel})
+            }
+         
+        });
+
+    // Check whether an initial notification is available
+        messaging()
+        .getInitialNotification()
+        .then(async(remoteMessage) => {
+            const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
+            if(storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
+            console.log("aqqq34");
+            
+            const dataNotification: SendNotificationProps = {
+                token: remoteMessage.data.tokenSecondary,
+                title: "Encontramos um profissional",
+                body: "Você realmente deseja entrar nessa consulta?",
+                id_professional: storagedUser._id,
+                id_pacient: null,
+                name: storagedUser.name,
+                sounds: "message",
+                tokenSecondary: user.tokenPush,
+                type: "requestCall",
+            }
+            // await sendNotificationTo({dataNotification});
+            console.log(remoteMessage.data.channel);
+            
+            setChannel(remoteMessage.data.channel);
+            setInitialRoute("videoCall"); // e.g. "Settings"
+          
+            }
+            setLoading(false);
+        });
+  }, []);
+
+
+    if (loading) {
+        return 
+    }
+
 
     return (
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName={initialRoute as any} screenOptions={{ headerShown: false }}>
                 {!signed ? 
                     (
                             <Stack.Screen name="login" component={LoginStack}/>
@@ -60,7 +144,7 @@ const Routes = () => {
                             <Stack.Screen name="search" component={Search} />
                             <Stack.Screen name="searchProfessional" component={SearchProfessional} />
                             <Stack.Screen name="settings" component={Settings} />
-                            <Stack.Screen name="videoCall" component={VideoCall} />
+                            <Stack.Screen initialParams={{channel_id: channel}} name="videoCall" component={VideoCall} />
                             <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                             <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
                             <Stack.Screen name="chat" component={Chat} />

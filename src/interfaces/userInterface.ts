@@ -23,7 +23,7 @@ interface UserInterface {
     "active": boolean,
     "createdAt": Date,
     "updatedAt": Date,
-    "role": string,
+    "role": "user" | "admin" | "professional",
     "tokenPush"?: string;
     "skills"?: string;
 }
