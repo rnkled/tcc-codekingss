@@ -11,7 +11,7 @@ import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteStackParamList } from '../../routes';
-import { requestUserNotificationPermission } from '../../services/notificationService';
+import { requestUserNotificationPermission, SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -65,7 +65,21 @@ const HomeProfessional: React.FC = () => {
           showAnimationDuration: 800,
           showEasing: Easing.bounce,
           onHidden: () => console.log('Hidden'),
-          onPress: () => {
+          onPress: async () => {
+
+            const dataNotification: SendNotificationProps = {
+              token: remoteMessage.data.tokenPush,
+              title: "Encontramos um profissional",
+              body: "Você realmente deseja entrar nessa consulta?",
+              id_professional: user._id,
+              id_pacient: null,
+              name: user.name,
+              sounds: "message",
+              tokenSecondary: user.tokenPush,
+              type: "requestCall",
+              multiplesToken: false,
+            }
+            await sendNotificationTo({dataNotification});
             
             navigation.navigate("videoCall", {channel_id: remoteMessage.data.channel})
            
