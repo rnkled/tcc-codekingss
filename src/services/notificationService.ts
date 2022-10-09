@@ -41,8 +41,8 @@ const callSound = {
 }
 
 const messageSound = {
-  soundName: "lovingly.mp3",
-  soundId: "sound_channel2"
+  soundName: "elegant.mp3",
+  soundId: "sound_channel"
 }
 
 export type SendNotificationProps = {
@@ -56,6 +56,7 @@ export type SendNotificationProps = {
   tokenSecondary: string;
   sounds: "call" | "message";
   channel_id?: string;
+  multiplesToken: Boolean
 
 }
 
@@ -68,36 +69,71 @@ type props = {
 
 export const sendNotificationTo = async ({ dataNotification }: props) => {
   if (dataNotification.token && dataNotification.title && dataNotification.body) {
+    if (dataNotification.multiplesToken) {
 
-    await axios.post(
-      "https://fcm.googleapis.com/fcm/send",
-      {
-        to: dataNotification.token,
-        notification: {
-          title: dataNotification.title,
-          body: dataNotification.body,
+      await axios.post(
+        "https://fcm.googleapis.com/fcm/send",
+        {
+          registration_ids: dataNotification.token,
+          notification: {
+            title: dataNotification.title,
+            body: dataNotification.body,
 
-          sound: dataNotification.sounds === "call" ? callSound.soundName : dataNotification.sounds === "message" ? messageSound.soundName : "default",
-          android_channel_id: dataNotification.sounds === "call" ? callSound.soundId : dataNotification.sounds === "message" ? messageSound.soundId : ""
+            sound: dataNotification.sounds === "call" ? callSound.soundName : dataNotification.sounds === "message" ? messageSound.soundName : "default",
+            android_channel_id: dataNotification.sounds === "call" ? callSound.soundId : dataNotification.sounds === "message" ? messageSound.soundId : ""
 
+          },
+          data: {
+            id_professional: dataNotification.id_professional,
+            id_pacient: dataNotification.id_pacient,
+            type: dataNotification.type,
+            name: dataNotification.name,
+            tokenPush: dataNotification.tokenSecondary,
+            channel: dataNotification.channel_id,
+          },
         },
-        data: {
-          id_professional: dataNotification.id_professional,
-          id_pacient: dataNotification.id_pacient,
-          type: dataNotification.type,
-          name: dataNotification.name,
-          tokenPush: dataNotification.tokenSecondary,
-          channel: dataNotification.channel_id,
-        },
-      },
 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            "key=AAAAzEg2BlA:APA91bEPsvKwgjwXPpKZjogA9IZADMZM4yRyWUWWQpgVs0nASgicHmP6xduacwTK_dQffL7DSoPLylut7Ze27oGNFWGGhL8ofk093YHy-XgD1FpaTQAp3IZ_AWg8tz8cIQ5HIC6iA6wX",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "key=AAAAzEg2BlA:APA91bEPsvKwgjwXPpKZjogA9IZADMZM4yRyWUWWQpgVs0nASgicHmP6xduacwTK_dQffL7DSoPLylut7Ze27oGNFWGGhL8ofk093YHy-XgD1FpaTQAp3IZ_AWg8tz8cIQ5HIC6iA6wX",
+          },
+        }
+      );
+    } else {
+
+      await axios.post(
+        "https://fcm.googleapis.com/fcm/send",
+        {
+          to: dataNotification.token,
+          notification: {
+            title: dataNotification.title,
+            body: dataNotification.body,
+
+            sound: dataNotification.sounds === "call" ? callSound.soundName : dataNotification.sounds === "message" ? messageSound.soundName : "default",
+            android_channel_id: dataNotification.sounds === "call" ? callSound.soundId : dataNotification.sounds === "message" ? messageSound.soundId : ""
+
+          },
+          data: {
+            id_professional: dataNotification.id_professional,
+            id_pacient: dataNotification.id_pacient,
+            type: dataNotification.type,
+            name: dataNotification.name,
+            tokenPush: dataNotification.tokenSecondary,
+            channel: dataNotification.channel_id,
+          },
         },
-      }
-    );
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "key=AAAAzEg2BlA:APA91bEPsvKwgjwXPpKZjogA9IZADMZM4yRyWUWWQpgVs0nASgicHmP6xduacwTK_dQffL7DSoPLylut7Ze27oGNFWGGhL8ofk093YHy-XgD1FpaTQAp3IZ_AWg8tz8cIQ5HIC6iA6wX",
+          },
+        }
+      );
+    }
+
   }
 }
