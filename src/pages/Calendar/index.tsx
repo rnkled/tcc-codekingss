@@ -11,6 +11,7 @@ import {
     TextInput,
     ListRenderItemInfo  
 } from "react-native";
+import { useIsFocused } from "@react-navigation/core";
 import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/native";
 import Background from "../../components/Background";
@@ -32,6 +33,19 @@ localization();
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
 const CalendarComponent: React.FC = () => {
+
+    let isFocused = useIsFocused();
+
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+      setMounted(true);
+      return () => {
+        setMounted(false);
+        navigation.removeListener("focus", () => {});
+      };
+    }, []);
+
     const navigation = useNavigation<propsScreens>();
 
     const { user } = useContext(AuthContext);
@@ -42,18 +56,16 @@ const CalendarComponent: React.FC = () => {
     const [selectedDay, setSelectedDay] = useState<DateData>({dateString: '0000-00-00'} as DateData);
 
     useEffect(() => {
-        formatData();
-    }, []);
+        updateData();
+    }, [isFocused]);
 
-    function formatData() {
+    function updateData() {
         setLoading(true);
-        api.get('/appointment/list/' + user._id).then(response => {
-            console.log(response.data);
-            
-            const APIData = response.data.appointments;
+        api.get('/appointment/list/' + user._id).then(response => {            
+            const APIData = response.data.appointments;            
             let dataObject = {};
             APIData && Object.keys(APIData).map((key) => {
-                dataObject[key] = {
+                dataObject[String(key).split('-').reverse().join('-')] = {
                     customStyles: {
                         container: {
                             backgroundColor: 'white',
@@ -76,9 +88,10 @@ const CalendarComponent: React.FC = () => {
 
     }
 
-    function goToNewAppointment() {
-        navigation.navigate('newAppointment', {
-            date: selectedDay.dateString
+    function goToAppointment(item?: appointmentInterface) {
+        navigation.navigate('appointment', {
+            date: selectedDay.dateString,
+            item: item
         });
     }
 
@@ -111,12 +124,12 @@ const CalendarComponent: React.FC = () => {
                         </View>
                         <View style={styles.contentSecondary}>
                             {
-                                apiData[selectedDay.dateString] ? (
+                                apiData[selectedDay.dateString.split('-').reverse().join('-')] ? (
                                     <>
                                         <Text style={styles.titleAppointments}>Agendamentos de {new Date(selectedDay.dateString).toLocaleDateString('pt-BR')}</Text>
                                             {
-                                                apiData[selectedDay.dateString] && apiData[selectedDay.dateString].map((item: appointmentInterface, index: number) => (
-                                                        <AppointmentItem key={index} item={item}/>
+                                                apiData[selectedDay.dateString.split('-').reverse().join('-')] && apiData[selectedDay.dateString.split('-').reverse().join('-')].map((item: appointmentInterface, index: number) => (
+                                                        <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment}/>
                                                     )
                                                 )
                                             }
@@ -125,7 +138,7 @@ const CalendarComponent: React.FC = () => {
                                     <Text style={styles.titleAppointments}>Nenhum agendamento</Text>
                                 )
                             }
-                            <TouchableOpacity style={styles.buttonAddAppointment} onPress={goToNewAppointment}>
+                            <TouchableOpacity style={styles.buttonAddAppointment} onPress={() => goToAppointment()}>
                                 <Ionicons name="add-circle-outline" size={24} color="#8B97FF88" />
                                 <Text style={styles.textAddAppointment}>Adicionar agendamento</Text>
                             </TouchableOpacity>

@@ -166,7 +166,7 @@ const SearchProfessional: React.FC = () => {
         <FlatList
           data={data}
           keyExtractor={(item) => item._id}
-          renderItem={({item}) => <SearchCard type_user='professional' dataProfessional={item}/>}
+          renderItem={({item}) => <SearchCard type_user='user' data={item}/>}
           style={styles.list}
         />}
       </View>

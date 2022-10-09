@@ -9,10 +9,11 @@ import Chat from '../pages/Chat';
 import Home from '../pages/Home'
 import Search from '../pages/Search';
 import Settings from '../pages/Settings';
-import NewAppointment from '../pages/NewAppointment';
+import appointment from '../pages/Appointment';
 import HomeProfessional from '../pages/HomeProfessional';
 import SearchProfessional from '../pages/SearchProfessional';
 import Calendar from '../pages/Calendar';
+import AppointmentInterface from '../interfaces/appointmentInterface';
 import messaging from '@react-native-firebase/messaging';
 import UserInterface from '../interfaces/userInterface';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -43,9 +44,10 @@ export type RouteStackParamList = {
     homeProfessional: undefined;
     searchProfessional: undefined;
     calendar: undefined;
-    newAppointment: {
+    appointment: {
         id_usuario?: string;
         date?: string;
+        item?: AppointmentInterface;
     }
 }
 
@@ -149,8 +151,8 @@ const Routes = () => {
                             <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                             <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
                             <Stack.Screen name="chat" component={Chat} />
-                            <Stack.Screen name="calendar" component={Calendar} /> 
-                            <Stack.Screen name="newAppointment" component={NewAppointment} />
+                            <Stack.Screen name="calendar" component={Calendar} />
+                            <Stack.Screen name="appointment" component={appointment} />
 
                         </>
                         )
