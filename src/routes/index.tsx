@@ -62,7 +62,7 @@ const Routes = () => {
 
     const {signed, user } =  useContext(AuthContext);
     const [initialRoute, setInitialRoute] = useState("home");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [channel, setChannel] = useState("");
     const navigation = useNavigation<propsCallRoute>();
 
@@ -71,21 +71,22 @@ const Routes = () => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
         messaging().onNotificationOpenedApp(async (remoteMessage) => {
             const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
-            if(storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
+            if(storagedUser && storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
                 console.log("aqqqq");
                 console.log(remoteMessage.data.navigate);
                 
                 
                 const dataNotification: SendNotificationProps = {
-                token: remoteMessage.data.tokenSecondary,
-                title: "Encontramos um profissional",
-                body: "Você realmente deseja entrar nessa consulta?",
-                id_professional: storagedUser._id,
-                id_pacient: null,
-                name: storagedUser.name,
-                sounds: "message",
-                tokenSecondary: user.tokenPush,
-                type: "requestCall",
+                    token: remoteMessage.data.tokenSecondary,
+                    title: "Encontramos um profissional",
+                    body: "Você realmente deseja entrar nessa consulta?",
+                    id_professional: storagedUser._id,
+                    id_pacient: null,
+                    name: storagedUser.name,
+                    sounds: "message",
+                    tokenSecondary: user.tokenPush,
+                    type: "requestCall",
+                    multiplesToken: false,
                 }
                 await sendNotificationTo({dataNotification});
             
@@ -100,7 +101,8 @@ const Routes = () => {
         .getInitialNotification()
         .then(async(remoteMessage) => {
             const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
-            if(storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
+            setLoading(true);
+            if(storagedUser && storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
             console.log("aqqq34");
             
             const dataNotification: SendNotificationProps = {
@@ -113,9 +115,10 @@ const Routes = () => {
                 sounds: "message",
                 tokenSecondary: user.tokenPush,
                 type: "requestCall",
+                multiplesToken: false
             }
-            // await sendNotificationTo({dataNotification});
-            console.log(remoteMessage.data.channel);
+            await sendNotificationTo({dataNotification});
+            
             
             setChannel(remoteMessage.data.channel);
             setInitialRoute("videoCall"); // e.g. "Settings"
@@ -146,7 +149,7 @@ const Routes = () => {
                             <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
                             <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
                             <Stack.Screen name="chat" component={Chat} />
-                            <Stack.Screen name="calendar" component={Calendar} />
+                            <Stack.Screen name="calendar" component={Calendar} /> 
                             <Stack.Screen name="newAppointment" component={NewAppointment} />
 
                         </>
