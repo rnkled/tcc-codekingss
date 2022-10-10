@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { View } from 'react-native';
 import Header from '../../components/Header';
@@ -14,6 +14,8 @@ import messaging from '@react-native-firebase/messaging';
 import api from '../../services/api';
 import { Notifier, Easing } from 'react-native-notifier';
 import UserInterface from '../../interfaces/userInterface';
+import LottieView from 'lottie-react-native';
+import CallAnimation from "../../assets/callanimation.json"
 import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
@@ -26,11 +28,14 @@ const VideoCall: React.FC = () => {
   const [isEnableVideo, setIsEnableVideo] = useState(false);
   const {user} = useContext(AuthContext);
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
-  const channel = route.params?.channel_id;
-  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channel);
+  const channelIdNotification = route.params?.channel_id;
+  const channelId = user.role === "user" ? String(Date.now()) : channelIdNotification
+  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId);
 
-  if(user.role === "professional" && !channel){
-    console.log({channel});
+  const animation = useRef(null);
+
+  if(user.role === "professional" && !channelId){
+    console.log({channelId});
     
     Alert.alert("Atenção", "Não foi possível se conectar com a chamada de video!")
     navigation.navigate("home");
@@ -41,7 +46,7 @@ const VideoCall: React.FC = () => {
   const props: PropsInterface = {
     rtcProps: {
       appId: '885ca3cade8f4a3e81c7550a827300a2',
-      channel: channel,
+      channel: channelId,
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
       mode: 2,
@@ -71,13 +76,6 @@ const VideoCall: React.FC = () => {
 
         iconSize: 30
     }
-    // connectionData: {
-    //   appId: '<Agora App ID>',
-    //   channel: 'test',
-    // },
-    // rtcCallbacks: {
-    //   EndCall: () => setVideoCall(false),
-    // },
   };
 
     useEffect(() => {
@@ -85,28 +83,40 @@ const VideoCall: React.FC = () => {
     },[]);
 
     async function handleSendNotificationCall(){
-      
-      const { data } = await api.get("/user/list?role=professional");
-     
-      const tokenPush = [];
-      data.length > 0 && data.map((item: UserInterface) => item.tokenPush && tokenPush.push(item.tokenPush))
-      
-      const dataNotification: SendNotificationProps = {
-        token: tokenPush,
-        multiplesToken: true,
-        title: "Emergência",
-        body: "Olá Dr. (a), temos um paciente esperando pelo seu atendimento. Toque para atendê-lo",
-        id_professional: null,
-        id_pacient: user._id,
-        name: user.name,
-        sounds: "call",
-        tokenSecondary: user.tokenPush,
-        type: "call",
-        channel_id: String(Date.now())
+      if(user.role === "user"){
 
+        
+        const { data } = await api.get("/user/list?role=professional");
+        
+        const tokenPush = [];
+        data.length > 0 && data.map((item: UserInterface) => item.tokenPush && tokenPush.push(item.tokenPush))
+        
+        const dataNotification: SendNotificationProps = {
+          token: tokenPush,
+          multiplesToken: true,
+          title: "Emergência",
+          body: "Olá Dr. (a), temos um paciente esperando pelo seu atendimento. Toque para atendê-lo",
+          id_professional: null,
+          id_pacient: user._id,
+          name: user.name,
+          sounds: "call",
+          tokenSecondary: user.tokenPush,
+          type: "call",
+          channel_id: String(Date.now())
+          
+        }
+        
+        await sendNotificationTo({dataNotification});
       }
-      
-      await sendNotificationTo({dataNotification})
+
+      setTimeout(() => {
+        if(!videoCall){
+          Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
+          navigation.goBack()
+          return 
+        }
+
+      }, 180000 )
       
       
 
@@ -116,12 +126,14 @@ const VideoCall: React.FC = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "requestCall"){
         Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`, [
-          {text: "Não", onPress: () => handleCancelCall(remoteMessage.data?.tokenSecondary), style: "cancel"},
+          {text: "Não", onPress: () => handleCancelCall(remoteMessage.data?.tokenPush), style: "cancel"},
           {text: "Sim", onPress: () => handleCall(remoteMessage.data?.id_professional), style: "default"}
         ]);
       }
 
       if(user.role === "professional" && remoteMessage.data.type && remoteMessage.data.type === "responseCall"){
+        console.log("aqqtbm");
+        
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
@@ -149,6 +161,7 @@ const VideoCall: React.FC = () => {
 
 
   async function handleCancelCall(token: string){
+    
     if(!!token){
       const dataNotification: SendNotificationProps = {
         token,
@@ -201,9 +214,16 @@ const VideoCall: React.FC = () => {
     <Background style={styles.container}> 
       <Text style={styles.titlePage}>Encontrando um profissional...</Text>
       <View style={styles.contentPrimary}>
-        <View style={styles.circleContent}>
-          <Ionicons name="videocam-outline" size={90} color="#8B97FF" />
-        </View>
+        <LottieView
+          style={styles.circleContent}
+          speed={1.5} 
+          source={CallAnimation}
+          autoPlay={true}
+          loop={true}
+          
+        />
+          {/* <Ionicons name="videocam-outline" size={90} color="#8B97FF" />
+        </View> */}
         <View style={styles.messageContent}>
           <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo e audio da chamada somente se sentir-se confortável.</Text>
           {/* <Text style={styles.message}>Para sua melhor comodidade, iremos te notificar a hora que um profissional entrar e perguntar se você realmente deseja ingressar nessa chamada!</Text> */}
@@ -243,7 +263,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 90,
+    paddingTop: 35,
+
   },
 
   titlePage: {
@@ -253,11 +274,11 @@ const styles = StyleSheet.create({
   },
 
   circleContent: {
-    width: 180,
-    height: 180,
-    borderRadius: 180 / 2,
-    backgroundColor: "transparent",
-    borderWidth: 1.9,
+    width: 300,
+    height: 300,
+   
+    // backgroundColor: "red",
+ 
     borderColor: "#8B97FF",
     justifyContent: "center",
     alignItems: "center",
