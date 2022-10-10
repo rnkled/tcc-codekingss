@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons, Ionicons } from '@expo/vector-icons';
@@ -8,13 +8,18 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
+<<<<<<< HEAD
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
+=======
+import CircleAnimation from "../../assets/effectButton.json";
+>>>>>>> b60bda28a52625756e18cd6f18d0254dc670705f
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import AnimatedLottieView from 'lottie-react-native';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -72,8 +77,9 @@ const Home: React.FC = () => {
 
 
   function handleNewVideoCall(){
+
     navigation.navigate("videoCall");
-    
+
   }
 
   function handleLogOut() {
@@ -125,6 +131,7 @@ const Home: React.FC = () => {
         }}
       />
       <View style={styles.contentPrimary}>
+       
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <LinearGradient
             colors={['#8B97FF', '#5566fc']}
@@ -211,5 +218,63 @@ const createStyles = (theme :Theme) => {
   return styles;
 };
 
+<<<<<<< HEAD
+=======
+  buttonCircle: {
+    width: 190,
+    height: 190,
+    backgroundColor: "#6877fd",
+    borderRadius: 190 / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "10%",
+    zIndex: 10
+  },
+
+  contentBorderButton: {
+    width: 175,
+    height: 175,
+    borderRadius: 175 / 2,
+    backgroundColor: "transparent",
+    borderWidth: 1.9,
+    borderColor: "#0C0150",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  contentSecondary: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    height: "30%",
+    
+  },
+
+  labelButtonCircle: {
+    fontSize: 20,
+    textAlign: "center",
+    color: '#0C0150',
+    fontFamily: "Inter_600SemiBold"
+  },
+
+
+  titleHome: {
+    color: "#FFF",
+    fontSize: 24,
+    fontFamily: "Inter_600SemiBold"
+
+  },
+
+  footer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+
+  }
+
+
+})
+>>>>>>> b60bda28a52625756e18cd6f18d0254dc670705f
 
 export default Home;
