@@ -1,30 +1,32 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useLayoutEffect} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
-import { EvilIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from '../../components/Footer';
 import Button from '../../components/Button';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteStackParamList } from '../../routes';
-import { requestUserNotificationPermission, SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
+import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+type propsScreens = NativeStackNavigationProp<RouteStackParamList, "homeProfessional">
 
 const HomeProfessional: React.FC = () => {
   
   const navigation = useNavigation<propsScreens>();
 
   const {signOut, user} =  useContext(AuthContext);
+  
+  
+  
+  const isFocused = useIsFocused();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
         Notifier.showNotification({
@@ -58,6 +60,8 @@ const HomeProfessional: React.FC = () => {
       }
 
       if(remoteMessage.data.type && remoteMessage.data.type === "call"){
+        console.log("aqqq01dnv");
+        
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
@@ -66,7 +70,6 @@ const HomeProfessional: React.FC = () => {
           showEasing: Easing.bounce,
           onHidden: () => console.log('Hidden'),
           onPress: async () => {
-
             const dataNotification: SendNotificationProps = {
               token: remoteMessage.data.tokenPush,
               title: "Encontramos um profissional",
@@ -80,7 +83,6 @@ const HomeProfessional: React.FC = () => {
               multiplesToken: false,
             }
             await sendNotificationTo({dataNotification});
-            
             navigation.navigate("videoCall", {channel_id: remoteMessage.data.channel})
            
           },
@@ -97,7 +99,8 @@ const HomeProfessional: React.FC = () => {
 
     });
 
-    return unsubscribe;
+    return unsubscribe
+    
   }, []);
 
 
