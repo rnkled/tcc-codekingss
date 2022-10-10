@@ -4,7 +4,8 @@ import userInterface from '../../interfaces/userInterface';
 import Loading from '../Loading';
 import api from '../../services/api';
 import SearchCardLite from '../SearchCardLite';
-
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 
 type CardPrams = {
@@ -16,6 +17,11 @@ type CardPrams = {
 
 
 const SearchUserComponent = ({ value, setValue, setShow, marginTop } :CardPrams) => {
+  const {theme} = React.useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -80,51 +86,56 @@ const SearchUserComponent = ({ value, setValue, setShow, marginTop } :CardPrams)
     </View>
   )
 }
+
+const createStyles = (theme :Theme) => {
   
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "auto",
-    maxHeight: 320,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  input: {
-    height: 35,
-    marginTop: 20,
-    marginBottom: 10,
-    width: "90%",
-    backgroundColor: "#8B97FF",
-    borderRadius: 20,
-    paddingHorizontal: 20,
-  },
-  listContainer: {
-    width: "100%",
-    height: "80%",
-    alignItems: "flex-end",
-  },
-  list: {
-    width: "100%",
-    marginTop: 10,
-    flex: 1,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "#8B97FF",
-    bottom: 1.5,
-  },
-  button: {
-    width: "40%",
-    height: 40,
-    marginTop: "3%",
-    backgroundColor: "#8B97FF00",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: "#8B97FF",
-    flexDirection: "row",
-    position: "relative",
-  },
-})
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "auto",
+      maxHeight: 320,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    input: {
+      height: 35,
+      marginTop: 20,
+      marginBottom: 10,
+      width: "90%",
+      backgroundColor: theme.primaryVariant,
+      borderRadius: 20,
+      paddingHorizontal: 20,
+    },
+    listContainer: {
+      width: "100%",
+      height: "80%",
+      alignItems: "flex-end",
+    },
+    list: {
+      width: "100%",
+      marginTop: 10,
+      flex: 1,
+    },
+    buttonText: {
+      fontSize: 16,
+      color: theme.primaryVariant,
+      bottom: 1.5,
+    },
+    button: {
+      width: "40%",
+      height: 40,
+      marginTop: "3%",
+      backgroundColor: "#8B97FF00",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 25,
+      borderWidth: 1,
+      borderColor: theme.primaryVariant,
+      flexDirection: "row",
+      position: "relative",
+    },
+  })
+  return styles;
+}
 export default SearchUserComponent;
+

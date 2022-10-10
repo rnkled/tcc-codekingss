@@ -8,7 +8,8 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import { DrawerNavigationProp } from '@react-navigation/drawer';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
@@ -24,7 +25,11 @@ const Home: React.FC = () => {
   const navigation = useNavigation<propsScreens>();
 
   const {signOut, user} =  useContext(AuthContext);
-
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
    useEffect(() => {
     console.log(user);
@@ -141,70 +146,70 @@ const Home: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  contentPrimary: {
-    width: "100%",
-    height: "40%",
-    justifyContent: "space-between",
-    paddingTop: 25,
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    contentPrimary: {
+      width: "100%",
+      height: "40%",
+      justifyContent: "space-between",
+      paddingTop: 25,
+      alignItems: "center"
+    },
   
-    alignItems: "center"
+    buttonCircle: {
+      width: 190,
+      height: 190,
+      backgroundColor: "#6877fd",
+      borderRadius: 190 / 2,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "10%",
+    },
   
-  },
+    contentBorderButton: {
+      width: 175,
+      height: 175,
+      borderRadius: 175 / 2,
+      backgroundColor: "transparent",
+      borderWidth: 1.9,
+      borderColor: "#0C0150",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  
+    contentSecondary: {
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 20,
+      height: "30%",
+      
+    },
+  
+    labelButtonCircle: {
+      fontSize: 20,
+      textAlign: "center",
+      color: '#0C0150',
+      fontFamily: "Inter_600SemiBold"
+    },
+  
+  
+    titleHome: {
+      color: "#FFF",
+      fontSize: 24,
+      fontFamily: "Inter_600SemiBold"
+  
+    },
+  
+    footer: {
+      flex: 1,
+      justifyContent: "flex-end",
+      alignItems: "flex-end",
+  
+    }
+  })
+  return styles;
+};
 
-  buttonCircle: {
-    width: 190,
-    height: 190,
-    backgroundColor: "#6877fd",
-    borderRadius: 190 / 2,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "10%",
-  },
-
-  contentBorderButton: {
-    width: 175,
-    height: 175,
-    borderRadius: 175 / 2,
-    backgroundColor: "transparent",
-    borderWidth: 1.9,
-    borderColor: "#0C0150",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  contentSecondary: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    height: "30%",
-    
-  },
-
-  labelButtonCircle: {
-    fontSize: 20,
-    textAlign: "center",
-    color: '#0C0150',
-    fontFamily: "Inter_600SemiBold"
-  },
-
-
-  titleHome: {
-    color: "#FFF",
-    fontSize: 24,
-    fontFamily: "Inter_600SemiBold"
-
-  },
-
-  footer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-
-  }
-
-
-})
 
 export default Home;

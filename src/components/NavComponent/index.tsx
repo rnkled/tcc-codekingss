@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FlatList, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Tab, Text as TextTab, TabView } from '@rneui/themed';
 import CardComment, { PropsCardComment } from '../CardComment';
 import { Feather } from '@expo/vector-icons';
 import userInterface from '../../interfaces/userInterface';
 // import { Container } from './styles';
-
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 
 type Props = {
@@ -15,7 +16,14 @@ type Props = {
 
 
 const NavComponent = ({dataComments, dataProfessional}: Props) => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
+  
   const [index, setIndex] = useState(0);
+  
 
   async function openGps(){
   
@@ -34,15 +42,15 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
       <Tab.Item
         title="Avaliações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 0 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium", top: -2.5 }}
-        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? "#0C0150" : "#EEE"}`}]}
+        titleStyle={{ fontSize: 18, color: `${index === 0 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? theme.secondary : theme.backgroundVariant}`}]}
         
         /> 
       <Tab.Item
         title="Informações"
         size='sm'
-        titleStyle={{ fontSize: 18, color: `${index === 1 ? '#8B97FF' : '#828282'}`, fontFamily: "Inter_500Medium", top: -2.5 }}
-        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? "#0C0150" : "#EEE"}`}]}   
+        titleStyle={{ fontSize: 18, color: `${index === 1 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? theme.secondary : theme.backgroundVariant}`}]}   
         />
       </Tab>
 
@@ -76,7 +84,7 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
             <View style={styles.contentRowLocale}>
               <Text style={[styles.descriptionInformation, {marginRight: 10}]}>{dataProfessional.address.city}</Text>
               <TouchableOpacity onPress={openGps}>
-                <Feather name="map-pin" size={24} color="#8B97FF" />
+                <Feather name="map-pin" size={24} color={theme.primaryVariant} />
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -87,58 +95,61 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#EEEEEE",
-    height: 50,
-    borderRadius: 100,
-  
-  },
-
-  buttonNav: {
-    backgroundColor: "#EEEE",
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "#EEE",
-    justifyContent: "center",
-    alignItems: "center",
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.backgroundVariant,
+      height: 50,
+      borderRadius: 100,
     
-  },
+    },
 
-  contentDescription: {
-    flex: 1,
-    width: "100%",
-    padding: 10,
-  },
+    buttonNav: {
+      backgroundColor: theme.backgroundVariant,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: theme.backgroundVariant,
+      justifyContent: "center",
+      alignItems: "center",
+      
+    },
 
-  containerInformationPersonal: {
-    width: '100%',
-    paddingHorizontal: 4,
-    height: "auto",
-  },
+    contentDescription: {
+      flex: 1,
+      width: "100%",
+      padding: 10,
+    },
 
-  labelTitleInformation: {
-    fontSize: 20,
-    fontFamily: "Inter_500Medium",
-    color: "#FFF",
-    marginBottom: 3,
-    fontWeight: "bold",
-  },
+    containerInformationPersonal: {
+      width: '100%',
+      paddingHorizontal: 4,
+      height: "auto",
+    },
 
-  descriptionInformation: {
-    fontSize: 16,
-    fontFamily: "Inter_400Regular",
-    color: "#ABB7FF",
-  },
+    labelTitleInformation: {
+      fontSize: 20,
+      fontFamily: "Inter_500Medium",
+      color: theme.textVariant,
+      marginBottom: 3,
+      fontWeight: "bold",
+    },
 
-  contentRowLocale: {
-    width: "auto",
-    flexDirection: "row",
-    height: "auto",
-    alignItems: "center"
-  }
+    descriptionInformation: {
+      fontSize: 16,
+      fontFamily: "Inter_400Regular",
+      color: theme.primary,
+    },
+
+    contentRowLocale: {
+      width: "auto",
+      flexDirection: "row",
+      height: "auto",
+      alignItems: "center"
+    }
 
 
-})
+  })
+  return styles;
+};
 
 export default NavComponent;

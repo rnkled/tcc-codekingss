@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import userInterface from '../../interfaces/userInterface';
@@ -8,6 +8,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient, } from 'expo-linear-gradient';
 import Loading from '../Loading';
 import { Ionicons } from '@expo/vector-icons';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
+
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -19,6 +22,11 @@ type CardPrams = {
 }
 
 const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop } :CardPrams) => {
+    const {theme} = useContext(ThemeContext);
+    const styles = React.useMemo(
+        () => createStyles(theme),
+        [theme]
+    );
 
     let [loadingImage, setLoadingImage] = useState(true);
 
@@ -43,13 +51,13 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
                         onLoad={() => setLoadingImage(false)}
                     /> 
                     <ActivityIndicator
-                        color={'#0C015088'}
+                        color={theme.secondary88}
                         size={30}
                         style={{ display: (loadingImage ? 'flex' : 'none') }}
                     /> 
                     </>) : ( 
                     <View style={{justifyContent: 'center', alignItems:'center'}}>
-                        <Ionicons name="person-circle-outline" size={60} color="#8B97FF66" />
+                        <Ionicons name="person-circle-outline" size={60} color={theme.primaryVariant66} />
                     </View> )} 
             </View>
             <View style={styles.content}>
@@ -60,7 +68,7 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
                     count={5}
                     defaultRating={data.rate}
                     isDisabled={true}
-                    selectedColor={"#FFB84E"}
+                    selectedColor={theme.stars}
                     size={16}
                     />
                 </> : 
@@ -70,47 +78,52 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
     </TouchableOpacity>);
 }
 
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginBottom: 5,
-        backgroundColor: '#8B97FF22',
-        borderRadius: 10,
-    },
-    image: {
-        width: '25%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    content: {
-        width: '75%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingBottom: 5,
-    },
-    imageStyled: {
-        width: 50,
-        height: 50,
-        borderRadius: 100,
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: '#8B97FF',
-        marginLeft: 5,
-    },
-    subTitle:{
-        fontSize: 12,
-        fontWeight: '500',
-        flexWrap: 'nowrap',
-        color: '#8B97FFaa',
-        marginLeft: 5,
-    }
-});
+const createStyles = (theme :Theme) => {
+
+    const styles = StyleSheet.create({
+        container: {
+            width: '100%',
+            height: 60,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            marginBottom: 5,
+            backgroundColor: theme.primaryVariant22,
+            borderRadius: 10,
+        },
+        image: {
+            width: '25%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        content: {
+            width: '75%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            paddingBottom: 5,
+        },
+        imageStyled: {
+            width: 50,
+            height: 50,
+            borderRadius: 100,
+        },
+        title: {
+            fontSize: 16,
+            fontWeight: '500',
+            color: theme.primaryVariant22,
+            marginLeft: 5,
+        },
+        subTitle:{
+            fontSize: 12,
+            fontWeight: '500',
+            flexWrap: 'nowrap',
+            color: theme.primaryVariantAA,
+            marginLeft: 5,
+        }
+    });
+
+    return styles;
+}
 export default SearchCardLite;

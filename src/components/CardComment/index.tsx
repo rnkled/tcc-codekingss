@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 // import { Container } from './styles';
 
@@ -15,6 +17,11 @@ type Props = {
 }
 
 const CardComment = ({ data }: Props) => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
   return(
     <View style={styles.container}>
       <View style={styles.contentImage}>
@@ -23,7 +30,7 @@ const CardComment = ({ data }: Props) => {
       <View style={styles.contentDescription}>
         <View style={styles.contentInformationComment}>
           <Text style={styles.labelName}>{data.pacientName}</Text>
-          <Text style={styles.labelTimer}>{data.published_at}</Text>
+          <Text style={styles.labelTime}>{data.published_at}</Text>
         </View>
         <Text style={styles.labelComment}>{data.comment}</Text>
       </View>
@@ -31,59 +38,63 @@ const CardComment = ({ data }: Props) => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "auto",
-    flexDirection: "row",
-    paddingTop: 10,
-    alignItems: "center"
-  },
+const createStyles = (theme :Theme) => {
 
-  contentImage: {
-    width: 60,
-    height: 60,
-    backgroundColor: "#FFF",
-    borderRadius: 10,
-    marginRight: 15,
-  },
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "auto",
+      flexDirection: "row",
+      paddingTop: 10,
+      alignItems: "center"
+    },
 
-  labelName: {
-    fontSize: 18,
-    color: "#FFF",
-    fontFamily: "Inter_500Medium"
-  },
-  
-  labelComment: {
-    fontSize: 14,
-    color: "#FFF",
-    marginTop: 2,
-    fontFamily: "Inter_400Regular"
-  },
+    contentImage: {
+      width: 60,
+      height: 60,
+      backgroundColor: theme.textVariant,
+      borderRadius: 10,
+      marginRight: 15,
+    },
 
-  labelTimer: {
-    fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    color: "#828282",
-    top: 5
-  },
+    labelName: {
+      fontSize: 18,
+      color: theme.textVariant,
+      fontFamily: "Inter_500Medium"
+    },
+    
+    labelComment: {
+      fontSize: 14,
+      color: theme.textVariant,
+      marginTop: 2,
+      fontFamily: "Inter_400Regular"
+    },
 
-  contentDescription: {
-    width: "75%",
-    maxWidth: "75%",
-    height: "auto",
-  },
+    labelTime: {
+      fontSize: 14,
+      fontFamily: "Inter_400Regular",
+      color: theme.textVariant8,
+      top: 5
+    },
 
-  contentInformationComment: {
-    justifyContent: "space-between",
-    flexDirection: "row"
-  },
+    contentDescription: {
+      width: "75%",
+      maxWidth: "75%",
+      height: "auto",
+    },
 
-  imageStyle: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 10,
-  }
-})
+    contentInformationComment: {
+      justifyContent: "space-between",
+      flexDirection: "row"
+    },
+
+    imageStyle: {
+      width: "100%",
+      height: "100%",
+      borderRadius: 10,
+    }
+  })
+  return styles;
+};
 
 export default CardComment;

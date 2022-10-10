@@ -4,6 +4,7 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import AuthContext from "../context/AuthContext";
+import ThemeContext from '../context/ThemeContext';
 import ProfessionalProfile from '../pages/ProfessionalProfile';
 import Chat from '../pages/Chat';
 import Home from '../pages/Home'
@@ -19,6 +20,7 @@ import UserInterface from '../interfaces/userInterface';
 import AsyncStorage from '@react-native-community/async-storage';
 import { SendNotificationProps, sendNotificationTo } from '../services/notificationService';
 import { useNavigation } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 
 export type RouteStackParamList = {
@@ -63,6 +65,7 @@ type propsCallRoute = NativeStackNavigationProp<RouteStackParamList, 'videoCall'
 const Routes = () => {
 
     const {signed, user } =  useContext(AuthContext);
+    const {loadingTheme} = useContext(ThemeContext);
     const [initialRoute, setInitialRoute] = useState("home");
     const [loading, setLoading] = useState(false);
     const [channel, setChannel] = useState("");
@@ -72,11 +75,9 @@ const Routes = () => {
     useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
         messaging().onNotificationOpenedApp(async (remoteMessage) => {
-            console.log("app segundo plano");
-            
+
             const storagedUser: UserInterface = JSON.parse(await AsyncStorage.getItem('@user'));
             if(storagedUser && storagedUser.role === "professional" && remoteMessage && remoteMessage.data.type && remoteMessage.data.type === "call"){
-                console.log("aqqqq");
                 console.log(remoteMessage.data.navigate);
                 
                 
@@ -135,8 +136,8 @@ const Routes = () => {
   }, []);
 
 
-    if (loading) {
-        return 
+    if (loading || loadingTheme) {
+        return <Loading/>
     }
 
 

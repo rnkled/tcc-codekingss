@@ -6,7 +6,8 @@ import {
   OutlinedTextField,
 
 } from 'rn-material-ui-textfield';
-import { Entypo } from '@expo/vector-icons';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type Props = {
   value: string;
@@ -19,7 +20,11 @@ type Props = {
 }
 
 const TextAreaMaterial = ({setValue, value, label, containerStyle, textColor, baseColor, ...rest}: Props) => {
-
+  const {theme} = React.useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
   return(
     <View style={{...styles.container, ...containerStyle}}>
       <FilledTextField 
@@ -48,29 +53,32 @@ const TextAreaMaterial = ({setValue, value, label, containerStyle, textColor, ba
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    height: 'auto',
-    minHeight: 100,
-    maxHeight: 160,
-    paddingTop: 0,
-    paddingBottom: 0,
-    marginTop: 10,
-    borderRadius: 10,
-    overflow: 'scroll',
-  },
+const createStyles = (theme :Theme) => {
 
-  input: {
-    width: "95%",
-    backgroundColor: "#FFF0",
-    height: 'auto',
-    maxHeight: 140,
-    minHeight: 90,
-  },
-})
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: theme.backgroundVariant,
+      height: 'auto',
+      minHeight: 100,
+      maxHeight: 160,
+      paddingTop: 0,
+      paddingBottom: 0,
+      marginTop: 10,
+      borderRadius: 10,
+      overflow: 'scroll',
+    },
 
+    input: {
+      width: "95%",
+      backgroundColor: "transparent",
+      height: 'auto',
+      maxHeight: 140,
+      minHeight: 90,
+    },
+  })
+  return styles;
+};
 export default TextAreaMaterial;

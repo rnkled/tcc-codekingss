@@ -1,11 +1,13 @@
 import { AntDesign, EvilIcons, Feather, FontAwesome, Foundation, Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, {useContext, useMemo} from 'react';
 import { View, Text, StyleSheet, ColorValue, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { RouteStackParamList } from "../../routes";
 import AppointmentInterface from '../../interfaces/appointmentInterface';
 import { OutlinedTextField } from 'rn-material-ui-textfield';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 
 type AppointmentItemProps = {
@@ -18,7 +20,11 @@ type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
 const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemProps) => {
 
-    const navigation = useNavigation<propsScreens>();
+    const {theme} = useContext(ThemeContext);
+    const styles = React.useMemo(
+        () => createStyles(theme),
+        [theme]
+    );
 
     function handleEditAppointment(){
 
@@ -62,73 +68,76 @@ const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemPro
             </View>
             <Text style={styles.appointmentNote}>{item.note}</Text>
             <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
-                <FontAwesome name="remove" size={24} color="#b5b5ff" />
+                <FontAwesome name="remove" size={24} color={theme.primary} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.appointmentInfoIcon} onPress={handleEditAppointment}>
-                <Feather  name="edit" size={20} color="#b5b5ff" />
+                <Feather  name="edit" size={20} color={theme.primary} />
             </TouchableOpacity>
         </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-    appointmentContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        height: 'auto',
-        minHeight: 50,
-        backgroundColor: '#8B97FF55',
-        borderRadius: 10,
-        marginTop: 10,
-        padding: 10,
-    },
-    appointmentTimeContainer: {
-        width: '15%',
-        height: 50,
-        borderRadius: 10,
-        marginRight: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#8B97FF22',
-    },
-    appointmentInfo: {
-        width: '75%',
-        minHeight: 50,
-        justifyContent: 'space-between',
-        paddingRight: '10%',
-    },
-    appointmentTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#b5b5ff',
-    },
-    titleBox: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        left: -5,
-    },
-    appointmentTime: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#b5b5ff',
-
-    },
-    appointmentNote: {
-        fontSize: 14,
-        color: '#ccf8',
-    },
-    appointmentTag: {
-        position: 'absolute',
-        right: 0,
-        top: 0,
-    },
-    appointmentInfoIcon: {
-        position: 'absolute',
-        right: 1,
-        bottom: 0,
-    },
-});
+const createStyles = (theme :Theme) => {
+    const styles = StyleSheet.create({
+        appointmentContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            height: 'auto',
+            minHeight: 50,
+            backgroundColor: theme.primaryVariant55,
+            borderRadius: 10,
+            marginTop: 10,
+            padding: 10,
+        },
+        appointmentTimeContainer: {
+            width: '15%',
+            height: 50,
+            borderRadius: 10,
+            marginRight: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.primaryVariant22,
+        },
+        appointmentInfo: {
+            width: '75%',
+            minHeight: 50,
+            justifyContent: 'space-between',
+            paddingRight: '10%',
+        },
+        appointmentTitle: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: theme.primary,
+        },
+        titleBox: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            left: -5,
+        },
+        appointmentTime: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: theme.primary,
+    
+        },
+        appointmentNote: {
+            fontSize: 14,
+            color: theme.textGray8,
+        },
+        appointmentTag: {
+            position: 'absolute',
+            right: 0,
+            top: 0,
+        },
+        appointmentInfoIcon: {
+            position: 'absolute',
+            right: 1,
+            bottom: 0,
+        },
+    });
+    return styles;
+  };
 
 export default AppointmentItem;

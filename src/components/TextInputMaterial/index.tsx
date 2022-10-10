@@ -6,6 +6,8 @@ import {
   OutlinedTextField,
 } from 'rn-material-ui-textfield';
 import { Entypo } from '@expo/vector-icons';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type Props = {
   value: string;
@@ -19,6 +21,12 @@ type Props = {
 }
 
 const TextInput = ({setValue, value, label, secure=false, containerStyle, textColor, baseColor, editable, ...rest}: Props) => {
+  const {theme} = React.useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
+
   const [showingPassword, setShowingPassword] = useState(secure);
 
   return(
@@ -55,25 +63,28 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    height: 60,
-    paddingTop: 0,
-    paddingBottom: 0,
-    marginTop: 10,
-    borderRadius: 10,
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: theme.backgroundVariant,
+      height: 60,
+      paddingTop: 0,
+      paddingBottom: 0,
+      marginTop: 10,
+      borderRadius: 10,
 
-  },
+    },
 
-  input: {
-    width: "95%",
-    backgroundColor: "#FFF0",
-    height: 50,
-  },
-})
+    input: {
+      width: "95%",
+      backgroundColor: "transparent",
+      height: 50,
+    },
+  })
+  return styles;
+}
 
 export default TextInput;

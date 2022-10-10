@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import userInterface from '../../interfaces/userInterface';
@@ -8,6 +8,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient, } from 'expo-linear-gradient';
 import Loading from '../Loading';
 import { Ionicons } from '@expo/vector-icons';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -17,6 +19,11 @@ type CardPrams = {
 }
 
 const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
+    const {theme} = useContext(ThemeContext);
+    const styles = React.useMemo(
+        () => createStyles(theme),
+        [theme]
+    );
 
     let [loadingImage, setLoadingImage] = useState(true);
 
@@ -32,7 +39,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
 
   return ( 
     <TouchableOpacity onPress={goTo}>
-        <LinearGradient colors={['#8B97FFDD', '#8B97FF','#8B97FFDD' ]} style={styles.container}>
+        <LinearGradient colors={[theme.searchFirst, theme.searchSecond, theme.searchThird]} style={styles.container}>
             <View style={styles.image}>
                 { data.profilePhoto ? (<>
                     <Image 
@@ -47,7 +54,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                     /> 
                     </>) : ( 
                     <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
-                        <Ionicons name="person-circle-outline" size={80} color="#0C0150" />
+                        <Ionicons name="person-circle-outline" size={80} color={theme.secondary} />
                     </View> )} 
             </View>
             <View style={styles.content}>
@@ -68,46 +75,49 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
         </LinearGradient>
     </TouchableOpacity>);
 }
+const createStyles = (theme :Theme) => {
 
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: 90,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginBottom: 5,
-        borderRadius: 8,
-    },
-    image: {
-        width: '25%',
-        height: '100%',
-        padding: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    content: {
-        width: '75%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingBottom: 5,
-    },
-    imageStyled: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 180/2,
-        borderColor: "#0C0150",
-        borderWidth: 1,
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: '500',
-    },
-    address:{
-        fontSize: 12,
-        fontWeight: '500',
-        flexWrap: 'nowrap',
-    }
-});
+    const styles = StyleSheet.create({
+        container: {
+            width: '100%',
+            height: 90,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            marginBottom: 5,
+            borderRadius: 8,
+        },
+        image: {
+            width: '25%',
+            height: '100%',
+            padding: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        content: {
+            width: '75%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            paddingBottom: 5,
+        },
+        imageStyled: {
+            width: "100%",
+            height: "100%",
+            borderRadius: 180/2,
+            borderColor: theme.secondary,
+            borderWidth: 1,
+        },
+        title: {
+            fontSize: 20,
+            fontWeight: '500',
+        },
+        address:{
+            fontSize: 12,
+            fontWeight: '500',
+            flexWrap: 'nowrap',
+        }
+    });
+    return styles;
+}
 export default SearchCard;

@@ -7,6 +7,7 @@ import { useFonts, Inter_600SemiBold, Inter_300Light, Inter_400Regular, Inter_50
 import Loading from './src/components/Loading';
 import * as Updates from "expo-updates";
 import { AuthProvider } from './src/context/AuthContext';
+import { ThemeProvider } from './src/context/ThemeContext';
 import messaging from '@react-native-firebase/messaging';
 import { NotifierWrapper } from 'react-native-notifier';
 import moment from "moment";
@@ -72,9 +73,11 @@ export default function App() {
     <View style={{ flex: 1, width: '100%'}}>
         <NavigationContainer>
           <AuthProvider>
-            <NotifierWrapper>
-              <Routes />
-            </NotifierWrapper>
+            <ThemeProvider>
+              <NotifierWrapper>
+                <Routes />
+              </NotifierWrapper>
+            </ThemeProvider>
           </AuthProvider>
         </NavigationContainer>
       </View>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 // import { Container } from './styles';
 
 type Props = {
@@ -12,9 +13,14 @@ type Props = {
 }
 
 const InputTextChat = ({onChangeText, text, onPressButton}: Props) => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
   return(
     <View style={styles.container}>
-        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={"#828282"} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
+        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={theme.textVariant8} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
      
        <TouchableOpacity activeOpacity={0.8} onPress={() => onPressButton()} style={styles.buttonInput}>
         <View>
@@ -25,45 +31,49 @@ const InputTextChat = ({onChangeText, text, onPressButton}: Props) => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection:'row', 
-    width: "100%", 
-    alignItems:'center',  
-  },
+const createStyles = (theme :Theme) => {
 
-  inputStyle: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#EEEEEE",
-    borderRadius: 100,
-    paddingLeft: 15,
-    fontSize: 17,
-  },
+  const styles = StyleSheet.create({
+    container: {
+      flexDirection:'row', 
+      width: "100%", 
+      alignItems:'center',  
+    },
 
-  buttonInput: {
-   width: 35, 
-   height: 35, 
-   left: -45, 
-   borderRadius: 100, 
-   backgroundColor: "#8B97FF",
-   justifyContent: "center",
-   alignItems: "center"
+    inputStyle: {
+      width: "100%",
+      height: 50,
+      backgroundColor: theme.backgroundVariant,
+      borderRadius: 100,
+      paddingLeft: 15,
+      fontSize: 17,
+    },
 
-  },
+    buttonInput: {
+    width: 35, 
+    height: 35, 
+    left: -45, 
+    borderRadius: 100, 
+    backgroundColor: theme.primaryVariant,
+    justifyContent: "center",
+    alignItems: "center"
 
-  contentButton: {
-    position: "relative",
-    zIndex: 1000,
-     width: "auto",
-    height: "auto",
-    left: -20 ,
-  },
+    },
 
-  contentInput: {
-    width: "100%",
-    
-  }
-})
+    contentButton: {
+      position: "relative",
+      zIndex: 1000,
+      width: "auto",
+      height: "auto",
+      left: -20 ,
+    },
+
+    contentInput: {
+      width: "100%",
+      
+    }
+  })
+  return styles;
+};
 
 export default InputTextChat;
