@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { EvilIcons, Ionicons } from '@expo/vector-icons';
@@ -8,12 +8,13 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import { DrawerNavigationProp } from '@react-navigation/drawer';
+import CircleAnimation from "../../assets/effectButton.json";
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import AnimatedLottieView from 'lottie-react-native';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -67,8 +68,9 @@ const Home: React.FC = () => {
 
 
   function handleNewVideoCall(){
+
     navigation.navigate("videoCall");
-    
+
   }
 
   function handleLogOut() {
@@ -120,6 +122,7 @@ const Home: React.FC = () => {
         }}
       />
       <View style={styles.contentPrimary}>
+       
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <LinearGradient
             colors={['#8B97FF', '#5566fc']}
@@ -160,6 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: "10%",
+    zIndex: 10
   },
 
   contentBorderButton: {
