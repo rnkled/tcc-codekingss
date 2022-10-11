@@ -8,8 +8,6 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
 import CircleAnimation from "../../assets/effectButton.json";
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
@@ -17,21 +15,23 @@ import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import AnimatedLottieView from 'lottie-react-native';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 
 
 const Home: React.FC = () => {
-  
-  const navigation = useNavigation<propsScreens>();
-
-  const {signOut, user} =  useContext(AuthContext);
   const {theme} = useContext(ThemeContext);
   const styles = React.useMemo(
     () => createStyles(theme),
     [theme]
   );
+  
+  const navigation = useNavigation<propsScreens>();
+
+  const {signOut, user} =  useContext(AuthContext);
 
    useEffect(() => {
     console.log(user);
@@ -107,6 +107,8 @@ const Home: React.FC = () => {
   }
 
   function goToCalendar() {
+    console.log('teste');
+    
     navigation.navigate("calendar");
   }
 
@@ -140,7 +142,7 @@ const Home: React.FC = () => {
 
       </View>
       <View style={styles.contentSecondary}>
-        <Button label='Minhas consultas' onPress={() => goToCalendar} />
+        <Button label='Minhas consultas' onPress={goToCalendar} />
         <Button label='Buscar profissionais' onPress={goToSearch}/>
       </View>
       <View style={styles.footer}>

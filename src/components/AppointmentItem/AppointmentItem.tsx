@@ -14,11 +14,12 @@ type AppointmentItemProps = {
     item: AppointmentInterface;
     updateData: () => void;
     goToAppointment: (item: AppointmentInterface) => void;
+    manage: boolean;
 }
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
-const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemProps) => {
+const AppointmentItem = ({item, updateData, goToAppointment, manage} :AppointmentItemProps) => {
 
     const {theme} = useContext(ThemeContext);
     const styles = React.useMemo(
@@ -67,12 +68,12 @@ const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemPro
                 <Text style={styles.appointmentTitle}> {item.name} </Text>
             </View>
             <Text style={styles.appointmentNote}>{item.note}</Text>
-            <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
+            {manage && <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
                 <FontAwesome name="remove" size={24} color={theme.primary} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.appointmentInfoIcon} onPress={handleEditAppointment}>
+            </TouchableOpacity>}
+            {manage && <TouchableOpacity style={styles.appointmentInfoIcon} onPress={handleEditAppointment}>
                 <Feather  name="edit" size={20} color={theme.primary} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     </View>
   );

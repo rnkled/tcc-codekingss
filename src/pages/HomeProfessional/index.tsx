@@ -13,10 +13,17 @@ import { SendNotificationProps, sendNotificationTo } from '../../services/notifi
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList, "homeProfessional">
 
 const HomeProfessional: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
   
   const navigation = useNavigation<propsScreens>();
 
@@ -52,9 +59,9 @@ const HomeProfessional: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -88,9 +95,9 @@ const HomeProfessional: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -130,8 +137,6 @@ const HomeProfessional: React.FC = () => {
     navigation.navigate("settings");
   }
   function goToCalendar() {
-    console.log('teste');
-    
     navigation.navigate("calendar");
   }
 
@@ -142,12 +147,12 @@ const HomeProfessional: React.FC = () => {
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <Ionicons name="settings-outline"  size={35} color="#8B97FF"/>,
+          icon: () => <Ionicons name="settings-outline"  size={35} color={theme.primaryVariant}/>,
           onPress: goToSettings,
         }} 
         buttonRight={{
           isIcon: true,
-          icon: () =><MaterialIcons name="logout" size={30} color="#8B97FF" />,
+          icon: () =><MaterialIcons name="logout" size={30} color={theme.primaryVariant} />,
           onPress: handleLogOut,
         }}
       />
@@ -163,62 +168,62 @@ const HomeProfessional: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  contentPrimary: {
-    width: "80%",
-    height: "70%",
-    justifyContent: "center",
-    paddingTop: 25,
-  
-    alignItems: "center"
-  
-  },
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    contentPrimary: {
+      width: "80%",
+      height: "70%",
+      justifyContent: "center",
+      paddingTop: 25,
+    
+      alignItems: "center"
+    
+    },
 
-  buttonCircle: {
-    width: 190,
-    height: 190,
-    backgroundColor: "#8B97FF",
-    borderRadius: 190 / 2,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "10%",
-  },
+    buttonCircle: {
+      width: 190,
+      height: 190,
+      backgroundColor: theme.primaryVariant,
+      borderRadius: 190 / 2,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "10%",
+    },
 
-  contentBorderButton: {
-    width: 175,
-    height: 175,
-    borderRadius: 175 / 2,
-    backgroundColor: "transparent",
-    borderWidth: 1.9,
-    borderColor: "#0C0150",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-
-  labelButtonCircle: {
-    fontSize: 20,
-    textAlign: "center",
-    color: '#0C0150',
-    fontFamily: "Inter_600SemiBold"
-  },
+    contentBorderButton: {
+      width: 175,
+      height: 175,
+      borderRadius: 175 / 2,
+      backgroundColor: "transparent",
+      borderWidth: 1.9,
+      borderColor: theme.secondary,
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
 
-  titleHome: {
-    color: "#FFF",
-    fontSize: 24,
-    fontFamily: "Inter_600SemiBold"
-
-  },
-
-  footer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-
-  }
+    labelButtonCircle: {
+      fontSize: 20,
+      textAlign: "center",
+      color: theme.secondary,
+      fontFamily: "Inter_600SemiBold"
+    },
 
 
-})
+    titleHome: {
+      color: theme.textVariant,
+      fontSize: 24,
+      fontFamily: "Inter_600SemiBold"
+
+    },
+
+    footer: {
+      flex: 1,
+      justifyContent: "flex-end",
+      alignItems: "flex-end",
+    }
+  })
+  return styles;
+}
 
 export default HomeProfessional;

@@ -17,10 +17,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import AuthContext from '../../context/AuthContext';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const ProfessionalProfile: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   const navigation = useNavigation<propsScreens>();
   const route = useRoute<RouteProp<RouteStackParamList, "professionalProfile">>()
@@ -62,9 +69,9 @@ const ProfessionalProfile: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -104,7 +111,7 @@ const ProfessionalProfile: React.FC = () => {
       <Loading/> 
       :
       (<View style={styles.container}>
-        <Header buttonLeft={{label: "Voltar", onPress: goToHome, isIcon: false}} titlePage='Profissional' color='#0C0150' fontSize={30} />
+        <Header buttonLeft={{label: "Voltar", onPress: goToHome, isIcon: false}} titlePage='Profissional' color={theme.secondary} fontSize={30} />
         <View style={styles.contentPrimary}/>
         <Background style={styles.contentSecondary}>
         { dataProfessional.profilePhoto ? 
@@ -116,14 +123,14 @@ const ProfessionalProfile: React.FC = () => {
                   onLoad={() => setLoadingImage(false)}
               /> 
               <ActivityIndicator
-                  color={'#8B97FF'}
+                  color={theme.primaryVariant}
                   size={100}
-                  style={{ display: (loadingImage ? 'flex' : 'none'), backgroundColor: '#0C0150', borderRadius: 100 }}
+                  style={{ display: (loadingImage ? 'flex' : 'none'), backgroundColor: theme.secondary, borderRadius: 100 }}
               /> 
             </View>  
             </>) : ( 
-            <View style={[styles.contentPhoto, {backgroundColor: '#8B97FF', borderRadius: 100}]}>
-                <Ionicons name="person-circle" size={170} color="#0C0150" style={{marginLeft: 10}} />
+            <View style={[styles.contentPhoto, {backgroundColor: theme.primaryVariant, borderRadius: 100}]}>
+                <Ionicons name="person-circle" size={170} color={theme.secondary} style={{marginLeft: 10}} />
           </View> )} 
           <View style={styles.rateContent}>
             <AirbnbRating
@@ -132,7 +139,7 @@ const ProfessionalProfile: React.FC = () => {
               starContainerStyle={styles.rateStyled}
               defaultRating={dataProfessional.rate}
               isDisabled={true}
-              selectedColor={"#FFB84E"}
+              selectedColor={theme.stars}
               size={26}
             />
           </View>
@@ -152,105 +159,101 @@ const ProfessionalProfile: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    backgroundColor: "#8B97FF",
-  },
-  
-  contentPrimary: {
-    width: "100%",
-    height: 90,
-    backgroundColor: "#8B97FF",
-    paddingTop: 10,
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      width: "100%",
+      backgroundColor: theme.primaryVariant,
+    },
+    
+    contentPrimary: {
+      width: "100%",
+      height: 90,
+      backgroundColor: theme.primaryVariant,
+      paddingTop: 10,
+      alignItems: "center",
+      justifyContent: "flex-end",
+    },
 
-  contentSecondary: {
-    alignContent: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    flex: 1,
-    // backgroundColor: "#0C0150",
-    padding: 15,
-    paddingTop: 0,
-    zIndex: 10, 
-  },
+    contentSecondary: {
+      alignContent: "center",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      flex: 1,
+      padding: 15,
+      paddingTop: 0,
+      zIndex: 10, 
+    },
 
-  contentPhoto: {
-    width: 180,
-    height: 180,
-    borderRadius: 180/2,
-    top: -80,
-    backgroundColor: "transparent",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: -70,
-  },
-  imageStyled: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 180/2,
-    borderColor: "#0C0150",
-    borderWidth: 4,
-  },
-  rateContent: {
-    width: "100%",
-    height: "auto",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 5,
-  },
+    contentPhoto: {
+      width: 180,
+      height: 180,
+      borderRadius: 180/2,
+      top: -80,
+      backgroundColor: "transparent",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: -70,
+    },
+    imageStyled: {
+      width: "100%",
+      height: "100%",
+      borderRadius: 180/2,
+      borderColor: theme.secondary,
+      borderWidth: 4,
+    },
+    rateContent: {
+      width: "100%",
+      height: "auto",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 5,
+    },
 
-  rateStyled: {
-    width: "55%", 
-    justifyContent: "space-between"
-  },
+    rateStyled: {
+      width: "55%", 
+      justifyContent: "space-between"
+    },
 
-  contentMotivational: {
-    width: "100%",
-    height: "auto",
-    justifyContent: "center",
-    paddingHorizontal: 5,
-  },
+    contentMotivational: {
+      width: "100%",
+      height: "auto",
+      justifyContent: "center",
+      paddingHorizontal: 5,
+    },
 
-  labelProfessionalName: {
-    fontSize: 24,
-    fontFamily: "Inter_500Medium",
-    color: "#FFF",
-    textAlign: "center",
-    marginBottom: 5,
-  },
-  
-  motivationalDescription: {
-    marginVertical: 5,
-    fontSize: 16,
-    color: "#FFF",
-    textAlign: "center",
-  },
+    labelProfessionalName: {
+      fontSize: 24,
+      fontFamily: "Inter_500Medium",
+      color: theme.textVariant,
+      textAlign: "center",
+      marginBottom: 5,
+    },
+    
+    motivationalDescription: {
+      marginVertical: 5,
+      fontSize: 16,
+      color: theme.textVariant,
+      textAlign: "center",
+    },
 
-  contentDescription: {
-    width: "100%",
-    paddingTop: 15,
-    flex: 1,
-  },
+    contentDescription: {
+      width: "100%",
+      paddingTop: 15,
+      flex: 1,
+    },
 
-  contentEvaluation: {
-    width: "100%",
-    flex: 1,
-    backgroundColor: "red"
-  },
-
-  labelButton: {
-    fontSize: 16,
-    color: "#8B97FF",
-    fontFamily: "Inter_600SemiBold",
-    marginTop: 20,
-    textAlign: "center"
-  },
-})
+    labelButton: {
+      fontSize: 16,
+      color: theme.primaryVariant,
+      fontFamily: "Inter_600SemiBold",
+      marginTop: 20,
+      textAlign: "center"
+    },
+  })
+  return styles
+}
 
 export default ProfessionalProfile;

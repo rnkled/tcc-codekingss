@@ -12,8 +12,15 @@ import Background from '../../components/Background';
 import { Ionicons } from '@expo/vector-icons';
 import AuthContext from "../../context/AuthContext";
 import Loading from '../../components/Loading';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 const Login = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
   type Nav = {
     navigate: (value: string) => void;
   }
@@ -57,7 +64,7 @@ const Login = () => {
       (<Background style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
           <View style={styles.contentTitleIconPage}>
-            <Ionicons name="person-circle-outline" size={120} color="#8B97FF" />
+            <Ionicons name="person-circle-outline" size={120} color={theme.primaryVariant} />
             <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
           </View>
         <ScrollView
@@ -80,68 +87,69 @@ const Login = () => {
       </KeyboardAwareScrollView>
     </Background>));
 }
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    scrollViewContainer: {
+      width: "100%",
+      height: "100%",
+      // justifyContent: "flex-start",
+      // alignItems: "center",
+      paddingBottom: '8%',
+      paddingTop: '8%',
+    },
+    textoHeader: {
+      fontSize: 34,
+      fontWeight: "bold",
+      color: theme.textVariant,
+    },
+    form: {
+      width: 350,
+      height: "50%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    input: {
+      width: "100%",
+      height: 50,
+      marginTop: "5%",
+      padding: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: theme.backgroundVariant,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.secondary,
+    },
+    mostrarSenha: {
+      position: "relative",
+      width: "100%",
+    },
+    textoAzul: {
+      fontSize: 15,
+      color: theme.primaryVariant,
+      marginTop: "3%",
+    },
+    footer: {
+      height: "30%",
+      alignItems: "center",
+      marginBottom: "5%",
+    },
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  scrollViewContainer: {
-    width: "100%",
-    height: "100%",
-    // justifyContent: "flex-start",
-    // alignItems: "center",
-    paddingBottom: '8%',
-    paddingTop: '8%',
-  },
-  textoHeader: {
-    fontSize: 34,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-  form: {
-    width: 350,
-    height: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    marginTop: "5%",
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#0C0150",
-  },
-  mostrarSenha: {
-    position: "relative",
-    width: "100%",
-  },
-  textoAzul: {
-    fontSize: 15,
-    color: "#8B97FF",
-    marginTop: "3%",
-  },
-  footer: {
-    height: "30%",
-    alignItems: "center",
-    marginBottom: "5%",
-  },
-
-  contentTitleIconPage: {
-    width: "100%", 
-    height: "auto", 
-    justifyContent: "center", 
-    alignItems: "center", 
-    paddingTop: 10,
-  }
-});
-
+    contentTitleIconPage: {
+      width: "100%", 
+      height: "auto", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      paddingTop: 10,
+    }
+  });
+  return styles;
+}
 
 export default Login;

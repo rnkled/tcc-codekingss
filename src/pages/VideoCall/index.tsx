@@ -17,10 +17,17 @@ import UserInterface from '../../interfaces/userInterface';
 import LottieView from 'lottie-react-native';
 import CallAnimation from "../../assets/callanimation.json"
 import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
 const VideoCall: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   const navigation = useNavigation<rateScreenProps>();
   const [idProfessional, setIdProfessional] = useState("");
@@ -59,14 +66,14 @@ const VideoCall: React.FC = () => {
     },
     styleProps: {
       localBtnStyles:{
-          muteLocalAudio: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          muteLocalVideo: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          switchCamera: {backgroundColor: "#8B97FF", borderWidth: 0 },
-          endCall: {backgroundColor: '#f66', borderWidth: 0, },
+          muteLocalAudio: {backgroundColor: theme.primaryVariant, borderWidth: 0 },
+          muteLocalVideo: {backgroundColor: theme.primaryVariant, borderWidth: 0 },
+          switchCamera: {backgroundColor: theme.primaryVariant, borderWidth: 0 },
+          endCall: {backgroundColor: theme.backgroundCallEnd, borderWidth: 0, },
 
         },
         localBtnContainer: {
-          backgroundColor: '#0C0150',
+          backgroundColor: theme.secondary,
           bottom: 0,
           paddingVertical: 10,
           height: 80,
@@ -147,9 +154,9 @@ const VideoCall: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
         navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home")
@@ -222,7 +229,7 @@ const VideoCall: React.FC = () => {
           loop={true}
           
         />
-          {/* <Ionicons name="videocam-outline" size={90} color="#8B97FF" />
+          {/* <Ionicons name="videocam-outline" size={90} color=theme.primaryVariant />
         </View> */}
         <View style={styles.messageContent}>
           <Text style={styles.message}>Para sua melhor comodidade, ative o vídeo e audio da chamada somente se sentir-se confortável.</Text>
@@ -231,16 +238,16 @@ const VideoCall: React.FC = () => {
         <View style={styles.buttonsContent}>
           <TouchableOpacity onPress={() => setIsEnableAudio(!isEnableAudio)} activeOpacity={0.8} style={styles.buttonRadio}>
             {isEnableAudio ? (
-              <Feather name="mic" size={30} color="#0C0150" />
+              <Feather name="mic" size={30} color={theme.secondary} />
             ) : (
-              <Feather name="mic-off" size={30} color="#0C0150" />
+              <Feather name="mic-off" size={30} color={theme.secondary} />
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setIsEnableVideo(!isEnableVideo)} activeOpacity={0.8} style={styles.buttonRadio}>
             {isEnableVideo ? (
-              <Feather name="video" size={30} color="#0C0150" />
+              <Feather name="video" size={30} color={theme.secondary} />
             ) : (
-              <Feather name="video-off" size={30} color="#0C0150" />
+              <Feather name="video-off" size={30} color={theme.secondary} />
             )}
             
           </TouchableOpacity>
@@ -251,72 +258,77 @@ const VideoCall: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    paddingTop: 50
-  },
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      paddingTop: 50
+    },
 
-  contentPrimary: {
-    width: "100%",
-    flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 35,
+    contentPrimary: {
+      width: "100%",
+      flex: 1,
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingTop: 35,
 
-  },
+    },
 
-  titlePage: {
-    color: "#8B97FF",
-    fontSize: 21,
-    fontFamily: "Inter_600SemiBold"
-  },
+    titlePage: {
+      color: theme.primaryVariant,
+      fontSize: 21,
+      fontFamily: "Inter_600SemiBold"
+    },
 
-  circleContent: {
-    width: 300,
-    height: 300,
-   
-    // backgroundColor: "red",
- 
-    borderColor: "#8B97FF",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  messageContent: {
-    width: "100%",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 10
-  },
-  message: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#8B97FF",
-    fontFamily: "Inter_400Regular"
-  },
-
-  buttonsContent: {
-    width: "100%",
-    height: "20%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignContent: 'center'
-  },
-
-  buttonRadio: {
-    width: 70,
-    height: 70,
-    borderRadius: 70/2,
-    backgroundColor: "#8B97FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 5
+    circleContent: {
+      width: 300,
+      height: 300,
+    
+      // backgroundColor: "red",
   
+      borderColor: theme.primaryVariant,
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  }
-})
+    messageContent: {
+      width: "100%",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingHorizontal: 10
+    },
+    message: {
+      textAlign: "center",
+      fontSize: 16,
+      color: theme.primaryVariant,
+      fontFamily: "Inter_400Regular"
+    },
+
+    buttonsContent: {
+      width: "100%",
+      height: "20%",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignContent: 'center'
+    },
+
+    buttonRadio: {
+      width: 70,
+      height: 70,
+      borderRadius: 70/2,
+      backgroundColor: theme.primaryVariant,
+      justifyContent: "center",
+      alignItems: "center",
+      marginLeft: 5
+    
+
+    }
+  })
+  
+    return styles;
+}
+
 
 export default VideoCall;

@@ -26,6 +26,9 @@ import localization from '../../services/calendarLocalization';
 import appointmentInterface from '../../interfaces/appointmentInterface';
 import AppointmentItem from '../../components/AppointmentItem/AppointmentItem';
 import { Ionicons } from '@expo/vector-icons';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
+
 
 
 localization();
@@ -33,6 +36,11 @@ localization();
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
 const CalendarComponent: React.FC = () => {
+    const {theme} = useContext(ThemeContext);
+    const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+    );
 
     let isFocused = useIsFocused();
 
@@ -89,10 +97,12 @@ const CalendarComponent: React.FC = () => {
     }
 
     function goToAppointment(item?: appointmentInterface) {
-        navigation.navigate('appointment', {
-            date: selectedDay.dateString,
-            item: item
-        });
+        if (user.role === "professional") {
+            navigation.navigate('appointment', {
+                date: selectedDay.dateString,
+                item: item
+            });
+        }
     }
 
     return (
@@ -100,7 +110,7 @@ const CalendarComponent: React.FC = () => {
                 <Header
                     titlePage={"Agenda"}
                     fontSize={28}
-                    color="#8B97FF"
+                    color={theme.primaryVariant}
                     buttonLeft={{
                         isIcon: false,
                         label: "Voltar",
@@ -115,10 +125,10 @@ const CalendarComponent: React.FC = () => {
                                 horizontal={true}
                                 pagingEnabled={true}
                                 style={styles.calendar}
-                                theme={calendarTheme as any}
+                                theme={theme.calendarTheme as any}
                                 items={data}
                                 markingType={'custom'}
-                                markedDates={{...data, [`${selectedDay.dateString}`]: {selected: true, selectedColor: '#8B97FF55'}}}
+                                markedDates={{...data, [`${selectedDay.dateString}`]: {selected: true, selectedColor: theme.primaryVariant55}}}
                                 onDayPress={(day) => { setSelectedDay(day);}}
                             />
                         </View>
@@ -129,7 +139,7 @@ const CalendarComponent: React.FC = () => {
                                         <Text style={styles.titleAppointments}>Agendamentos de {new Date(selectedDay.dateString).toLocaleDateString('pt-BR')}</Text>
                                             {
                                                 apiData[selectedDay.dateString.split('-').reverse().join('-')] && apiData[selectedDay.dateString.split('-').reverse().join('-')].map((item: appointmentInterface, index: number) => (
-                                                        <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment}/>
+                                                        <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment} manage={user.role === "professional" ? true : false}/>
                                                     )
                                                 )
                                             }
@@ -138,10 +148,10 @@ const CalendarComponent: React.FC = () => {
                                     <Text style={styles.titleAppointments}>Nenhum agendamento</Text>
                                 )
                             }
-                            <TouchableOpacity style={styles.buttonAddAppointment} onPress={() => goToAppointment()}>
-                                <Ionicons name="add-circle-outline" size={24} color="#8B97FF88" />
+                            { user.role === "professional" && <TouchableOpacity style={styles.buttonAddAppointment} onPress={() => goToAppointment()}>
+                                <Ionicons name="add-circle-outline" size={24} color={theme.primaryVariant88} />
                                 <Text style={styles.textAddAppointment}>Adicionar agendamento</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                         </View>
                     </>
                 )}
@@ -150,88 +160,64 @@ const CalendarComponent: React.FC = () => {
     );
 };
 
-const calendarTheme = {
-    backgroundColor: '#ffffff00',
-    calendarBackground: '#ffffff00',
-    textSectionTitleColor: '#b6c1cd',
-    textSectionTitleDisabledColor: '#d9e1e8',
-    selectedDayBackgroundColor: '#00adf5',
-    selectedDayTextColor: '#ffffff',
-    todayTextColor: '#00adf5',
-    dayTextColor: '#8B97FF',
-    textDisabledColor: '#8B97FF55',
-    dotColor: '#00adf5',
-    selectedDotColor: '#ffffff',
-    arrowColor: 'orange',
-    disabledArrowColor: '#d9e1e8',
-    monthTextColor: '#fff',
-    indicatorColor: 'blue',
-    textDayFontFamily: 'monospace',
-    textMonthFontFamily: 'monospace',
-    textDayHeaderFontFamily: 'monospace',
-    textDayFontWeight: '300',
-    textMonthFontWeight: 'bold',
-    textDayHeaderFontWeight: '300',
-    textDayFontSize: 16,
-    textMonthFontSize: 16,
-    textDayHeaderFontSize: 16,
-}
+const createStyles = (theme :Theme) => {
+    const styles = StyleSheet.create({
+        contentPrimary: {
+            width: '90%',
+            minWidth: '90%',
+            borderRadius: 10,
+            height: 'auto',
+            alignItems: "center",
+            paddingBottom: 10,
+            backgroundColor: theme.primaryVariant22,
+        },
+        calendar: {
+            width: 350,
+            minWidth: '90%',
+            height: 'auto',
+        },
+        contentSecondary: {
+            width: "85%",
+            minWidth: '90%',
+            alignItems: "center",
+            justifyContent: "center",
+            height: 'auto',
+            marginTop: 15,
+            backgroundColor: theme.primaryVariant22,
+            borderRadius: 10,
+            paddingTop: 10,
+            paddingBottom: 10,
+        },
+        titleAppointments: {
+            color: theme.primaryVariant,
+            fontSize: 22,
+            fontFamily: "Inter_600SemiBold",
+            textAlignVertical: "center",
+            textAlign: "center",
+        },
+        buttonAddAppointment: {
+            flexDirection: "row",
+            minWidth: '90%',
+            width: '100%',
+            height: 60,
+            backgroundColor: 'transparent',
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 20,
+            marginBottom: 10,
+            borderWidth: 0.8,
+            borderColor: theme.primaryVariant22,
+        },
+        textAddAppointment: {
+            color: theme.primaryVariant88,
+            fontSize: 16,
+            fontFamily: 'Inter_600SemiBold',
+            marginLeft: 10,
+        },
 
-const styles = StyleSheet.create({
-    contentPrimary: {
-        width: '90%',
-        minWidth: '90%',
-        borderRadius: 10,
-        height: 'auto',
-        alignItems: "center",
-        paddingBottom: 10,
-        backgroundColor: "#8B97FF22",
-    },
-    calendar: {
-        width: 350,
-        minWidth: '90%',
-        height: 'auto',
-    },
-    contentSecondary: {
-        width: "85%",
-        minWidth: '90%',
-        alignItems: "center",
-        justifyContent: "center",
-        height: 'auto',
-        marginTop: 15,
-        backgroundColor: "#8B97FF22",
-        borderRadius: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
-    },
-    titleAppointments: {
-        color: "#8B97FF",
-        fontSize: 22,
-        fontFamily: "Inter_600SemiBold",
-        textAlignVertical: "center",
-        textAlign: "center",
-    },
-    buttonAddAppointment: {
-        flexDirection: "row",
-        minWidth: '90%',
-        width: '100%',
-        height: 60,
-        backgroundColor: '#0000',
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 20,
-        marginBottom: 10,
-        borderWidth: 0.8,
-        borderColor: '#8B97FF22',
-    },
-    textAddAppointment: {
-        color: '#8B97FF88',
-        fontSize: 16,
-        fontFamily: 'Inter_600SemiBold',
-        marginLeft: 10,
-    },
-
-});
+    });
+    return styles;
+};
 
 export default CalendarComponent;

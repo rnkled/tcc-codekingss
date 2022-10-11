@@ -10,8 +10,15 @@ import Button from '../../components/Button';
 import Background from '../../components/Background';
 import api from '../../services/api';
 import AuthContext from "../../context/AuthContext";
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 const Registrar = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   type Nav = {
     navigate: (value: string) => void;
@@ -102,90 +109,91 @@ const Registrar = () => {
   </Background>);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    // backgroundColor: "#0C0150",
-    // alignItems: "center",
-    paddingHorizontal: 10,
-    justifyContent: "center",
-  },
-  scrollViewContainer: {
-    width: "100%",
-    height: "100%",
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingBottom: '8%',
-    paddingTop: '8%',
-  },
-  header: {
-    width: "80%",
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent:'space-evenly',
-  },
-  textoHeader: {
-    fontSize: 38,
-    fontWeight: "bold",
-    color: "#fff",
-    width: "90%",
-    textAlign: "center",
-    fontFamily: "Inter_600SemiBold"
-  },
-  form: {
-    width: 350,
-    height: "70%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    marginTop: "5%",
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#0C0150",
-  },
-  mostrarSenha: {
-    position: "relative",
-    width: "100%",
-  },
-  textoAzul: {
-    fontSize: 15,
-    color: "#8B97FF",
-    marginTop: "3%",
-  },
-  footer: {
-    position: "relative",
-    width: "100%",
-    bottom: 0,
-    alignItems: "center",
-    marginBottom: "5%",
-  },
-  botao: {
-    width: 350,
-    height: 50,
-    marginTop: "5%",
-    backgroundColor: "#8B97FF",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: "#0C0150",
-  },
-  textoBotao: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#0C0150",
-  },
-});
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "100%",
+      paddingHorizontal: 10,
+      justifyContent: "center",
+    },
+    scrollViewContainer: {
+      width: "100%",
+      height: "100%",
+      flex: 1,
+      justifyContent: "flex-start",
+      alignItems: "center",
+      paddingBottom: '8%',
+      paddingTop: '8%',
+    },
+    header: {
+      width: "80%",
+      height: 50,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent:'space-evenly',
+    },
+    textoHeader: {
+      fontSize: 38,
+      fontWeight: "bold",
+      color: theme.textVariant,
+      width: "90%",
+      textAlign: "center",
+      fontFamily: "Inter_600SemiBold"
+    },
+    form: {
+      width: 350,
+      height: "70%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    input: {
+      width: "100%",
+      height: 50,
+      marginTop: "5%",
+      padding: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: theme.textVariant,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.secondary,
+    },
+    mostrarSenha: {
+      position: "relative",
+      width: "100%",
+    },
+    textoAzul: {
+      fontSize: 15,
+      color: theme.primaryVariant,
+      marginTop: "3%",
+    },
+    footer: {
+      position: "relative",
+      width: "100%",
+      bottom: 0,
+      alignItems: "center",
+      marginBottom: "5%",
+    },
+    botao: {
+      width: 350,
+      height: 50,
+      marginTop: "5%",
+      backgroundColor: theme.primaryVariant,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 25,
+      borderWidth: 1,
+      borderColor: theme.secondary,
+    },
+    textoBotao: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: theme.secondary,
+    },
+  });
+  return styles;
+}
 
 
 export default Registrar;

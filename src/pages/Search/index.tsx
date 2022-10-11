@@ -14,10 +14,17 @@ import UserInterface from '../../interfaces/userInterface';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import AuthContext from '../../context/AuthContext';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 const Search: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   const navigation = useNavigation<propsScreens>();
   
@@ -54,9 +61,9 @@ const Search: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -97,7 +104,7 @@ const Search: React.FC = () => {
       <Header
         titlePage={"Buscar"}
         fontSize={22}
-        color={"#8B97FF"}
+        color={theme.primaryVariant}
         buttonLeft={{
           label: 'Voltar',
           onPress: goToHome,
@@ -107,7 +114,7 @@ const Search: React.FC = () => {
         buttonRight={{
           onPress: getData,
           isIcon: true,
-          icon: () => <AntDesign name="search1" size={28} color="#8B97FF" />,
+          icon: () => <AntDesign name="search1" size={28} color={theme.primaryVariant} />,
         }}
       />
       <TextInput 
@@ -130,30 +137,34 @@ const Search: React.FC = () => {
     </View>
   </Background>}
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  input: {
-    height: 45,
-    width: "90%",
-    backgroundColor: "#FFF",
-    borderRadius: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  listContainer: {
-    width: "90%",
-    height: "80%",
-  },
-  list: {
-    width: "100%",
-    marginTop: 20,
-    flex: 1,
-  },
-})
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    input: {
+      height: 45,
+      width: "90%",
+      backgroundColor: theme.textVariant,
+      borderRadius: 20,
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    listContainer: {
+      width: "90%",
+      height: "80%",
+    },
+    list: {
+      width: "100%",
+      marginTop: 20,
+      flex: 1,
+    },
+  })
+  return styles;
+}
+
 
 export default Search;
