@@ -75,7 +75,7 @@ const Home: React.FC = () => {
 
   function handleNewVideoCall(){
 
-    navigation.navigate("videoCall");
+    navigation.navigate("videoCall", {channel_id: null});
 
   }
 
