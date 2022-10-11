@@ -8,12 +8,9 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-<<<<<<< HEAD
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
-=======
 import CircleAnimation from "../../assets/effectButton.json";
->>>>>>> b60bda28a52625756e18cd6f18d0254dc670705f
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
@@ -64,9 +61,9 @@ const Home: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -121,12 +118,12 @@ const Home: React.FC = () => {
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <Ionicons name="settings-outline"  size={30} color="#8B97FF"/>,
+          icon: () => <Ionicons name="settings-outline"  size={30} color={theme.primaryVariant}/>,
           onPress: goToSettings,
         }} 
         buttonRight={{
           isIcon: true,
-          icon: () =><MaterialIcons name="logout" size={30} color="#8B97FF" />,
+          icon: () =><MaterialIcons name="logout" size={30} color={theme.primaryVariant} />,
           onPress: handleLogOut,
         }}
       />
@@ -134,7 +131,7 @@ const Home: React.FC = () => {
        
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <LinearGradient
-            colors={['#8B97FF', '#5566fc']}
+            colors={[theme.primaryVariant, theme.buttonCircleSecond]}
             style={styles.contentBorderButton}
           >
                 <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
@@ -166,11 +163,12 @@ const createStyles = (theme :Theme) => {
     buttonCircle: {
       width: 190,
       height: 190,
-      backgroundColor: "#6877fd",
+      backgroundColor: theme.buttonSecond,
       borderRadius: 190 / 2,
       justifyContent: "center",
       alignItems: "center",
       marginTop: "10%",
+      zIndex: 10
     },
   
     contentBorderButton: {
@@ -179,7 +177,7 @@ const createStyles = (theme :Theme) => {
       borderRadius: 175 / 2,
       backgroundColor: "transparent",
       borderWidth: 1.9,
-      borderColor: "#0C0150",
+      borderColor: theme.secondary,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -196,13 +194,13 @@ const createStyles = (theme :Theme) => {
     labelButtonCircle: {
       fontSize: 20,
       textAlign: "center",
-      color: '#0C0150',
+      color: theme.secondary,
       fontFamily: "Inter_600SemiBold"
     },
   
   
     titleHome: {
-      color: "#FFF",
+      color: theme.textVariant,
       fontSize: 24,
       fontFamily: "Inter_600SemiBold"
   
@@ -217,64 +215,5 @@ const createStyles = (theme :Theme) => {
   })
   return styles;
 };
-
-<<<<<<< HEAD
-=======
-  buttonCircle: {
-    width: 190,
-    height: 190,
-    backgroundColor: "#6877fd",
-    borderRadius: 190 / 2,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "10%",
-    zIndex: 10
-  },
-
-  contentBorderButton: {
-    width: 175,
-    height: 175,
-    borderRadius: 175 / 2,
-    backgroundColor: "transparent",
-    borderWidth: 1.9,
-    borderColor: "#0C0150",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  contentSecondary: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    height: "30%",
-    
-  },
-
-  labelButtonCircle: {
-    fontSize: 20,
-    textAlign: "center",
-    color: '#0C0150',
-    fontFamily: "Inter_600SemiBold"
-  },
-
-
-  titleHome: {
-    color: "#FFF",
-    fontSize: 24,
-    fontFamily: "Inter_600SemiBold"
-
-  },
-
-  footer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-
-  }
-
-
-})
->>>>>>> b60bda28a52625756e18cd6f18d0254dc670705f
 
 export default Home;

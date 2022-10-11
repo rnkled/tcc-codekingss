@@ -8,6 +8,7 @@ export interface Theme {
     primaryVariant22: string;
     primaryVariant66: string;
     buttonSecond: string;
+    buttonCircleSecond: string;
     backgroundFirst: string;
     backgroundSecond: string;
     textVariant: string;
