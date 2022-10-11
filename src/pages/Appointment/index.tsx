@@ -324,7 +324,7 @@ const createStyles = (theme :Theme) => {
       alignItems: "center",
     },
     boxMarker: {
-      color: "#0C0150",
+      color: theme.secondary,
       fontSize: 15,
       paddingBottom: 5,
       fontWeight: "bold",

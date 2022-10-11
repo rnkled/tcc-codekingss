@@ -1,6 +1,7 @@
 export interface Theme {
     primary: string;
     secondary: string;
+    secondary44: string;
     secondary88: string;
     primaryVariant: string;
     primaryVariantAA: string;

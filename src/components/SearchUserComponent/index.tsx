@@ -125,7 +125,7 @@ const createStyles = (theme :Theme) => {
       width: "40%",
       height: 40,
       marginTop: "3%",
-      backgroundColor: "#8B97FF00",
+      backgroundColor: "transparent",
       alignItems: "center",
       justifyContent: "center",
       borderRadius: 25,

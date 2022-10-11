@@ -9,6 +9,7 @@ const colorsDark = {
     primaryVariant22: '#8B97FF22',
     secondary: '#0C0150',
     secondary88: '#0C015088',
+    secondary44: '#0C015044',
     backgroundSecond: '#000',
     buttonSecond: '#6677ff',
     buttonCircleSecond: '#5566fc',

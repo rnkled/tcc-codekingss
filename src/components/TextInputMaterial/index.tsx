@@ -34,14 +34,14 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
       <FilledTextField 
         textColor={textColor}
         label={label}
-        placeholderTextColor="#0C015044"
+        placeholderTextColor={theme.secondary44}
         containerStyle={styles.input}
         value={value}
         onChange={(data :any) => {setValue(data.nativeEvent.text)}}
-        labelActiveColor="#FFF0"
-        baseColor={baseColor ? baseColor : "#0C015088"}
-        titleTextStyle={{color: "#fff"}}
-        inputContainerStyle={{backgroundColor: "#FFF0",}}
+        labelActiveColor="transparent"
+        baseColor={baseColor ? baseColor : theme.secondary88}
+        titleTextStyle={{color: theme.textVariant}}
+        inputContainerStyle={{backgroundColor: "transparent",}}
         lineWidth={0}
         activeLineWidth={0}
         labelOffset={{y0: -10, y1: -8}}
@@ -53,8 +53,8 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
             style={{top: -10}}
             onPress={() => {setShowingPassword(!showingPassword)}}>
               {showingPassword ? 
-              <Entypo name="eye" size={24} color="#0C015088" /> : 
-              <Entypo name="eye-with-line" size={24} color="#0C015088" />}
+              <Entypo name="eye" size={24} color={theme.secondary88} /> : 
+              <Entypo name="eye-with-line" size={24} color={theme.secondary88} />}
           </TouchableOpacity> : null)}
         editable={editable? editable : true}
         {...rest}

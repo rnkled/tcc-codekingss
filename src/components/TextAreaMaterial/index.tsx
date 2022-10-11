@@ -30,14 +30,14 @@ const TextAreaMaterial = ({setValue, value, label, containerStyle, textColor, ba
       <FilledTextField 
         textColor={textColor}
         label={label}
-        placeholderTextColor="#0C015044"
+        placeholderTextColor={theme.secondary44}
         containerStyle={styles.input}
         value={value}
         onChange={(data :any) => {setValue(data.nativeEvent.text)}}
-        labelActiveColor="#FFF0"
-        baseColor={baseColor ? baseColor : "#0C015088"}
-        titleTextStyle={{color: "#fff"}}
-        inputContainerStyle={{backgroundColor: "#FFF0",}}
+        labelActiveColor="transparent"
+        baseColor={baseColor ? baseColor : theme.secondary88}
+        titleTextStyle={{color: theme.textVariant}}
+        inputContainerStyle={{backgroundColor: "transparent",}}
         lineWidth={0}
         activeLineWidth={0}
         labelOffset={{y0: -10, y1: -8}}

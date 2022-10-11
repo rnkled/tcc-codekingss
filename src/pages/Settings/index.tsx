@@ -512,7 +512,7 @@ const createStyles = (theme :Theme) => {
             width: "100%",
             height: 50,
             textAlign: "center",
-            backgroundColor: "#FFF0",
+            backgroundColor: "transparent",
             borderRadius: 10,
             paddingHorizontal: 20,
             fontSize: 28,
