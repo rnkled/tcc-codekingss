@@ -37,7 +37,7 @@ const VideoCall: React.FC = () => {
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
   const channelIdNotification = route.params?.channel_id;
   const channelId = user.role === "user" ? String(Date.now()) : channelIdNotification
-  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId);
+  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId || true);
 
   const animation = useRef(null);
 
@@ -73,7 +73,7 @@ const VideoCall: React.FC = () => {
 
         },
         localBtnContainer: {
-          backgroundColor: theme.secondary,
+          backgroundColor: 'transparent',
           bottom: 0,
           paddingVertical: 10,
           height: 80,
@@ -238,16 +238,16 @@ const VideoCall: React.FC = () => {
         <View style={styles.buttonsContent}>
           <TouchableOpacity onPress={() => setIsEnableAudio(!isEnableAudio)} activeOpacity={0.8} style={styles.buttonRadio}>
             {isEnableAudio ? (
-              <Feather name="mic" size={30} color={theme.secondary} />
+              <Feather name="mic" size={30} color={theme.callButtons} />
             ) : (
-              <Feather name="mic-off" size={30} color={theme.secondary} />
+              <Feather name="mic-off" size={30} color={theme.callButtons} />
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setIsEnableVideo(!isEnableVideo)} activeOpacity={0.8} style={styles.buttonRadio}>
             {isEnableVideo ? (
-              <Feather name="video" size={30} color={theme.secondary} />
+              <Feather name="video" size={30} color={theme.callButtons} />
             ) : (
-              <Feather name="video-off" size={30} color={theme.secondary} />
+              <Feather name="video-off" size={30} color={theme.callButtons} />
             )}
             
           </TouchableOpacity>

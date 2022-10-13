@@ -43,14 +43,14 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
         title="Avaliações"
         size='sm'
         titleStyle={{ fontSize: 18, color: `${index === 0 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
-        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? theme.secondary : theme.backgroundVariant}`}]}
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? theme.backgroundProfileVariant : theme.backgroundProfileDisable}`}]}
         
         /> 
       <Tab.Item
         title="Informações"
         size='sm'
         titleStyle={{ fontSize: 18, color: `${index === 1 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
-        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? theme.secondary : theme.backgroundVariant}`}]}   
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? theme.backgroundProfileVariant : theme.backgroundProfileDisable}`}]}   
         />
       </Tab>
 
@@ -98,17 +98,17 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
 const createStyles = (theme :Theme) => {
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: theme.backgroundVariant,
+      backgroundColor: theme.backgroundProfileDisable,
       height: 50,
       borderRadius: 100,
     
     },
 
     buttonNav: {
-      backgroundColor: theme.backgroundVariant,
+      backgroundColor: theme.backgroundProfileDisable,
       borderRadius: 50,
       borderWidth: 1,
-      borderColor: theme.backgroundVariant,
+      borderColor: theme.backgroundProfileDisable,
       justifyContent: "center",
       alignItems: "center",
       

@@ -24,6 +24,9 @@ export interface Theme {
     textVariant8: string;
     textVariantGray: string;
     textGray8: string;
+    backgroundProfile: string;
+    backgroundProfileVariant: string;
+    backgroundProfileDisable: string;
     textInputVariant: string,
     backgroundVariant: string;
     backgroundVariantColor: string;
@@ -32,6 +35,7 @@ export interface Theme {
     chatText: string;
     chatInputBackground: string;
     chatInputSend: string;
+    callButtons: string;
     borderVariant: string;
     searchFirst: string;
     searchSecond: string;

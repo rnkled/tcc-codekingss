@@ -163,13 +163,13 @@ const createStyles = (theme :Theme) => {
     container: {
       flex: 1,
       width: "100%",
-      backgroundColor: theme.primaryVariant,
+      backgroundColor: theme.backgroundProfile,
     },
     
     contentPrimary: {
       width: "100%",
       height: 90,
-      backgroundColor: theme.primaryVariant,
+      backgroundColor: theme.backgroundProfile,
       paddingTop: 10,
       alignItems: "center",
       justifyContent: "flex-end",

@@ -147,7 +147,7 @@ const createStyles = (theme :Theme) => {
     input: {
       height: 45,
       width: "90%",
-      backgroundColor: theme.textVariant,
+      backgroundColor: theme.inputBackground,
       borderRadius: 20,
       paddingLeft: 20,
       paddingRight: 20,
