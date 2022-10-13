@@ -35,23 +35,21 @@ const VideoCall: React.FC = () => {
   const animation = useRef(null);
 
   if(user.role === "professional" && !channelId){
-    console.log({channelId});
     
     Alert.alert("Atenção", "Não foi possível se conectar com a chamada de video!")
     navigation.navigate("home");
     return 
-
+    
   }
- 
+
   const props: PropsInterface = {
     rtcProps: {
       appId: '885ca3cade8f4a3e81c7550a827300a2',
       channel: channelId,
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
-      mode: 2,
-      role: 1
-
+      callActive: user.role === "user" && !isEnableVideo
+      
     },
     callbacks: {
       EndCall: () => goToNextScreen(),
@@ -66,7 +64,7 @@ const VideoCall: React.FC = () => {
 
         },
         localBtnContainer: {
-          backgroundColor: '#0C0150',
+          backgroundColor: 'transparent',
           bottom: 0,
           paddingVertical: 10,
           height: 80,
@@ -106,13 +104,14 @@ const VideoCall: React.FC = () => {
           
         }
         
+        
         await sendNotificationTo({dataNotification});
       }
 
       setTimeout(() => {
         if(!videoCall){
           Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
-          navigation.goBack()
+          navigation.canGoBack() ? navigation.goBack() : navigation.popToTop(); navigation.navigate("home");
           return 
         }
 
