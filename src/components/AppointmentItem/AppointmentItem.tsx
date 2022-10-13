@@ -14,11 +14,12 @@ type AppointmentItemProps = {
     item: AppointmentInterface;
     updateData: () => void;
     goToAppointment: (item: AppointmentInterface) => void;
+    manage: boolean;
 }
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
-const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemProps) => {
+const AppointmentItem = ({item, updateData, goToAppointment, manage} :AppointmentItemProps) => {
 
     const {theme} = useContext(ThemeContext);
     const styles = React.useMemo(
@@ -67,12 +68,12 @@ const AppointmentItem = ({item, updateData, goToAppointment} :AppointmentItemPro
                 <Text style={styles.appointmentTitle}> {item.name} </Text>
             </View>
             <Text style={styles.appointmentNote}>{item.note}</Text>
-            <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
-                <FontAwesome name="remove" size={24} color={theme.primary} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.appointmentInfoIcon} onPress={handleEditAppointment}>
-                <Feather  name="edit" size={20} color={theme.primary} />
-            </TouchableOpacity>
+            {manage && <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
+                <FontAwesome name="remove" size={24} color={theme.appointmentCardColor} />
+            </TouchableOpacity>}
+            {manage && <TouchableOpacity style={styles.appointmentInfoIcon} onPress={handleEditAppointment}>
+                <Feather  name="edit" size={20} color={theme.appointmentCardColor} />
+            </TouchableOpacity>}
         </View>
     </View>
   );
@@ -86,7 +87,7 @@ const createStyles = (theme :Theme) => {
             width: '100%',
             height: 'auto',
             minHeight: 50,
-            backgroundColor: theme.primaryVariant55,
+            backgroundColor: theme.appointmentCardBackground,
             borderRadius: 10,
             marginTop: 10,
             padding: 10,
@@ -109,7 +110,7 @@ const createStyles = (theme :Theme) => {
         appointmentTitle: {
             fontSize: 16,
             fontWeight: 'bold',
-            color: theme.primary,
+            color: theme.appointmentCardColor,
         },
         titleBox: {
             flexDirection: 'row',
@@ -119,7 +120,7 @@ const createStyles = (theme :Theme) => {
         appointmentTime: {
             fontSize: 16,
             fontWeight: 'bold',
-            color: theme.primary,
+            color: theme.appointmentCardColor,
     
         },
         appointmentNote: {

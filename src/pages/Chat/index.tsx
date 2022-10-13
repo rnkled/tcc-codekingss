@@ -12,6 +12,8 @@ import database from '@react-native-firebase/database';
 import moment from "moment";
 import AuthContext from '../../context/AuthContext';
 import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 // import { Container } from './styles';
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -19,6 +21,11 @@ type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 
 const Chat: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
   const navigation = useNavigation<propsScreens>();
 
   const [message, setMessage] = useState("");
@@ -168,26 +175,27 @@ const Chat: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flex: 1,
-    // backgroundColor: "red"
-  },
 
-  contentChatMessages: {
-    width: "100%",
-    flex: 1,
-    padding: 15,
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: "100%",
+      flex: 1,
+    },
 
-   
-  },
+    contentChatMessages: {
+      width: "100%",
+      flex: 1,
+      padding: 15,
+    },
 
-  contentInput: {
-    width: "100%",
-    padding: 15,
-  }
+    contentInput: {
+      width: "100%",
+      padding: 15,
+    }
 
-})
+  })
+  return styles;
+}
 
 export default Chat;

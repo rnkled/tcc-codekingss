@@ -8,8 +8,6 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import Background from '../../components/Background';
 import AuthContext from "../../context/AuthContext";
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
 import CircleAnimation from "../../assets/effectButton.json";
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
@@ -17,21 +15,23 @@ import messaging from '@react-native-firebase/messaging';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import AnimatedLottieView from 'lottie-react-native';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 
 
 const Home: React.FC = () => {
-  
-  const navigation = useNavigation<propsScreens>();
-
-  const {signOut, user} =  useContext(AuthContext);
   const {theme} = useContext(ThemeContext);
   const styles = React.useMemo(
     () => createStyles(theme),
     [theme]
   );
+  
+  const navigation = useNavigation<propsScreens>();
+
+  const {signOut, user} =  useContext(AuthContext);
 
    useEffect(() => {
     console.log(user);
@@ -107,6 +107,8 @@ const Home: React.FC = () => {
   }
 
   function goToCalendar() {
+    console.log('teste');
+    
     navigation.navigate("calendar");
   }
 
@@ -131,7 +133,7 @@ const Home: React.FC = () => {
        
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <LinearGradient
-            colors={[theme.primaryVariant, theme.buttonCircleSecond]}
+            colors={[theme.buttonCircleFirst, theme.buttonCircleSecond]}
             style={styles.contentBorderButton}
           >
                 <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
@@ -140,7 +142,7 @@ const Home: React.FC = () => {
 
       </View>
       <View style={styles.contentSecondary}>
-        <Button label='Minhas consultas' onPress={() => goToCalendar} />
+        <Button label='Minhas consultas' onPress={goToCalendar} />
         <Button label='Buscar profissionais' onPress={goToSearch}/>
       </View>
       <View style={styles.footer}>
@@ -163,7 +165,7 @@ const createStyles = (theme :Theme) => {
     buttonCircle: {
       width: 190,
       height: 190,
-      backgroundColor: theme.buttonSecond,
+      backgroundColor: theme.buttonCircleSecond,
       borderRadius: 190 / 2,
       justifyContent: "center",
       alignItems: "center",
@@ -177,7 +179,7 @@ const createStyles = (theme :Theme) => {
       borderRadius: 175 / 2,
       backgroundColor: "transparent",
       borderWidth: 1.9,
-      borderColor: theme.secondary,
+      borderColor: theme.buttonCircleBorder,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -194,7 +196,7 @@ const createStyles = (theme :Theme) => {
     labelButtonCircle: {
       fontSize: 20,
       textAlign: "center",
-      color: theme.secondary,
+      color: theme.titleButton,
       fontFamily: "Inter_600SemiBold"
     },
   

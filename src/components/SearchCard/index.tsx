@@ -48,7 +48,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                         onLoad={() => setLoadingImage(false)}
                     /> 
                     <ActivityIndicator
-                        color={'#0C015088'}
+                        color={theme.secondary88}
                         size={30}
                         style={{ display: (loadingImage ? 'flex' : 'none') }}
                     /> 
@@ -65,7 +65,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                     count={5}
                     defaultRating={data.rate}
                     isDisabled={true}
-                    selectedColor={"#FFB84E"}
+                    selectedColor={theme.stars}
                     size={16}
                     />
                     <Text numberOfLines={1} style={styles.address}>{data.address.street}, {data.address.number}, {data.address.neighborhood}, {data.address.postalCode}</Text>

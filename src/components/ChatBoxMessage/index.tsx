@@ -24,7 +24,7 @@ const ChatBoxMessage = ({data, user_role}: Props) => {
       [theme]
   );
   return(
-    <View style={[styles.container, data.user_type === user_role ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: theme.primaryVariant} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: theme.backgroundVariant}]}>
+    <View style={[styles.container, data.user_type === user_role ? { borderBottomLeftRadius: 15, borderBottomEndRadius: 0, backgroundColor: theme.chatPrimary} : {borderBottomLeftRadius: 0, borderBottomEndRadius: 15, backgroundColor: theme.chatSecondary}]}>
       <Text style={styles.textMessage}>
         {data.message}
       </Text>
@@ -53,7 +53,7 @@ const createStyles = (theme :Theme) => {
 
     textMessage: {
       fontFamily: "Inter_400Regular",
-      color: theme.secondary,
+      color: theme.chatText,
       fontSize: 16,
       marginRight: 55,
     },

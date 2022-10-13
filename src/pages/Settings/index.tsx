@@ -12,7 +12,7 @@ import {
     TextInput,
 } from "react-native";
 import Header from "../../components/Header";
-import { EvilIcons, Feather, Ionicons } from "@expo/vector-icons";
+import { EvilIcons, Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../components/Button";
 import { LinearGradient } from "expo-linear-gradient";
@@ -27,11 +27,18 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import api from "../../services/api";
 import {launchCamera, launchImageLibrary, CameraOptions, ImageLibraryOptions} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
-
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
+import SwitchWithIcons from "react-native-switch-with-icons";
+import sun from '../../assets/sun.png';
+import moon from '../../assets/moon.png';
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
 const Settings: React.FC = () => {
+    const { theme, mode, toggleTheme } = useContext(ThemeContext);
+    const styles = React.useMemo(() => createStyles(theme), [theme]);
+
     const navigation = useNavigation<propsScreens>();
 
     const { user, updateLocalUser } = useContext(AuthContext);
@@ -230,12 +237,36 @@ const Settings: React.FC = () => {
             <KeyboardAwareScrollView nestedScrollEnabled={true} contentContainerStyle={{alignItems: "center"}}>
                 <Header
                     titlePage={"Configurações"}
-                    fontSize={28}
-                    color="#8B97FF"
+                    fontSize={26}
+                    color={theme.primaryVariant}
                     buttonLeft={{
                         isIcon: false,
                         label: "Voltar",
                         onPress: goBack,
+                    }}
+                />
+                <SwitchWithIcons
+                    value={mode == 'dark' ? true : false}
+                    onValueChange={toggleTheme}
+                    style={styles.darkModeSwitch}
+                    // noIcon={false}
+                    icon={{
+                        true: moon,
+                        false: sun
+                    }}
+                    iconColor={
+                        {
+                            true: '#005',
+                            false: '#ffcc04'
+                        }
+                    }
+                    trackColor={{
+                        true: theme.backgroundVariantColor,
+                        false: theme.backgroundVariantColor
+                    }}
+                    thumbColor={{
+                        true: '#fff',
+                        false: '#0052'
                     }}
                 />
                 <View style={styles.contentPrimary}>
@@ -244,11 +275,11 @@ const Settings: React.FC = () => {
                             <TouchableOpacity style={styles.contentPhoto} onPress={findPhoto}>
                                 
                                 <ActivityIndicator
-                                    color={"#8B97FF"}
+                                    color={theme.primaryVariant}
                                     size={100}
                                     style={{
                                         display: loadingImage ? "flex" : "none",
-                                        backgroundColor: "#0C0150",
+                                        backgroundColor: theme.secondary,
                                         borderRadius: 100,
                                     }}
                                 />
@@ -267,11 +298,11 @@ const Settings: React.FC = () => {
                                     // onLoad={() => setLoadingImage(false)}
                                 />
                                 <ActivityIndicator
-                                    color={"#8B97FF"}
+                                    color={theme.primaryVariant}
                                     size={100}
                                     style={{
                                         display: loadingImage ? "flex" : "none",
-                                        backgroundColor: "#0C0150",
+                                        backgroundColor: theme.secondary,
                                         borderRadius: 100,
                                     }}
                                 />
@@ -283,13 +314,13 @@ const Settings: React.FC = () => {
                             onPress={findPhoto}
                             style={[
                                 styles.contentPhoto,
-                                { backgroundColor: "#8B97FF", borderRadius: 100 },
+                                { backgroundColor: theme.primaryVariant, borderRadius: 100 },
                             ]}
                         >
                             <Feather
                                 name="camera-off"
                                 size={100}
-                                color="#0C0150"
+                                color={theme.secondary}
                                 style={{ marginLeft: 10 }}
                             />
                         </TouchableOpacity>
@@ -308,8 +339,8 @@ const Settings: React.FC = () => {
                         setValue={setEmail}
                         label="Email"
                         containerStyle={styles.inputMaterial}
-                        textColor="#fff"
-                        baseColor="#8B97FF"
+                        textColor={theme.textInputVariant}
+                        baseColor={theme.primaryVariant}
                         editable={false}
                     />
                     <TextInputMaterial
@@ -317,8 +348,8 @@ const Settings: React.FC = () => {
                         setValue={setCpf}
                         label="CPF"
                         containerStyle={styles.inputMaterial}
-                        textColor="#fff"
-                        baseColor="#8B97FF"
+                        textColor={theme.textInputVariant}
+                        baseColor={theme.primaryVariant}
                     />
                     {user.role == "professional" && 
                         <View style={styles.frame}>
@@ -339,32 +370,32 @@ const Settings: React.FC = () => {
                                         setValue={setDegreeCrp}
                                         label="CRP"
                                         containerStyle={styles.inputMaterial}
-                                        textColor="#fff"
-                                        baseColor="#8B97FF"
+                                        textColor={theme.textInputVariant}
+                                        baseColor={theme.primaryVariant}
                                     />
                                     <TextInputMaterial
                                         value={clinicName}
                                         setValue={setClinicName}
                                         label="Nome da clínica"
                                         containerStyle={styles.inputMaterial}
-                                        textColor="#fff"
-                                        baseColor="#8B97FF"
+                                        textColor={theme.textInputVariant}
+                                        baseColor={theme.primaryVariant}
                                     />
                                     <TextAreaMaterial
                                         value={degreeDescription}
                                         setValue={setDegreeDescription}
                                         label="Formação Acadêmica"
                                         containerStyle={styles.inputMaterial}
-                                        textColor="#fff"
-                                        baseColor="#8B97FF"
+                                        textColor={theme.textInputVariant}
+                                        baseColor={theme.primaryVariant}
                                     />
                                     <TextAreaMaterial
                                         value={skills}
                                         setValue={setSkills}
                                         label="Competências e responsabilidades"
                                         containerStyle={styles.inputMaterial}
-                                        textColor="#fff"
-                                        baseColor="#8B97FF"
+                                        textColor={theme.textInputVariant}
+                                        baseColor={theme.primaryVariant}
                                     />
                                 </>
                             }  
@@ -388,56 +419,56 @@ const Settings: React.FC = () => {
                                     setValue={setAddressStreet}
                                     label="Rua"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressNumber}
                                     setValue={setAddressNumber}
                                     label="Número"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressComplement}
                                     setValue={setAddressComplement}
                                     label="Complemento"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressNeighborhood}
                                     setValue={setAddressNeighborhood}
                                     label="Bairro"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressCity}
                                     setValue={setAddressCity}
                                     label="Cidade"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressState}
                                     setValue={setAddressState}
                                     label="Estado"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
                                     value={addressPostalCode}
                                     setValue={setAddressPostalCode}
                                     label="CEP"
                                     containerStyle={styles.inputMaterial}
-                                    textColor="#fff"
-                                    baseColor="#8B97FF"
+                                    textColor={theme.textInputVariant}
+                                    baseColor={theme.primaryVariant}
                                 />
                             </>
                         }  
@@ -449,96 +480,104 @@ const Settings: React.FC = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    contentPrimary: {
-        width: "90%",
-        borderRadius: 10,
-        height: 'auto',
-        justifyContent: "space-between",
-        alignItems: "center",
-        backgroundColor: "#8B97FF22",
-        padding: 10,
-    },
-    instructions: {
-        color: "#8B97FF88",
-        fontSize: 12,
-        textAlign: "center",
-    },
-    contentBorderButton: {
-        width: 175,
-        height: 175,
-        borderRadius: 175 / 2,
-        backgroundColor: "transparent",
-        borderWidth: 1.9,
-        borderColor: "#0C0150",
-        justifyContent: "center",
-        alignItems: "center",
-    },
+const createStyles = (theme :Theme) => {
+    const styles = StyleSheet.create({
+        contentPrimary: {
+            width: "90%",
+            borderRadius: 10,
+            height: 'auto',
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: theme.primaryVariant22,
+            padding: 10,
+        },
+        instructions: {
+            color: theme.primaryVariant88,
+            fontSize: 12,
+            textAlign: "center",
+        },
+        contentBorderButton: {
+            width: 175,
+            height: 175,
+            borderRadius: 175 / 2,
+            backgroundColor: "transparent",
+            borderWidth: 1.9,
+            borderColor: theme.secondary,
+            justifyContent: "center",
+            alignItems: "center",
+        },
 
-    contentSecondary: {
-        width: "100%",
-        paddingHorizontal: 20,
-        height: 'auto',
-    },
+        contentSecondary: {
+            width: "100%",
+            paddingHorizontal: 20,
+            height: 'auto',
+        },
 
-    titleHome: {
-        color: "#FFF",
-        fontSize: 24,
-        fontFamily: "Inter_600SemiBold",
-    },
-    contentPhoto: {
-        width: 180,
-        height: 180,
-        backgroundColor: "transparent",
- 
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    imageStyled: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 180 / 2,
-        borderColor: "#0C0150",
-        borderWidth: 2,
-        
-    },
-    inputName: {
-        width: "100%",
-        height: 50,
-        textAlign: "center",
-        backgroundColor: "#FFF0",
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        fontSize: 28,
-        fontFamily: "Inter_400Regular",
-        color: "#fff",
-        fontWeight: "bold",
-    },
-    inputMaterial: {
-        backgroundColor: "#8B97FF22",
-    },
-    showBox: {
-        width: "100%",
-        height: 50,
-        borderRadius: 10,
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        paddingHorizontal: 10,
-    },
-    showBoxTitle: {
-        color: "#fff",
-        fontSize: 18,
-    },
-    frame: {
-        width: "100%",
-        height: "auto",
-        backgroundColor: "#8B97FF22",
-        borderRadius: 10,
-        marginTop: 10,
-        paddingHorizontal: 10,
-        paddingBottom: 10,
-    },
-});
+        titleHome: {
+            color: theme.textVariant,
+            fontSize: 22,
+            fontFamily: "Inter_600SemiBold",
+        },
+        contentPhoto: {
+            width: 180,
+            height: 180,
+            backgroundColor: "transparent",
+    
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        imageStyled: {
+            width: "100%",
+            height: "100%",
+            borderRadius: 180 / 2,
+            borderColor: theme.secondary,
+            borderWidth: 2,
+            
+        },
+        inputName: {
+            width: "100%",
+            height: 50,
+            textAlign: "center",
+            backgroundColor: "transparent",
+            borderRadius: 10,
+            paddingHorizontal: 20,
+            fontSize: 28,
+            fontFamily: "Inter_400Regular",
+            color: theme.textVariant,
+            fontWeight: "bold",
+        },
+        inputMaterial: {
+            backgroundColor: theme.primaryVariant22,
+        },
+        showBox: {
+            width: "100%",
+            height: 50,
+            borderRadius: 10,
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "row",
+            paddingHorizontal: 10,
+        },
+        showBoxTitle: {
+            color: theme.textVariant,
+            fontSize: 18,
+        },
+        frame: {
+            width: "100%",
+            height: "auto",
+            backgroundColor: theme.primaryVariant22,
+            borderRadius: 10,
+            marginTop: 10,
+            paddingHorizontal: 10,
+            paddingBottom: 10,
+        },
+        darkModeSwitch: {
+            position: "absolute",
+            top: '5%',
+            right: '5%',
+        }
+    });
+    return styles;
+};
 
 export default Settings;

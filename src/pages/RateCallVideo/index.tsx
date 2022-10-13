@@ -9,12 +9,19 @@ import AuthContext from '../../context/AuthContext';
 import { RouteStackParamList } from '../../routes';
 import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 // import { Container } from './styles';
 
 type professionalScreenProps = NativeStackNavigationProp<RouteStackParamList, 'professionalProfile'>
 
 const RateCallVideo: React.FC = () => {
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   
   const navigation = useNavigation<professionalScreenProps>();
@@ -49,9 +56,9 @@ const RateCallVideo: React.FC = () => {
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: "#0C0150", fontSize: 18, fontFamily: "Inter_500Medium"},
+            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
             descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: "#EEE"}
+            containerStyle: {backgroundColor: theme.backgroundVariant}
           }
         });
       }
@@ -94,7 +101,7 @@ const RateCallVideo: React.FC = () => {
             starContainerStyle={styles.rateStyled}
             isDisabled={isDisableRate}
             defaultRating={countRate}
-            selectedColor={"#FFB84E"}
+            selectedColor={theme.stars}
             size={24}
             onFinishRating={value => handleRateFinish(value)}
           />
@@ -127,72 +134,76 @@ const RateCallVideo: React.FC = () => {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#8B97FF"
-  },
-  
-  contentPrimary: {
-    width: "95%",
-    height: "auto",
-    backgroundColor: "#0C0150",
-    paddingHorizontal: 10,
-    paddingTop:  10,
-    paddingBottom: 20,
-    borderRadius: 8
-  },
-  rateContainer: {
-    width: "100%",
-    height: "auto",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 15,
-    marginBottom: 25,
-  },
-
-  messageContent: {
-    width: "100%",
-    height: "auto",
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: theme.primaryVariant
+    },
     
-  },
-  
-  titleMessage: {
-    textAlign: "center",
-    fontSize: 24,
-    fontFamily: "Inter_500Medium",
-    color: "#FFF"
-  },
-  
-  message: {
-    textAlign: "center",
-    fontSize: 18,
-    fontFamily: "Inter_400Regular",
-    color: "#FFF",
-    paddingVertical: 25,
-  },
+    contentPrimary: {
+      width: "95%",
+      height: "auto",
+      backgroundColor: theme.secondary,
+      paddingHorizontal: 10,
+      paddingTop:  10,
+      paddingBottom: 20,
+      borderRadius: 8
+    },
+    rateContainer: {
+      width: "100%",
+      height: "auto",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 15,
+      marginBottom: 25,
+    },
 
-  contentButtons: {
-    height: "auto",
-    width: "100%",
-    alignItems: "center",
-  },
+    messageContent: {
+      width: "100%",
+      height: "auto",
+      
+    },
+    
+    titleMessage: {
+      textAlign: "center",
+      fontSize: 24,
+      fontFamily: "Inter_500Medium",
+      color: theme.textVariant
+    },
+    
+    message: {
+      textAlign: "center",
+      fontSize: 18,
+      fontFamily: "Inter_400Regular",
+      color: theme.textVariant,
+      paddingVertical: 25,
+    },
 
-  labelButton: {
-    fontSize: 16,
-    color: "#8B97FF",
-    fontFamily: "Inter_600SemiBold",
-    marginTop: 20,
-  },
+    contentButtons: {
+      height: "auto",
+      width: "100%",
+      alignItems: "center",
+    },
 
-  rateStyled: {
-    width: "50%", 
-    justifyContent: "space-between"
-  }
+    labelButton: {
+      fontSize: 16,
+      color: theme.primaryVariant,
+      fontFamily: "Inter_600SemiBold",
+      marginTop: 20,
+    },
 
-})
+    rateStyled: {
+      width: "50%", 
+      justifyContent: "space-between"
+    }
+
+  })
+  return styles;
+}
+
 
 export default RateCallVideo;

@@ -22,12 +22,19 @@ import api from '../../services/api';
 DropDownPicker.setTheme("DARK");
 import AuthContext from "../../context/AuthContext";
 import Loading from '../../components/Loading';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
 
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
 
 const Appointment: React.FC = () => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+    () => createStyles(theme),
+    [theme]
+  );
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews']);
@@ -46,11 +53,11 @@ const Appointment: React.FC = () => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [openColorPicker, setOpenColorPicker] = useState<boolean>(false);
   const [colorPickerItems, setColorPickerItems] = useState([
-    {label: 'Vermelho', value: '#f88', icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: '#f88'}} />},
-    {label: 'Azul', value: '#88f', icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: '#88f'}} />},
-    {label: 'Verde', value: '#8f8', icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: '#8f8'}} />},
-    {label: 'Amarelo', value: '#ff8', icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: '#ff8'}} />},
-    {label: 'Vazio', value: null, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: '#fff0'}} />},
+    {label: 'Vermelho', value: theme.appoimentColor1, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: theme.appoimentColor1}} />},
+    {label: 'Azul', value: theme.appoimentColor2, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: theme.appoimentColor2}} />},
+    {label: 'Verde', value: theme.appoimentColor3, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: theme.appoimentColor3}} />},
+    {label: 'Amarelo', value: theme.appoimentColor4, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: theme.appoimentColor4}} />},
+    {label: 'Vazio', value: null, icon: () => <View style={{width: 18, height: 18, borderRadius: 4, backgroundColor: 'transparent'}} />},
   ]);
 
 
@@ -178,7 +185,7 @@ const Appointment: React.FC = () => {
       <Header
         titlePage={"Novo Agendamento"}
         fontSize={22}
-        color="#8B97FF"
+        color={theme.primaryVariant}
         buttonLeft={{
           isIcon: false,
           label: "Voltar",
@@ -211,7 +218,7 @@ const Appointment: React.FC = () => {
                 (selectedUser ? 
                 <SearchCardLite data={selectedUser} marginTop={10} type_user={'user'} altFunction={() => setShowSearch(true)}/> :
                 <TouchableOpacity style={styles.addPacienteBox} onPress={() => setShowSearch(true)}>
-                  <Ionicons name="add-circle-outline" size={24} color="#8B97FF" />
+                  <Ionicons name="add-circle-outline" size={24} color={theme.primaryVariant} />
                   <Text style={styles.boxLegend}>Selecione um paciente</Text>
                 </TouchableOpacity>
               )
@@ -227,16 +234,16 @@ const Appointment: React.FC = () => {
               setValue={setTitle}
               label="Titulo"
               containerStyle={styles.inputMaterial}
-              textColor="#fff"
-              baseColor="#8B97FF"
+              textColor={theme.textVariant}
+              baseColor={theme.primaryVariant}
           />
           <TextInputMaterial
               value={status}
               setValue={setStatus}
               label="Situação"
               containerStyle={styles.inputMaterial}
-              textColor="#fff"
-              baseColor="#8B97FF"
+              textColor={theme.textVariant}
+              baseColor={theme.primaryVariant}
           />
           <DropDownPicker
             style={styles.inputDropDown}
@@ -247,8 +254,8 @@ const Appointment: React.FC = () => {
             setValue={setColor}
             setItems={setColorPickerItems}
             dropDownContainerStyle={styles.dropDownContainer}
-            listItemLabelStyle={{color: '#8B97FF'}}
-            labelProps={{style: {color: color ? '#fff' : '#8B97FF', marginLeft: 9, fontSize: 18}}}
+            listItemLabelStyle={{color: theme.primaryVariant}}
+            labelProps={{style: {color: color ? theme.textVariant : theme.primaryVariant, marginLeft: 9, fontSize: 18}}}
             placeholder="Selecione uma cor"
             hideSelectedItemIcon={false}
             dropDownDirection="TOP"
@@ -258,8 +265,8 @@ const Appointment: React.FC = () => {
               setValue={setDescription}
               label="Descrição"
               containerStyle={styles.inputAreaMaterial}
-              textColor="#fff"
-              baseColor="#8B97FF"
+              textColor={theme.textVariant}
+              baseColor={theme.primaryVariant}
           />
         </View>
         <Button label="Salvar" onPress={handleSave} loading={loadingSave} containerStyle={{marginVertical: 5}}/>
@@ -268,109 +275,111 @@ const Appointment: React.FC = () => {
   </Background>;
 }
 
-
-const styles = StyleSheet.create({
-  contentPrimary: {
-    width: "90%",
-    borderRadius: 10,
-    height: 'auto',
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#8B97FF22",
-    padding: 10,
-  },
-  frame: {
-    width: "100%",
-    height: "auto",
-    backgroundColor: "#8B97FF1f",
-    borderRadius: 10,
-    marginTop: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  titleBox: {
-    borderRadius: 10,
-    justifyContent: "space-between",
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    borderBottomColor: "#8B97FF",
-    borderBottomWidth: 0.8,
-  },
-  boxTitle: {
-    color: "#8B97FF",
-    fontSize: 18,
-    paddingBottom: 5,
-    alignItems: "center",
-  },
-  boxLegend: {
-    color: "#8B97FF",
-    fontSize: 18,
-    paddingBottom: 3,
-    marginLeft: 5,
-    alignItems: "center",
-  },
-  boxDateLegend: {
-    width: 50,
-    color: "#8B97FF",
-    fontSize: 18,
-    paddingBottom: 5,
-    alignItems: "center",
-  },
-  boxMarker: {
-    color: "#0C0150",
-    fontSize: 15,
-    paddingBottom: 5,
-    fontWeight: "bold",
-    borderRadius: 10,
-    borderColor: "#8B97FF",
-    borderWidth: 0.8,
-    paddingHorizontal: 15,
-    textAlignVertical: "center",
-    paddingVertical: 3,
-    alignItems: "center",
-    marginLeft: 10,
-    backgroundColor: "#8B97FF",
-  },
-  calendar: {
-    width: 315,
-    minWidth: '90%',
-    height: 'auto',
-  },
-  dateButton: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    paddingLeft: 10,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  addPacienteBox: {
-    width: "100%",
-    height: 50,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    borderColor: "#8B97FF",
-    borderWidth: 0.8,
-    marginTop: 10,
-  },
-  inputMaterial: {
-    backgroundColor: "#8B97FF22",
-    height: 50,
-  },
-  inputAreaMaterial: {
-    backgroundColor: "#8B97FF22",
-  },
-  inputDropDown: {
-    backgroundColor: "#8B97FF22",
-    height: 50,
-    marginTop: 10,
-    borderColor: "#8B97FF00",
-  },
-  dropDownContainer: {
-    backgroundColor: "#336",
-    borderColor: "#1144",
-  },
-});
+const createStyles = (theme :Theme) => {
+  const styles = StyleSheet.create({
+    contentPrimary: {
+      width: "90%",
+      borderRadius: 10,
+      height: 'auto',
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: theme.primaryVariant22,
+      padding: 10,
+    },
+    frame: {
+      width: "100%",
+      height: "auto",
+      backgroundColor: theme.primaryVariant22,
+      borderRadius: 10,
+      marginTop: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+    },
+    titleBox: {
+      borderRadius: 10,
+      justifyContent: "space-between",
+      flexDirection: "row",
+      paddingHorizontal: 10,
+      borderBottomColor: theme.primaryVariant,
+      borderBottomWidth: 0.8,
+    },
+    boxTitle: {
+      color: theme.primaryVariant,
+      fontSize: 18,
+      paddingBottom: 5,
+      alignItems: "center",
+    },
+    boxLegend: {
+      color: theme.primaryVariant,
+      fontSize: 18,
+      paddingBottom: 3,
+      marginLeft: 5,
+      alignItems: "center",
+    },
+    boxDateLegend: {
+      width: 50,
+      color: theme.primaryVariant,
+      fontSize: 18,
+      paddingBottom: 5,
+      alignItems: "center",
+    },
+    boxMarker: {
+      color: theme.appointmentTimeLegend,
+      fontSize: 15,
+      paddingBottom: 5,
+      fontWeight: "bold",
+      borderRadius: 10,
+      borderColor: theme.primaryVariant,
+      borderWidth: 0.8,
+      paddingHorizontal: 15,
+      textAlignVertical: "center",
+      paddingVertical: 3,
+      alignItems: "center",
+      marginLeft: 10,
+      backgroundColor: theme.primaryVariant,
+    },
+    calendar: {
+      width: 315,
+      minWidth: '90%',
+      height: 'auto',
+    },
+    dateButton: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      paddingLeft: 10,
+      alignItems: "center",
+      marginTop: 20,
+    },
+    addPacienteBox: {
+      width: "100%",
+      height: 50,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 10,
+      borderColor: theme.primaryVariant,
+      borderWidth: 0.8,
+      marginTop: 10,
+    },
+    inputMaterial: {
+      backgroundColor: theme.primaryVariant22,
+      height: 50,
+    },
+    inputAreaMaterial: {
+      backgroundColor: theme.primaryVariant22,
+    },
+    inputDropDown: {
+      backgroundColor: theme.primaryVariant22,
+      height: 50,
+      marginTop: 10,
+      borderColor: "transparent",
+    },
+    dropDownContainer: {
+      backgroundColor: theme.appoimentColorPicker,
+      borderColor: theme.borderVariant,
+    },
+  });
+  return styles;
+}
 export default Appointment;

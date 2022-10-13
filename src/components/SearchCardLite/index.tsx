@@ -57,7 +57,7 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
                     /> 
                     </>) : ( 
                     <View style={{justifyContent: 'center', alignItems:'center'}}>
-                        <Ionicons name="person-circle-outline" size={60} color={theme.primaryVariant66} />
+                        <Ionicons name="person-circle-outline" size={60} color={theme.cardLitePerson} />
                     </View> )} 
             </View>
             <View style={styles.content}>
@@ -112,14 +112,14 @@ const createStyles = (theme :Theme) => {
         title: {
             fontSize: 16,
             fontWeight: '500',
-            color: theme.primaryVariant22,
+            color: theme.cardLiteText,
             marginLeft: 5,
         },
         subTitle:{
             fontSize: 12,
             fontWeight: '500',
             flexWrap: 'nowrap',
-            color: theme.primaryVariantAA,
+            color: theme.cardLiteTextVariant,
             marginLeft: 5,
         }
     });
