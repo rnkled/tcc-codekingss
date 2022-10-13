@@ -13,21 +13,24 @@ const ThemeContext = createContext<ThemeContextData>({} as ThemeContextData);
 
 export const ThemeProvider = ({ children } : any) => {
     
-    const [theme, setTheme] = useState<Theme>(colorsDark as Theme);
+    const [theme, setTheme] = useState<Theme>(colorsDark);
     const [mode, setMode] = useState<string>('light');
     const [loadingTheme, setLoadingTheme] = useState<boolean>(true);
 
   useEffect(() => {
     
     async function loadStorageData() {
-      
       const storagedThemeMode = await AsyncStorage.getItem('@themeMode');
-
       if (storagedThemeMode) {
         setMode(storagedThemeMode);
+        if(storagedThemeMode === 'light'){
+          setTheme(colorsLight);
+        }else{
+          setTheme(colorsDark);
+        }
       } else {
-        setMode('dark');
-        setTheme(colorsDark as Theme);
+        setMode('light');
+        setTheme(colorsLight);
       }
       setLoadingTheme(false);
     }
@@ -35,22 +38,27 @@ export const ThemeProvider = ({ children } : any) => {
   }, []);
 
   useEffect(() => {
-      if (mode == 'light') {
-        setTheme(colorsLight as Theme);
-      } else {
-        setTheme(colorsDark as Theme);
-      }
-    }, [mode]);
-
-    function toggleTheme() {
-        if(mode === 'light'){
-            setMode('dark');
-            AsyncStorage.setItem('@themeMode', 'dark');
-        }else{
-            setMode('light');
-            AsyncStorage.setItem('@themeMode', 'light');
-        }
+    if (mode == 'light') {
+      setTheme(colorsLight);
+    } else {
+      setTheme(colorsDark);
     }
+  }, [mode]);
+
+  function toggleTheme() {
+      setLoadingTheme(true);
+      if(mode === 'light'){
+          setMode('dark');
+          setTheme(colorsDark);
+          AsyncStorage.setItem('@themeMode', 'dark');
+          setLoadingTheme(false);
+      }else{
+          setMode('light');
+          setTheme(colorsLight);
+          AsyncStorage.setItem('@themeMode', 'light');
+          setLoadingTheme(false);
+      }
+  }
 
   return(
   <ThemeContext.Provider value={{theme, mode, loadingTheme, toggleTheme}}>

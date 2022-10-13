@@ -39,7 +39,8 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
         value={value}
         onChange={(data :any) => {setValue(data.nativeEvent.text)}}
         labelActiveColor="transparent"
-        baseColor={baseColor ? baseColor : theme.secondary88}
+        baseColor={baseColor ? baseColor : theme.inputTitle}
+        tintColor={theme.inputActiveTitle}
         titleTextStyle={{color: theme.textVariant}}
         inputContainerStyle={{backgroundColor: "transparent",}}
         lineWidth={0}
@@ -53,8 +54,8 @@ const TextInput = ({setValue, value, label, secure=false, containerStyle, textCo
             style={{top: -10}}
             onPress={() => {setShowingPassword(!showingPassword)}}>
               {showingPassword ? 
-              <Entypo name="eye" size={24} color={theme.secondary88} /> : 
-              <Entypo name="eye-with-line" size={24} color={theme.secondary88} />}
+              <Entypo name="eye" size={24} color={theme.inputTitle} /> : 
+              <Entypo name="eye-with-line" size={24} color={theme.inputTitle} />}
           </TouchableOpacity> : null)}
         editable={editable? editable : true}
         {...rest}
@@ -69,7 +70,7 @@ const createStyles = (theme :Theme) => {
       width: "100%",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: theme.backgroundVariant,
+      backgroundColor: theme.inputBackground,
       height: 60,
       paddingTop: 0,
       paddingBottom: 0,

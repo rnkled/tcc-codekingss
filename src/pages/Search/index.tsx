@@ -4,7 +4,6 @@ import Background from '../../components/Background';
 import Header from '../../components/Header';
 import { AntDesign } from '@expo/vector-icons';
 import SearchCard from '../../components/SearchCard';
-import ImageProfissional from "../../assets/th.jpg"
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import { useNavigation } from '@react-navigation/native';

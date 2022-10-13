@@ -4,7 +4,6 @@ import Background from '../../components/Background';
 import Header from '../../components/Header';
 import { AntDesign } from '@expo/vector-icons';
 import SearchCard from '../../components/SearchCard';
-import ImageProfissional from "../../assets/th.jpg"
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +17,7 @@ import { Notifier, Easing } from 'react-native-notifier';
 import messaging from '@react-native-firebase/messaging';
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
+
 
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -42,7 +42,6 @@ const SearchProfessional: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log({user});
     
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
@@ -163,6 +162,7 @@ const SearchProfessional: React.FC = () => {
       <TextInput 
         style={styles.input}
         placeholder="Pesquisar"
+        placeholderTextColor={theme.primaryVariant}
         onChangeText={(text) => setSearchTerm(text)}
         value={searchTerm}
         onEndEditing={getData}
@@ -191,7 +191,7 @@ const createStyles = (theme :Theme) => {
     input: {
       height: 45,
       width: "90%",
-      backgroundColor: theme.backgroundVariant,
+      backgroundColor: theme.inputBackground,
       borderRadius: 20,
       paddingLeft: 20,
       paddingRight: 20,

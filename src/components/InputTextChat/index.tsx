@@ -20,7 +20,7 @@ const InputTextChat = ({onChangeText, text, onPressButton}: Props) => {
   );
   return(
     <View style={styles.container}>
-        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={theme.textVariant8} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
+        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={theme.chatText} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
      
        <TouchableOpacity activeOpacity={0.8} onPress={() => onPressButton()} style={styles.buttonInput}>
         <View>
@@ -43,7 +43,7 @@ const createStyles = (theme :Theme) => {
     inputStyle: {
       width: "100%",
       height: 50,
-      backgroundColor: theme.backgroundVariant,
+      backgroundColor: theme.chatInputBackground,
       borderRadius: 100,
       paddingLeft: 15,
       fontSize: 17,
@@ -54,7 +54,7 @@ const createStyles = (theme :Theme) => {
     height: 35, 
     left: -45, 
     borderRadius: 100, 
-    backgroundColor: theme.primaryVariant,
+    backgroundColor: theme.chatInputSend,
     justifyContent: "center",
     alignItems: "center"
 

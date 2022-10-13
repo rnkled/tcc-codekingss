@@ -91,9 +91,10 @@ const createStyles = (theme :Theme) => {
   const styles = StyleSheet.create({
     container: {
       width: "100%",
-      height: "100%",
+      // height: "100%",
       alignItems: "center",
       justifyContent: "center",
+      paddingTop: '6%',
     },
     scrollViewContainer: {
       width: "100%",
@@ -113,6 +114,8 @@ const createStyles = (theme :Theme) => {
       height: "50%",
       alignItems: "center",
       justifyContent: "center",
+      marginTop: '10%',
+      marginBottom: '10%',
     },
     input: {
       width: "100%",

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Image, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import Header from '../../components/Header';
-import ImageProfissional from "../../assets/th.jpg"
 import { AirbnbRating } from 'react-native-ratings';
 import NavComponent from '../../components/NavComponent';
 import userInterface from '../../interfaces/userInterface';

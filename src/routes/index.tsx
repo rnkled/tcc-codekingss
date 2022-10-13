@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import LoginStack from './login.stack.routes';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TransitionPresets, createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import VideoCall from '../pages/VideoCall';
 import RateCallVideo from '../pages/RateCallVideo';
 import AuthContext from "../context/AuthContext";
@@ -53,12 +53,12 @@ export type RouteStackParamList = {
     }
 }
 
-const Stack = createNativeStackNavigator<RouteStackParamList>();
+const Stack = createStackNavigator<RouteStackParamList>();
 export type propsRouteInitial = {
     initialRoute?: string;
 }
 
-type propsCallRoute = NativeStackNavigationProp<RouteStackParamList, 'videoCall'>
+type propsCallRoute = StackNavigationProp<RouteStackParamList, 'videoCall'>
 
 
 
@@ -140,6 +140,17 @@ const Routes = () => {
         return <Loading/>
     }
 
+    // const transitionsOptions :any = {
+    //     transitionSpec: {
+    //       open: TransitionSpecs.TransitionIOSSpec,
+    //       close: TransitionSpecs.TransitionIOSSpec,
+    //     },
+    //     cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+    //   }
+
+    const transitionsGeral :any = TransitionPresets.ModalSlideFromBottomIOS;
+    const transitionsConfigure :any = TransitionPresets.SlideFromRightIOS;
+
 
     return (
             <Stack.Navigator initialRouteName={initialRoute as any} screenOptions={{ headerShown: false }}>
@@ -148,16 +159,16 @@ const Routes = () => {
                             <Stack.Screen name="login" component={LoginStack}/>
                     ) : (
                         <>
-                            <Stack.Screen name="home" component={user.role === "professional" ? HomeProfessional : Home} />
-                            <Stack.Screen name="search" component={Search} />
-                            <Stack.Screen name="searchProfessional" component={SearchProfessional} />
-                            <Stack.Screen name="settings" component={Settings} />
-                            <Stack.Screen initialParams={{channel_id: channel}} name="videoCall" component={VideoCall} />
-                            <Stack.Screen name="rateVideoCall" component={RateCallVideo} />
-                            <Stack.Screen name="professionalProfile" component={ProfessionalProfile} />
-                            <Stack.Screen name="chat" component={Chat} />
-                            <Stack.Screen name="calendar" component={Calendar} />
-                            <Stack.Screen name="appointment" component={appointment} />
+                            <Stack.Screen name="home" component={user.role === "professional" ? HomeProfessional : Home} options={transitionsGeral} />
+                            <Stack.Screen name="search" component={Search} options={transitionsGeral} />
+                            <Stack.Screen name="searchProfessional" component={SearchProfessional} options={transitionsGeral} />
+                            <Stack.Screen name="settings" component={Settings} options={transitionsConfigure}/>
+                            <Stack.Screen initialParams={{channel_id: channel}} name="videoCall" component={VideoCall} options={transitionsGeral} />
+                            <Stack.Screen name="rateVideoCall" component={RateCallVideo} options={transitionsGeral} />
+                            <Stack.Screen name="professionalProfile" component={ProfessionalProfile} options={transitionsGeral} />
+                            <Stack.Screen name="chat" component={Chat} options={transitionsGeral} />
+                            <Stack.Screen name="calendar" component={Calendar} options={transitionsGeral} />
+                            <Stack.Screen name="appointment" component={appointment} options={transitionsGeral} />
 
                         </>
                         )

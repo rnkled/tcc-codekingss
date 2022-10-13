@@ -133,7 +133,7 @@ const Home: React.FC = () => {
        
         <TouchableOpacity onPress={handleNewVideoCall} activeOpacity={0.8} style={styles.buttonCircle}>
           <LinearGradient
-            colors={[theme.primaryVariant, theme.buttonCircleSecond]}
+            colors={[theme.buttonCircleFirst, theme.buttonCircleSecond]}
             style={styles.contentBorderButton}
           >
                 <Text style={styles.labelButtonCircle}>Atendimento Rápido</Text>
@@ -165,7 +165,7 @@ const createStyles = (theme :Theme) => {
     buttonCircle: {
       width: 190,
       height: 190,
-      backgroundColor: theme.buttonSecond,
+      backgroundColor: theme.buttonCircleSecond,
       borderRadius: 190 / 2,
       justifyContent: "center",
       alignItems: "center",
@@ -179,7 +179,7 @@ const createStyles = (theme :Theme) => {
       borderRadius: 175 / 2,
       backgroundColor: "transparent",
       borderWidth: 1.9,
-      borderColor: theme.secondary,
+      borderColor: theme.buttonCircleBorder,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -196,7 +196,7 @@ const createStyles = (theme :Theme) => {
     labelButtonCircle: {
       fontSize: 20,
       textAlign: "center",
-      color: theme.secondary,
+      color: theme.titleButton,
       fontFamily: "Inter_600SemiBold"
     },
   

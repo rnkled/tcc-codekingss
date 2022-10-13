@@ -20,7 +20,7 @@ const Button = ({label, onPress, loading, containerStyle,  ...rest}: Props) => {
   return(
     <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{...{justifyContent: 'center', alignItems:'center', width: '100%', height: 'auto'}, ...containerStyle}}>
       <LinearGradient
-        colors={[theme.primaryVariant, theme.buttonSecond]}
+        colors={[theme.buttonFirst, theme.buttonSecond]}
         style={{...styles.button, ...containerStyle}}
       >
       <Text style={styles.text}>{label}</Text>
@@ -37,7 +37,7 @@ const createStyles = (theme :Theme) => {
       fontSize: 20,
       // fontWeight: "bold",
       fontFamily: "Inter_600SemiBold",
-      color: theme.secondary,
+      color: theme.titleButton,
     },
     button: {
       width: "100%",

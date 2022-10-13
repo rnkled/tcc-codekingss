@@ -65,6 +65,7 @@ const SearchUserComponent = ({ value, setValue, setShow, marginTop } :CardPrams)
       <TextInput 
         style={styles.input}
         placeholder="Digite o Nome ou CPF do usuário"
+        placeholderTextColor={theme.secondary}
         onChangeText={(text) => setSearchTerm(text)}
         value={searchTerm}
         onEndEditing={getData}
@@ -102,7 +103,7 @@ const createStyles = (theme :Theme) => {
       marginTop: 20,
       marginBottom: 10,
       width: "90%",
-      backgroundColor: theme.primaryVariant,
+      backgroundColor: theme.searchUserComponent,
       borderRadius: 20,
       paddingHorizontal: 20,
     },

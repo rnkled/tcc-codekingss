@@ -324,7 +324,7 @@ const createStyles = (theme :Theme) => {
       alignItems: "center",
     },
     boxMarker: {
-      color: theme.secondary,
+      color: theme.appointmentTimeLegend,
       fontSize: 15,
       paddingBottom: 5,
       fontWeight: "bold",
@@ -376,7 +376,7 @@ const createStyles = (theme :Theme) => {
       borderColor: "transparent",
     },
     dropDownContainer: {
-      backgroundColor: theme.backgroundVariantColor,
+      backgroundColor: theme.appoimentColorPicker,
       borderColor: theme.borderVariant,
     },
   });

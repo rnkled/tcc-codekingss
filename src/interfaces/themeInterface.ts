@@ -9,31 +9,48 @@ export interface Theme {
     primaryVariant66: string;
     primaryVariant55: string;
     primaryVariant22: string;
+    buttonFirst: string;
     buttonSecond: string;
+    buttonCircleFirst: string;
     buttonCircleSecond: string;
-    backgroundFirst: string;
+    buttonCircleBorder: string;
+    titleButton: string;
+    backgroundFirst: string,
     backgroundSecond: string;
+    inputBackground: string;
+    inputTitle: string;
+    inputActiveTitle: string;
     textVariant: string;
     textVariant8: string;
     textVariantGray: string;
     textGray8: string;
+    textInputVariant: string,
     backgroundVariant: string;
     backgroundVariantColor: string;
+    chatPrimary: string;
+    chatSecondary: string;
+    chatText: string;
+    chatInputBackground: string;
+    chatInputSend: string;
     borderVariant: string;
     searchFirst: string;
     searchSecond: string;
     searchThird: string;
+    searchUserComponent: string;
     stars: string;
+    appointmentTimeLegend: string;
+    appoimentColorPicker: string;
     appoimentColor1: string;
     appoimentColor2: string;
     appoimentColor3: string;
     appoimentColor4: string;
     backgroundCallEnd: string;
-
-
-
-
-
+    appointmentCardColor: string;
+    appointmentCardBackground: string;
+    cardLitePerson: string;
+    cardLiteText: string;
+    cardLiteTextVariant: string;
+    calendarBackground: string;
     calendarTheme: {
         backgroundColor: string;
         calendarBackground: string;
@@ -57,5 +74,7 @@ export interface Theme {
         textDayFontSize: number;
         textMonthFontSize: number;
         textDayHeaderFontSize: number;
+        textSectionTitleDisabledColor: string;
+        disabledArrowColor: string;
     };
 }

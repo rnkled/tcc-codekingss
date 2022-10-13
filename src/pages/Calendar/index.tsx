@@ -169,7 +169,7 @@ const createStyles = (theme :Theme) => {
             height: 'auto',
             alignItems: "center",
             paddingBottom: 10,
-            backgroundColor: theme.primaryVariant22,
+            backgroundColor: theme.calendarBackground,
         },
         calendar: {
             width: 350,
@@ -206,7 +206,7 @@ const createStyles = (theme :Theme) => {
             justifyContent: 'center',
             marginTop: 20,
             marginBottom: 10,
-            borderWidth: 0.8,
+            borderWidth: 1,
             borderColor: theme.primaryVariant22,
         },
         textAddAppointment: {

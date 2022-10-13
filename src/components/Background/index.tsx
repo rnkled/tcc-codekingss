@@ -9,16 +9,14 @@ type props = ViewProps & PropsWithChildren<{
 
 
 const Background = ({ children, ...rest }: props) => {
-  const {theme} = useContext(ThemeContext);
-  var colors = ['#0C0150', '#000']
-  
-
+  const {theme, mode} = useContext(ThemeContext);
+  const [colors, setColors] = React.useState(['#0C0150', '#000']);
 
   useEffect(() => {
     if(theme){
-      colors = [theme.secondary, theme.backgroundSecond]
+      setColors([theme.backgroundFirst, theme.backgroundSecond])
     }
-  }, [theme])
+  }, [mode])
 
   return (
     <LinearGradient

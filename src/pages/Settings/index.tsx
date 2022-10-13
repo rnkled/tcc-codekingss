@@ -12,7 +12,7 @@ import {
     TextInput,
 } from "react-native";
 import Header from "../../components/Header";
-import { EvilIcons, Feather, Ionicons } from "@expo/vector-icons";
+import { EvilIcons, Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../components/Button";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,12 +29,14 @@ import {launchCamera, launchImageLibrary, CameraOptions, ImageLibraryOptions} fr
 import storage from '@react-native-firebase/storage';
 import ThemeContext from "../../context/ThemeContext";
 import { Theme } from "../../interfaces/themeInterface";
-
+import SwitchWithIcons from "react-native-switch-with-icons";
+import sun from '../../assets/sun.png';
+import moon from '../../assets/moon.png';
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
 const Settings: React.FC = () => {
-    const { theme } = useContext(ThemeContext);
+    const { theme, mode, toggleTheme } = useContext(ThemeContext);
     const styles = React.useMemo(() => createStyles(theme), [theme]);
 
     const navigation = useNavigation<propsScreens>();
@@ -235,12 +237,36 @@ const Settings: React.FC = () => {
             <KeyboardAwareScrollView nestedScrollEnabled={true} contentContainerStyle={{alignItems: "center"}}>
                 <Header
                     titlePage={"Configurações"}
-                    fontSize={28}
+                    fontSize={26}
                     color={theme.primaryVariant}
                     buttonLeft={{
                         isIcon: false,
                         label: "Voltar",
                         onPress: goBack,
+                    }}
+                />
+                <SwitchWithIcons
+                    value={mode == 'dark' ? true : false}
+                    onValueChange={toggleTheme}
+                    style={styles.darkModeSwitch}
+                    // noIcon={false}
+                    icon={{
+                        true: moon,
+                        false: sun
+                    }}
+                    iconColor={
+                        {
+                            true: '#005',
+                            false: '#ffcc04'
+                        }
+                    }
+                    trackColor={{
+                        true: theme.backgroundVariantColor,
+                        false: theme.backgroundVariantColor
+                    }}
+                    thumbColor={{
+                        true: '#fff',
+                        false: '#0052'
                     }}
                 />
                 <View style={styles.contentPrimary}>
@@ -313,7 +339,7 @@ const Settings: React.FC = () => {
                         setValue={setEmail}
                         label="Email"
                         containerStyle={styles.inputMaterial}
-                        textColor={theme.backgroundVariant}
+                        textColor={theme.textInputVariant}
                         baseColor={theme.primaryVariant}
                         editable={false}
                     />
@@ -322,7 +348,7 @@ const Settings: React.FC = () => {
                         setValue={setCpf}
                         label="CPF"
                         containerStyle={styles.inputMaterial}
-                        textColor={theme.backgroundVariant}
+                        textColor={theme.textInputVariant}
                         baseColor={theme.primaryVariant}
                     />
                     {user.role == "professional" && 
@@ -344,7 +370,7 @@ const Settings: React.FC = () => {
                                         setValue={setDegreeCrp}
                                         label="CRP"
                                         containerStyle={styles.inputMaterial}
-                                        textColor={theme.backgroundVariant}
+                                        textColor={theme.textInputVariant}
                                         baseColor={theme.primaryVariant}
                                     />
                                     <TextInputMaterial
@@ -352,7 +378,7 @@ const Settings: React.FC = () => {
                                         setValue={setClinicName}
                                         label="Nome da clínica"
                                         containerStyle={styles.inputMaterial}
-                                        textColor={theme.backgroundVariant}
+                                        textColor={theme.textInputVariant}
                                         baseColor={theme.primaryVariant}
                                     />
                                     <TextAreaMaterial
@@ -360,7 +386,7 @@ const Settings: React.FC = () => {
                                         setValue={setDegreeDescription}
                                         label="Formação Acadêmica"
                                         containerStyle={styles.inputMaterial}
-                                        textColor={theme.backgroundVariant}
+                                        textColor={theme.textInputVariant}
                                         baseColor={theme.primaryVariant}
                                     />
                                     <TextAreaMaterial
@@ -368,7 +394,7 @@ const Settings: React.FC = () => {
                                         setValue={setSkills}
                                         label="Competências e responsabilidades"
                                         containerStyle={styles.inputMaterial}
-                                        textColor={theme.backgroundVariant}
+                                        textColor={theme.textInputVariant}
                                         baseColor={theme.primaryVariant}
                                     />
                                 </>
@@ -393,7 +419,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressStreet}
                                     label="Rua"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -401,7 +427,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressNumber}
                                     label="Número"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -409,7 +435,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressComplement}
                                     label="Complemento"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -417,7 +443,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressNeighborhood}
                                     label="Bairro"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -425,7 +451,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressCity}
                                     label="Cidade"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -433,7 +459,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressState}
                                     label="Estado"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                                 <TextInputMaterial
@@ -441,7 +467,7 @@ const Settings: React.FC = () => {
                                     setValue={setAddressPostalCode}
                                     label="CEP"
                                     containerStyle={styles.inputMaterial}
-                                    textColor={theme.backgroundVariant}
+                                    textColor={theme.textInputVariant}
                                     baseColor={theme.primaryVariant}
                                 />
                             </>
@@ -489,7 +515,7 @@ const createStyles = (theme :Theme) => {
 
         titleHome: {
             color: theme.textVariant,
-            fontSize: 24,
+            fontSize: 22,
             fontFamily: "Inter_600SemiBold",
         },
         contentPhoto: {
@@ -545,6 +571,11 @@ const createStyles = (theme :Theme) => {
             paddingHorizontal: 10,
             paddingBottom: 10,
         },
+        darkModeSwitch: {
+            position: "absolute",
+            top: '5%',
+            right: '5%',
+        }
     });
     return styles;
 };
