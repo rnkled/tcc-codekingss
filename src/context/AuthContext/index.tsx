@@ -38,6 +38,8 @@ export const AuthProvider = ({ children } : any) => {
 
   async function signIn(email: string, password: string) {
     auth.signIn(email, password).then(async (response) => {
+      console.log(response.data);
+      
       setUser(response.data.user as userInterface);
       api.defaults.headers.common['Authorization'] = `Baerer ${response.data.token}`;
       await AsyncStorage.setItem('@user', JSON.stringify(response.data.user));
