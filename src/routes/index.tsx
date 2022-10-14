@@ -135,8 +135,8 @@ const Routes = () => {
         });
   }, []);
 
-
-    if (loading || loadingTheme) {
+  
+    if (loading || loadingTheme ) {
         return <Loading/>
     }
 
@@ -154,7 +154,7 @@ const Routes = () => {
 
     return (
             <Stack.Navigator initialRouteName={initialRoute as any} screenOptions={{ headerShown: false }}>
-                {!signed ? 
+                {!signed || !user ? 
                     (
                             <Stack.Screen name="login" component={LoginStack}/>
                     ) : (

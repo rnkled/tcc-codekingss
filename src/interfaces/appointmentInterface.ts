@@ -5,6 +5,7 @@ interface AppointmentInterface {
     note: string,
     user_id: string,
     color: string
+    id: string
 }
 
 export default AppointmentInterface;

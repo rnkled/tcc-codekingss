@@ -129,7 +129,7 @@ const colorsLight :Theme= {
     searchUserComponent: '#0C015022',
     borderVariant: '#1144',
     appointmentTimeLegend: '#ccf',
-    appoimentColorPicker: '#116',
+    appoimentColorPicker: '#ccf',
     backgroundCallEnd: '#f66',
     appoimentColor1: "#F88",
     appoimentColor2: "#88F",

@@ -47,6 +47,8 @@ const Appointment: React.FC = () => {
 
   const { user } = useContext(AuthContext);
   
+  const [oldDate, setOldDate] = useState<Date>();
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(routeDate);
   const [selectedUser, setSelectedUser] = useState<UserInterface | null>(null);
   const [professionalID, setProfessionalID] = useState<string | null>(user._id);
@@ -92,6 +94,10 @@ const Appointment: React.FC = () => {
       routeDate.setHours(parseInt(routeItem.time.split(':')[0]))
       routeDate.setMinutes(parseInt(routeItem.time.split(':')[1]))
       setDate(new Date(routeDate));
+      setOldDate(new Date(routeDate));
+      setIsEditing(true);
+      console.log('Editando');
+      
       getUserData();
     }
   }, [routeItem])
@@ -139,6 +145,13 @@ const Appointment: React.FC = () => {
     return padNumber(d) + '/' + padNumber(m) + '/' + padNumber(y)
   }
 
+  function getOldDate() {
+    let d = oldDate.getDate();
+    let m = oldDate.getMonth() + 1;
+    let y = oldDate.getFullYear();
+    return padNumber(d) + '/' + padNumber(m) + '/' + padNumber(y)
+  }
+
   function check(label, value) {
     if (value == '' || value == undefined || value == null) {
       Alert.alert('Atenção!', `Por favor, preencha o campo ${label} para finalizar o processo!`);
@@ -154,6 +167,8 @@ const Appointment: React.FC = () => {
       return;
     }
 
+    console.log('Salvando...');
+    
     let data = {
       "professionalId": professionalID,
       "appointment": {
@@ -178,6 +193,41 @@ const Appointment: React.FC = () => {
       Alert.alert("Erro", "Erro ao salvar o Agendamento!");
     });
 
+  }
+
+  function handleUpdate() {
+    setLoadingSave(true);
+
+    if (check('Título', title) == false) {
+      setLoadingSave(false);
+      return;
+    }
+
+    let data = {
+      "professionalId": professionalID,
+      "appointment": {
+          "name": title,
+          "time": getTime(),
+          "status": status,
+          "note": description,
+          "user_id": selectedUser ? selectedUser._id : null,
+          "color": color,
+          "id": routeItem.id
+    },
+      "date": getDate().replace(/\//g, '-'),
+      "lastDate": getOldDate().replace(/\//g, '-')
+    }
+    api.put(`/appointment/update/${professionalID}`, data).then((response) => {
+      setLoadingSave(false);
+      Alert.alert("Sucesso", "Agendamento Editado com sucesso!",
+      [
+        { text: "OK", onPress: () => navigation.navigate('calendar') }
+      ])
+    }).catch((error) => {
+      setLoadingSave(false);
+      console.log(error.response.data);
+      Alert.alert("Erro", "Erro ao salvar o Agendamento!");
+    });
   }
     
   return <Background>
@@ -269,7 +319,7 @@ const Appointment: React.FC = () => {
               baseColor={theme.primaryVariant}
           />
         </View>
-        <Button label="Salvar" onPress={handleSave} loading={loadingSave} containerStyle={{marginVertical: 5}}/>
+        <Button label="Salvar" onPress={isEditing ? handleUpdate : handleSave} loading={loadingSave} containerStyle={{marginVertical: 5}}/>
       </View>
     </KeyboardAwareScrollView>
   </Background>;

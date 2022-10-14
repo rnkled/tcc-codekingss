@@ -8,19 +8,22 @@ import AppointmentInterface from '../../interfaces/appointmentInterface';
 import { OutlinedTextField } from 'rn-material-ui-textfield';
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
-
+import api from '../../services/api';
+import AuthContext from '../../context/AuthContext';
 
 type AppointmentItemProps = {
     item: AppointmentInterface;
     updateData: () => void;
     goToAppointment: (item: AppointmentInterface) => void;
     manage: boolean;
+    date: string;
 }
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
-const AppointmentItem = ({item, updateData, goToAppointment, manage} :AppointmentItemProps) => {
+const AppointmentItem = ({item, updateData, goToAppointment, manage, date} :AppointmentItemProps) => {
 
+    const { user } = useContext(AuthContext);
     const {theme} = useContext(ThemeContext);
     const styles = React.useMemo(
         () => createStyles(theme),
@@ -41,6 +44,22 @@ const AppointmentItem = ({item, updateData, goToAppointment, manage} :Appointmen
         ]);       
     }
 
+    function getDate() {
+        function padNumber(number : Number) {
+            if (number < 10) {
+                return String('0' + number);
+            } else {
+                return String(number);
+            }
+        }
+
+        let itemDate = new Date(date);
+        let d = itemDate.getDate();
+        let m = itemDate.getMonth() + 1;
+        let y = itemDate.getFullYear();
+        return padNumber(d) + '-' + padNumber(m) + '-' + padNumber(y)
+      }
+
     function handleDeleteAppointment(){
         Alert.alert('ATENÇÃO!', 'Deseja realmente cancelar este agendamento?', [
             {
@@ -49,8 +68,24 @@ const AppointmentItem = ({item, updateData, goToAppointment, manage} :Appointmen
             {
                 text: 'Sim',
                 onPress: () => {
-                    updateData();
-                    console.log('deletar')
+                    let data = {
+                        "professionalId": user._id,
+                        "date": getDate(),
+                        "appointmentId": item.id
+                    }
+                    console.log(data);
+                    
+                    api.delete("/appointment/delete/", {data}).then((response) => {
+                        Alert.alert("Sucesso", "Agendamento removido com sucesso!",
+                        [
+                          { text: "OK", onPress: () => updateData() }
+                        ])
+                    }).catch((error) => {
+                        console.log(error.response.data);
+                        Alert.alert("Erro", "Erro ao remover o Agendamento!");
+                        updateData();
+                    });
+
                 }
             }
         ])

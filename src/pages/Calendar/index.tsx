@@ -139,7 +139,7 @@ const CalendarComponent: React.FC = () => {
                                         <Text style={styles.titleAppointments}>Agendamentos de {new Date(selectedDay.dateString).toLocaleDateString('pt-BR')}</Text>
                                             {
                                                 apiData[selectedDay.dateString.split('-').reverse().join('-')] && apiData[selectedDay.dateString.split('-').reverse().join('-')].map((item: appointmentInterface, index: number) => (
-                                                        <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment} manage={user.role === "professional" ? true : false}/>
+                                                        <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment} manage={user.role === "professional" ? true : false} date={selectedDay.dateString}/>
                                                     )
                                                 )
                                             }
