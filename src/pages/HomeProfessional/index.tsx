@@ -67,7 +67,6 @@ const HomeProfessional: React.FC = () => {
       }
 
       if(remoteMessage.data.type && remoteMessage.data.type === "call"){
-        console.log("aqqq01dnv");
         
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
@@ -80,7 +79,7 @@ const HomeProfessional: React.FC = () => {
             const dataNotification: SendNotificationProps = {
               token: remoteMessage.data.tokenPush,
               title: "Encontramos um profissional",
-              body: "Você realmente deseja entrar nessa consulta?",
+              body: `Psicólogo (a) ${user.name} aceitou a sua chamada!`,
               id_professional: user._id,
               id_pacient: null,
               name: user.name,
