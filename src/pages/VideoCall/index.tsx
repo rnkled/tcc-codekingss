@@ -19,6 +19,7 @@ import CallAnimation from "../../assets/callanimation.json"
 import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
 import ThemeContext from "../../context/ThemeContext";
 import { Theme } from "../../interfaces/themeInterface";
+import Loading from '../../components/Loading';
 
 type rateScreenProps = NativeStackNavigationProp<RouteStackParamList, 'rateVideoCall'>
 
@@ -37,9 +38,13 @@ const VideoCall: React.FC = () => {
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
   const channelIdNotification = route.params?.channel_id;
   const channelId = user.role === "user" ? String(Date.now()) : channelIdNotification
-  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId || true);
+  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId || false);
 
-  const animation = useRef(null);
+
+  if(!channelId){
+    return <Loading/>
+  }
+
 
   if(user.role === "professional" && !channelId){
     
@@ -55,11 +60,16 @@ const VideoCall: React.FC = () => {
       channel: channelId,
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
-      callActive: user.role === "user" && !isEnableVideo
+      callActive: user.role === "user" && !isEnableVideo,
+      role: user.role === "user" ? 1 : 2,
+      dualStreamMode: 1,
+      layout: 1
+
       
     },
     callbacks: {
       EndCall: () => goToNextScreen(),
+
 
     },
     styleProps: {
@@ -85,6 +95,9 @@ const VideoCall: React.FC = () => {
 
     useEffect(() => {
       handleSendNotificationCall();
+      if(!!channelId){
+        Alert.alert(channelId)
+      }
     },[]);
 
     async function handleSendNotificationCall(){
@@ -107,7 +120,7 @@ const VideoCall: React.FC = () => {
           sounds: "call",
           tokenSecondary: user.tokenPush,
           type: "call",
-          channel_id: String(Date.now())
+          channel_id: channelId
           
         }
         
@@ -131,14 +144,14 @@ const VideoCall: React.FC = () => {
     useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type && remoteMessage.data.type === "requestCall"){
-        Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`, [
-          {text: "Não", onPress: () => handleCancelCall(remoteMessage.data?.tokenPush), style: "cancel"},
-          {text: "Sim", onPress: () => handleCall(remoteMessage.data?.id_professional), style: "default"}
-        ]);
+        Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`)
+        setIdProfessional(remoteMessage.data?.id_professional || null);
+        setVideoCall(true);
+        console.log("ouvindo");
+        
       }
 
       if(user.role === "professional" && remoteMessage.data.type && remoteMessage.data.type === "responseCall"){
-        console.log("aqqtbm");
         
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
@@ -166,35 +179,6 @@ const VideoCall: React.FC = () => {
   }, []);
 
 
-  async function handleCancelCall(token: string){
-    
-    if(!!token){
-      const dataNotification: SendNotificationProps = {
-        token,
-        title: "Chamada encerrada",
-        body: "O paciente desistiu de entrar na chamada!",
-        id_pacient: null,
-        id_professional: null,
-        name: "",
-        sounds: "message",
-        tokenSecondary: null,
-        type: "responseCall",
-        multiplesToken: false
-        
-      }
-      await sendNotificationTo({dataNotification})
-    }
-    navigation.navigate("home");
-  }
-  
-  function handleCall(id_professional: string){
-    console.log({id_professional});
-    
-    setIdProfessional(id_professional);
-    setVideoCall(true);
-  }
-
-
 
   function goToNextScreen(){
     user.role === "user" ?
@@ -212,7 +196,7 @@ const VideoCall: React.FC = () => {
       rtcProps={props.rtcProps} 
       callbacks={props.callbacks}
       // settings={{
-      //   mode: 2,
+    
       //   role: 1, // analisar o acesso do psicologo aqui  
       // }}
     />
