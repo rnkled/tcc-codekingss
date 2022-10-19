@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import userInterface from '../../interfaces/userInterface';
@@ -10,6 +10,7 @@ import Loading from '../Loading';
 import { Ionicons } from '@expo/vector-icons';
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
+import api from '../../services/api';
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
 
@@ -37,6 +38,22 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
         }
     }
 
+    const [rating, setRating] = useState(0.00);
+    
+    async function getRating(){
+        api.get(`/rate/list/${data._id}`).then(response => {
+            console.log(response.data);
+            
+            setRating(parseFloat(response.data.averageRate) || 0.00);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        getRating();
+    }, [])
+
   return ( 
     <TouchableOpacity onPress={goTo}>
         <LinearGradient colors={[theme.searchFirst, theme.searchSecond, theme.searchThird]} style={styles.container}>
@@ -63,7 +80,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
                     <AirbnbRating
                     showRating={false}
                     count={5}
-                    defaultRating={data.rate}
+                    defaultRating={rating}
                     isDisabled={true}
                     selectedColor={theme.stars}
                     size={16}

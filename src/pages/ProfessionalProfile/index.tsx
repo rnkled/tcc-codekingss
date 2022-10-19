@@ -6,7 +6,7 @@ import NavComponent from '../../components/NavComponent';
 import userInterface from '../../interfaces/userInterface';
 import Button from '../../components/Button';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { PropsCardComment } from '../../components/CardComment';
+import commentaryInterface from '../../interfaces/commentaryInterface';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteStackParamList } from '../../routes';
 import Background from '../../components/Background';
@@ -35,13 +35,9 @@ const ProfessionalProfile: React.FC = () => {
   const [loadingImage, setLoadingImage] = useState(true)
   const {user} =  useContext(AuthContext);
   const [dataProfessional, setDataProfessional] = useState<userInterface>();
-
-  const [dataComments, setDataComments] = useState<PropsCardComment[]>([
-    {comment: "Amei, vou fazer mais novas consultas com ela!", pacientName: "Maria", published_at: "10min atrás"}, 
-    {comment: "Gostei demais!!", pacientName: "Jubiscleide", published_at: "Há 10d"}, 
-    {comment: "Hoje sou outra pessoa gracas a ela!", pacientName: "Josefina", published_at: "Há 1h"}, 
-  
-  ])
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [dataComments, setDataComments] = useState<commentaryInterface[]>([])
+  const [rating, setRating] = useState(0.00);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -80,16 +76,38 @@ const ProfessionalProfile: React.FC = () => {
   }, []);
 
 
+  async function getCommentsData(){
+    setLoadingComments(true);
+    api.get(`/comment/list/${id}/professionalId`).then(response => {
+      setDataComments(response.data);
+      setLoadingComments(false);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  async function getRating(){
+    api.get(`/rate/list/${id}`).then(response => {
+      console.log(response.data);
+      
+      setRating(parseFloat(response.data.averageRate) || 0.00);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  async function getDataProfessional() {
+    api.get(`/user/list/${id}`).then(response => {        
+      setDataProfessional(response.data[0]);
+      setLoading(false)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
   useEffect(() => {
-    async function getDataProfessional() {
-      api.get(`/user/list/${id}`).then(response => {        
-        setDataProfessional(response.data[0]);
-        setLoading(false)
-      }).catch(err => {
-        console.log(err)
-      })
-    }
     getDataProfessional()
+    getCommentsData()
+    getRating()
   } , [id])
 
   function goToHome(){
@@ -136,7 +154,7 @@ const ProfessionalProfile: React.FC = () => {
               showRating={false}
               count={5}
               starContainerStyle={styles.rateStyled}
-              defaultRating={dataProfessional.rate}
+              defaultRating={rating}
               isDisabled={true}
               selectedColor={theme.stars}
               size={26}
@@ -149,7 +167,7 @@ const ProfessionalProfile: React.FC = () => {
             </Text>
           </View>
           <View style={styles.contentDescription}>
-            <NavComponent dataProfessional={dataProfessional} dataComments={dataComments}/>
+            <NavComponent dataProfessional={dataProfessional} dataComments={dataComments} loadingComments={loadingComments}/>
           </View>
           <Button onPress={goToChat} label='Entrar em contato'/>
         </Background>
