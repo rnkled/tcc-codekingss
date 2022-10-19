@@ -147,7 +147,7 @@ const createStyles = (theme :Theme) => {
     contentPrimary: {
       width: "95%",
       height: "auto",
-      backgroundColor: theme.secondary,
+      backgroundColor: theme.callBackground,
       paddingHorizontal: 10,
       paddingTop:  10,
       paddingBottom: 20,

@@ -17,6 +17,7 @@ export interface Theme {
     titleButton: string;
     backgroundFirst: string,
     backgroundSecond: string;
+    callBackground: string;
     inputBackground: string;
     inputTitle: string;
     inputActiveTitle: string;

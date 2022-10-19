@@ -70,10 +70,10 @@ const CardComment = ({ data, updateData, managementMode }: Props) => {
   return(
     <View style={styles.container}>
       <View style={styles.contentImage}>
-        { data.profilePhoto ? (<>
+        { data.user.profilePhoto ? (<>
           <Image 
               style={[styles.imageStyle, {display: (loadingImage ? 'none' : 'flex')}]} 
-              source={{uri: data.profilePhoto } as ImageSourcePropType} 
+              source={{uri: data.user.profilePhoto } as ImageSourcePropType} 
               onLoad={() => setLoadingImage(false)}
           /> 
           <ActivityIndicator
@@ -88,7 +88,7 @@ const CardComment = ({ data, updateData, managementMode }: Props) => {
       </View>
       <View style={styles.contentDescription}>
         <View style={styles.contentInformationComment}>
-          <Text style={styles.labelName}>{data.pacientName}</Text>
+          <Text style={styles.labelName}>{data.user.name}</Text>
           <Text style={styles.labelTime}>{getDate()}</Text>
           {managementMode && 
             <TouchableOpacity onPress={handleDeleteComment}>
