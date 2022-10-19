@@ -1,21 +1,23 @@
 import React, { useContext, useState } from 'react';
 import { FlatList, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Tab, Text as TextTab, TabView } from '@rneui/themed';
-import CardComment, { PropsCardComment } from '../CardComment';
+import CardComment from '../CardComment';
+import commentaryInterface from '../../interfaces/commentaryInterface';
 import { Feather } from '@expo/vector-icons';
 import userInterface from '../../interfaces/userInterface';
-// import { Container } from './styles';
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
+import Loading from '../Loading';
 
 
 type Props = {
   dataProfessional: userInterface,
-  dataComments: PropsCardComment[],
+  dataComments: commentaryInterface[],
+  loadingComments: boolean,
 }
 
 
-const NavComponent = ({dataComments, dataProfessional}: Props) => {
+const NavComponent = ({dataComments, dataProfessional, loadingComments}: Props) => {
   const {theme} = useContext(ThemeContext);
   const styles = React.useMemo(
       () => createStyles(theme),
@@ -56,14 +58,14 @@ const NavComponent = ({dataComments, dataProfessional}: Props) => {
 
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={styles.contentDescription}>
-          <FlatList
-            data={dataComments}
-            renderItem={({item}) => (
-                <CardComment data={item}/>
-              )
-            }          
-          />
-          
+          {loadingComments ? <Loading transparent={true}/> : 
+            <FlatList
+              data={dataComments}
+              renderItem={({item}) => (
+                  <CardComment data={item} managementMode={false}/>
+                )
+              }          
+            />}
         </TabView.Item>
         <TabView.Item style={styles.contentDescription}>
           <ScrollView style={styles.containerInformationPersonal}>

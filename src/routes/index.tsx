@@ -13,6 +13,7 @@ import Settings from '../pages/Settings';
 import appointment from '../pages/Appointment';
 import HomeProfessional from '../pages/HomeProfessional';
 import SearchProfessional from '../pages/SearchProfessional';
+import CommentsManagement from '../pages/CommentsManagement';
 import Calendar from '../pages/Calendar';
 import AppointmentInterface from '../interfaces/appointmentInterface';
 import messaging from '@react-native-firebase/messaging';
@@ -50,7 +51,8 @@ export type RouteStackParamList = {
         id_usuario?: string;
         date?: string;
         item?: AppointmentInterface;
-    }
+    },
+    commentsManagement: undefined;
 }
 
 const Stack = createStackNavigator<RouteStackParamList>();
@@ -169,6 +171,7 @@ const Routes = () => {
                             <Stack.Screen name="chat" component={Chat} options={transitionsGeral} />
                             <Stack.Screen name="calendar" component={Calendar} options={transitionsGeral} />
                             <Stack.Screen name="appointment" component={appointment} options={transitionsGeral} />
+                            <Stack.Screen name="commentsManagement" component={CommentsManagement} options={transitionsGeral} />
 
                         </>
                         )

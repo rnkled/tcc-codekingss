@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import userInterface from '../../interfaces/userInterface';
@@ -10,6 +10,7 @@ import Loading from '../Loading';
 import { Ionicons } from '@expo/vector-icons';
 import ThemeContext from '../../context/ThemeContext';
 import { Theme } from '../../interfaces/themeInterface';
+import api from '../../services/api';
 
 
 type propsScreens = NativeStackNavigationProp<RouteStackParamList>
@@ -40,6 +41,20 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
         }
     }
 
+    const [rating, setRating] = useState(0.00);
+    
+    async function getRating(){
+        api.get(`/rate/list/${data._id}`).then(response => {
+            setRating(parseFloat(response.data.averageRate) || 0.00);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        getRating();
+    }, [])
+
   return ( 
     <TouchableOpacity onPress={() => altFunction ? altFunction() : goTo()}>
         <View style={{...styles.container, marginTop: marginTop ? marginTop : 0}}>
@@ -66,7 +81,7 @@ const SearchCardLite = ({ data, type_user="professional", altFunction, marginTop
                     <AirbnbRating
                     showRating={false}
                     count={5}
-                    defaultRating={data.rate}
+                    defaultRating={rating}
                     isDisabled={true}
                     selectedColor={theme.stars}
                     size={16}
