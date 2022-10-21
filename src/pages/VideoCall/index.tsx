@@ -36,40 +36,27 @@ const VideoCall: React.FC = () => {
   const [isEnableVideo, setIsEnableVideo] = useState(false);
   const {user} = useContext(AuthContext);
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
-  const channelIdNotification = route.params?.channel_id;
-  const channelId = user.role === "user" ? String(Date.now()) : channelIdNotification
-  const [videoCall, setVideoCall] = useState(user.role === "professional" && !!channelId || false);
-
-
-  if(!channelId){
-    return <Loading/>
-  }
-
-
-  if(user.role === "professional" && !channelId){
-    
-    Alert.alert("Atenção", "Não foi possível se conectar com a chamada de video!")
-    navigation.navigate("home");
-    return 
-    
-  }
+  const [videoCall, setVideoCall] = useState(false);
+  const [channel, setChannel] = useState("");
+  
 
   const props: PropsInterface = {
     rtcProps: {
       appId: '885ca3cade8f4a3e81c7550a827300a2',
-      channel: channelId,
+      channel: channel,
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
       callActive: user.role === "user" && !isEnableVideo,
       role: user.role === "user" ? 1 : 2,
       dualStreamMode: 1,
-      layout: 1
+
 
       
     },
     callbacks: {
       EndCall: () => goToNextScreen(),
-
+      // UserJoined: (e) => console.log({e}),
+    
 
     },
     styleProps: {
@@ -79,7 +66,10 @@ const VideoCall: React.FC = () => {
           switchCamera: {backgroundColor: theme.primaryVariant, borderWidth: 0 },
           endCall: {backgroundColor: theme.backgroundCallEnd, borderWidth: 0, },
 
-        },
+        }, 
+        remoteBtnContainer: {display: "none"},
+        
+        videoMode: {max: 1080, min: 420},
         localBtnContainer: {
           backgroundColor: 'transparent',
           bottom: 0,
@@ -94,13 +84,39 @@ const VideoCall: React.FC = () => {
   };
 
     useEffect(() => {
-      handleSendNotificationCall();
-      if(!!channelId){
-        Alert.alert(channelId)
-      }
+      joinChannel();
     },[]);
 
-    async function handleSendNotificationCall(){
+    async function joinChannel(){
+      if(user.role === "user"){
+        let channelId = String(Date.now());
+        setChannel(channelId);
+        await sendCallNotificationForProfessional(channelId);
+        
+
+      }
+      if(user.role === "professional"){
+        const channelIdNotification = route.params?.channel_id;
+
+        if(!channelIdNotification){
+    
+          Alert.alert("Atenção", "Não foi possível se conectar com a chamada de video!")
+          navigation.navigate("home");
+          return 
+          
+        }else{
+          setChannel(channelIdNotification);
+
+          setTimeout(() => {
+            setVideoCall(true);
+          }, 3000);
+        }
+
+      }
+
+    }
+
+    async function sendCallNotificationForProfessional(channelId: string){
       if(user.role === "user"){
 
         
@@ -128,14 +144,14 @@ const VideoCall: React.FC = () => {
         await sendNotificationTo({dataNotification});
       }
 
-      setTimeout(() => {
-        if(!videoCall){
-          Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
-          navigation.canGoBack() ? navigation.goBack() : navigation.popToTop(); navigation.navigate("home");
-          return 
-        }
+      // setTimeout(() => {
+      //   if(!videoCall && user.role === "user"){
+      //     Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
+      //     navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home");
+      //     return 
+      //   }
 
-      }, 180000 )
+      // }, 180000 )
       
       
 
@@ -147,7 +163,6 @@ const VideoCall: React.FC = () => {
         Alert.alert(`${remoteMessage.notification.title}`, `${remoteMessage.notification.body}`)
         setIdProfessional(remoteMessage.data?.id_professional || null);
         setVideoCall(true);
-        console.log("ouvindo");
         
       }
 
@@ -186,6 +201,12 @@ const VideoCall: React.FC = () => {
       navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home")
   
     }
+
+
+
+  if(!videoCall && user.role === "professional"){
+    return <Loading/>
+  }
 
 
   
