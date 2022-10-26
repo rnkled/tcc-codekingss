@@ -141,7 +141,7 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion 33
+    compileSdkVersion 32
 
         compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

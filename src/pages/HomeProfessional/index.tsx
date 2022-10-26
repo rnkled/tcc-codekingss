@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect} from 'react';
+import React, {useContext, useEffect, useLayoutEffect} from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,10 +27,8 @@ const HomeProfessional: React.FC = () => {
   
   const navigation = useNavigation<propsScreens>();
 
-  const {signOut, user} =  useContext(AuthContext);
-  
-  
-  
+  const {signOut, user, firstTime} =  useContext(AuthContext);
+
   const isFocused = useIsFocused();
 
   useLayoutEffect(() => {
@@ -138,6 +136,18 @@ const HomeProfessional: React.FC = () => {
   function goToCalendar() {
     navigation.navigate("calendar");
   }
+
+  function checkFirstTime() {
+    console.log({firstTime});
+    
+    if (firstTime) {
+      navigation.navigate('firstTimeProfessional');
+    }
+  }
+
+  useEffect(() => {
+    checkFirstTime();
+  }, [firstTime]);
 
   return(
     <Background style={{alignItems: 'center'}}>

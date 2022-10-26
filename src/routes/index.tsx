@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { SendNotificationProps, sendNotificationTo } from '../services/notificationService';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/Loading';
+import FirstTimeProfessional from '../pages/FirstTimeProfessional';
 
 
 export type RouteStackParamList = {
@@ -53,6 +54,7 @@ export type RouteStackParamList = {
         item?: AppointmentInterface;
     },
     commentsManagement: undefined;
+    firstTimeProfessional: undefined;
 }
 
 const Stack = createStackNavigator<RouteStackParamList>();
@@ -162,6 +164,7 @@ const Routes = () => {
                     ) : (
                         <>
                             <Stack.Screen name="home" component={user.role === "professional" ? HomeProfessional : Home} options={transitionsGeral} />
+                            <Stack.Screen name="firstTimeProfessional" component={FirstTimeProfessional} options={transitionsGeral} />
                             <Stack.Screen name="search" component={Search} options={transitionsGeral} />
                             <Stack.Screen name="searchProfessional" component={SearchProfessional} options={transitionsGeral} />
                             <Stack.Screen name="settings" component={Settings} options={transitionsConfigure}/>

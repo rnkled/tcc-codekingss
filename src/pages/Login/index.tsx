@@ -37,6 +37,10 @@ const Login = () => {
     navigation.navigate('login.create');
   }
 
+  function irParaRegistrarProfissional() {
+    navigation.navigate('login.createProfessional');
+  }
+
   async function handleLogin() {
     if (!email || email == '') {
       Alert.alert('Erro', 'Preencha o campo de e-mail');
@@ -75,6 +79,9 @@ const Login = () => {
             <TextInputMaterial label={"Senha"} value={password} setValue={setPassword} secure={true}/>
             <TouchableOpacity onPress={irParaRegistrar}>
               <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={irParaRegistrarProfissional}>
+              <Text style={[styles.textoAzul, {top: 20, fontSize: 14}]}>Deseja fazer parte da plataforma como profissional? Toque aqui e se cadastre.</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
@@ -137,6 +144,7 @@ const createStyles = (theme :Theme) => {
       fontSize: 15,
       color: theme.primaryVariant,
       marginTop: "3%",
+      textAlign: "center",
     },
     footer: {
       height: "30%",

@@ -32,10 +32,11 @@ import { Theme } from "../../interfaces/themeInterface";
 import SwitchWithIcons from "react-native-switch-with-icons";
 import sun from '../../assets/sun.png';
 import moon from '../../assets/moon.png';
+import AsyncStorage from "@react-native-community/async-storage";
 
 type propsScreens = DrawerNavigationProp<RouteStackParamList>;
 
-const Settings: React.FC = () => {
+const FirstTimeProfessional: React.FC = () => {
     const { theme, mode, toggleTheme } = useContext(ThemeContext);
     const styles = React.useMemo(() => createStyles(theme), [theme]);
 
@@ -69,12 +70,13 @@ const Settings: React.FC = () => {
 
     const [loadingImage, setLoadingImage] = useState<boolean>(true);
 
-    const [openProfissionalInfo, setOpenProfissionalInfo] = useState<boolean>(false);
-    const [openAddressInfo, setOpenAddressInfo] = useState<boolean>(false);
+    const [openProfissionalInfo, setOpenProfissionalInfo] = useState<boolean>(true);
+    const [openAddressInfo, setOpenAddressInfo] = useState<boolean>(true);
 
     const [loadingSave, setLoadingSave] = useState<boolean>(false);
 
     useEffect(() => {
+        welcome();
         getPhotoFirestore();
     }, [])
 
@@ -111,7 +113,8 @@ const Settings: React.FC = () => {
         api.put("/user/update/"+user._id, data).then((response) => {
             updateLocalUser();
             setLoadingSave(false);
-            Alert.alert("Sucesso", "Dados atualizados com sucesso!");
+            AsyncStorage.setItem("@firstTime", "false");
+            Alert.alert("Sucesso", "Dados Definidos com sucesso!");
             navigation.navigate('home')
         }).catch((error) => {
             setLoadingSave(false);
@@ -232,18 +235,18 @@ const Settings: React.FC = () => {
         }) 
     }
     
+    function welcome() {
+        Alert.alert("Bem vindo", "Seja bem vindo a plataforma, preencha seus dados para começar a utilizar! Ah e não se preocupe, eles podem ser alterados depois.");
+    }
+
+    
     return (
         <Background>
             <KeyboardAwareScrollView nestedScrollEnabled={true} contentContainerStyle={{alignItems: "center"}}>
                 <Header
-                    titlePage={"Configurações"}
-                    fontSize={26}
+                    titlePage={"Dados Cadastrais"}
+                    fontSize={20}
                     color={theme.primaryVariant}
-                    buttonLeft={{
-                        isIcon: false,
-                        label: "Voltar",
-                        onPress: goBack,
-                    }}
                 />
                 <SwitchWithIcons
                     value={mode == 'dark' ? true : false}
@@ -345,7 +348,8 @@ const Settings: React.FC = () => {
                     <TextInputMaterial
                         value={cpf}
                         setValue={setCpf}
-                        label="CPF"
+                        mask={"cpf/cnpj"}
+                        label="CPF/CNPJ"
                         containerStyle={styles.inputMaterial}
                         textColor={theme.textInputVariant}
                         baseColor={theme.primaryVariant}
@@ -574,11 +578,11 @@ const createStyles = (theme :Theme) => {
         },
         darkModeSwitch: {
             position: "absolute",
-            top: 45,
+            top: 35,
             right: '5%',
         }
     });
     return styles;
 };
 
-export default Settings;
+export default FirstTimeProfessional;

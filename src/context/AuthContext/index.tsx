@@ -13,6 +13,7 @@ interface AuthContextData {
   signOut(): void;
   loading: boolean;
   updateLocalUser(): void;
+  firstTime: boolean;
 }
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
@@ -20,13 +21,17 @@ export const AuthProvider = ({ children } : any) => {
     
   const [user, setUser] = useState<userInterface | null>(null);
   const [loading, setLoading] = useState(true);
+  const [firstTime, setFirstTime] = useState(false);
 
   useEffect(() => {
     async function loadStorageData() {
       const storagedUser = await AsyncStorage.getItem('@user');
       const storagedToken = await AsyncStorage.getItem('@token');
-
+      const firstTime = await AsyncStorage.getItem('@firstTime');
+      console.log({firstTime});
+      
       if (storagedUser && storagedToken) {
+        setFirstTime(Boolean(firstTime));
         setUser(JSON.parse(storagedUser));
         api.defaults.headers.common['Authorization'] = `Baerer ${storagedToken}`;
       }
@@ -83,7 +88,7 @@ export const AuthProvider = ({ children } : any) => {
 
   }
   return(
-  <AuthContext.Provider value={{signed: !!user, user, signIn, signOut, loading, updateLocalUser }}>
+  <AuthContext.Provider value={{signed: !!user, user, signIn, signOut, loading, updateLocalUser, firstTime }}>
     {children}
   </AuthContext.Provider>)
 };

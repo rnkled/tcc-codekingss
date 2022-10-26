@@ -116,7 +116,7 @@ const Home: React.FC = () => {
   return(
     <Background>
       <Header 
-        titlePage={"Bem-Vindo " + user ? user.name.split(" ")[0] : ''}
+        titlePage={"Bem-Vindo " + (user ? user.name.split(" ")[0] : '')}
         fontSize={18}
         buttonLeft={{
           isIcon: true,
