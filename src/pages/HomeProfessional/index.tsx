@@ -1,78 +1,83 @@
-import React, {useContext, useEffect, useLayoutEffect} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
-import Header from '../../components/Header';
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import Footer from '../../components/Footer';
-import Button from '../../components/Button';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import Background from '../../components/Background';
+import React, { useContext, useEffect, useLayoutEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import Header from "../../components/Header";
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import Footer from "../../components/Footer";
+import Button from "../../components/Button";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import Background from "../../components/Background";
 import AuthContext from "../../context/AuthContext";
-import { RouteStackParamList } from '../../routes';
-import { SendNotificationProps, sendNotificationTo } from '../../services/notificationService';
-import { Notifier, Easing } from 'react-native-notifier';
-import messaging from '@react-native-firebase/messaging';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
+import { RouteStackParamList } from "../../routes";
+import {
+  SendNotificationProps,
+  sendNotificationTo,
+} from "../../services/notificationService";
+import { Notifier, Easing } from "react-native-notifier";
+import messaging from "@react-native-firebase/messaging";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 
-type propsScreens = NativeStackNavigationProp<RouteStackParamList, "homeProfessional">
+type propsScreens = NativeStackNavigationProp<
+  RouteStackParamList,
+  "homeProfessional"
+>;
 
 const HomeProfessional: React.FC = () => {
-  const {theme} = useContext(ThemeContext);
-  const styles = React.useMemo(
-    () => createStyles(theme),
-    [theme]
-  );
-  
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+
   const navigation = useNavigation<propsScreens>();
 
-  const {signOut, user, firstTime} =  useContext(AuthContext);
+  const { signOut, user, checkFirstTime, firstTime } = useContext(AuthContext);
 
   const isFocused = useIsFocused();
 
   useLayoutEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage.data.type && remoteMessage.data.type === "chat") {
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
           duration: 10000,
           showAnimationDuration: 800,
           showEasing: Easing.bounce,
-          onHidden: () => console.log('Hidden'),
+          onHidden: () => console.log("Hidden"),
           onPress: () => {
-            if(user.role === "professional"){
+            if (user.role === "professional") {
               navigation.navigate("chat", {
                 id_pacient: remoteMessage.data.id_pacient,
                 pushNotification: remoteMessage.data.tokenPush,
                 id_professional: undefined,
-                name: remoteMessage.data.name
-              })
+                name: remoteMessage.data.name,
+              });
             }
-  
-            if(user.role === "admin"){
-              
+
+            if (user.role === "admin") {
             }
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
-            descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: theme.backgroundVariant}
-          }
+            titleStyle: {
+              color: theme.secondary,
+              fontSize: 18,
+              fontFamily: "Inter_500Medium",
+            },
+            descriptionStyle: { fontFamily: "Inter_400Regular" },
+            containerStyle: { backgroundColor: theme.backgroundVariant },
+          },
         });
       }
 
-      if(remoteMessage.data.type && remoteMessage.data.type === "call"){
-        
+      if (remoteMessage.data.type && remoteMessage.data.type === "call") {
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
           duration: 10000,
           showAnimationDuration: 800,
           showEasing: Easing.bounce,
-          onHidden: () => console.log('Hidden'),
+          onHidden: () => console.log("Hidden"),
           onPress: async () => {
             const dataNotification: SendNotificationProps = {
               token: remoteMessage.data.tokenPush,
@@ -85,46 +90,42 @@ const HomeProfessional: React.FC = () => {
               tokenSecondary: user.tokenPush,
               type: "requestCall",
               multiplesToken: false,
-            }
-            await sendNotificationTo({dataNotification});
-            navigation.navigate("videoCall", {channel_id: remoteMessage.data.channel})
-           
+            };
+            await sendNotificationTo({ dataNotification });
+            navigation.navigate("videoCall", {
+              channel_id: remoteMessage.data.channel,
+            });
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
-            descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: theme.backgroundVariant}
-          }
+            titleStyle: {
+              color: theme.secondary,
+              fontSize: 18,
+              fontFamily: "Inter_500Medium",
+            },
+            descriptionStyle: { fontFamily: "Inter_400Regular" },
+            containerStyle: { backgroundColor: theme.backgroundVariant },
+          },
         });
       }
-
-      
-
     });
 
-    return unsubscribe
-    
+    return unsubscribe;
   }, []);
 
-
   function handleLogOut() {
-    Alert.alert(
-      "Sair",
-      "Tem certeza que deseja sair de sua conta?",
-      [
-        {
-          text: "Cancelar",
-          onPress: () => {}
+    Alert.alert("Sair", "Tem certeza que deseja sair de sua conta?", [
+      {
+        text: "Cancelar",
+        onPress: () => {},
+      },
+      {
+        text: "Sim",
+        onPress: () => {
+          signOut();
         },
-        {
-          text: "Sim",
-          onPress: () => {
-            signOut();
-          }
-        }
-      ],
-    );
+      },
+    ]);
   }
 
   function goToSearch() {
@@ -137,56 +138,65 @@ const HomeProfessional: React.FC = () => {
     navigation.navigate("calendar");
   }
 
-  function checkFirstTime() {
-    console.log({firstTime});
-    
-    if (firstTime) {
-      navigation.navigate('firstTimeProfessional');
-    }
-  }
-
   useEffect(() => {
-    checkFirstTime();
+    async function checkFt() {
+      let firstTime = await checkFirstTime();
+      if (firstTime) {
+        navigation.navigate("firstTimeProfessional");
+      }
+    }
+    checkFt();
   }, [firstTime]);
 
-  return(
-    <Background style={{alignItems: 'center'}}>
-      <Header 
-        titlePage={"Bem-Vindo " + user.name.split(" ")[0]}
+  return (
+    <Background style={{ alignItems: "center" }}>
+      <Header
+        titlePage={"Bem-Vindo " + user?.name.split(" ")[0]}
         fontSize={18}
         buttonLeft={{
           isIcon: true,
-          icon: () => <Ionicons name="settings-outline"  size={35} color={theme.primaryVariant}/>,
+          icon: () => (
+            <Ionicons
+              name="settings-outline"
+              size={35}
+              color={theme.primaryVariant}
+            />
+          ),
           onPress: goToSettings,
-        }} 
+        }}
         buttonRight={{
           isIcon: true,
-          icon: () =><MaterialIcons name="logout" size={30} color={theme.primaryVariant} />,
+          icon: () => (
+            <MaterialIcons
+              name="logout"
+              size={30}
+              color={theme.primaryVariant}
+            />
+          ),
           onPress: handleLogOut,
         }}
       />
-      
+
       <View style={styles.contentPrimary}>
-        <Button label='Minha agenda' onPress={goToCalendar} />
-        <Button label='Meus pacientes' onPress={goToSearch}/>
+        <Button label="Minha agenda" onPress={goToCalendar} />
+        <Button label="Meus pacientes" onPress={goToSearch} />
       </View>
       <View style={styles.footer}>
-        <Footer/>
+        <Footer />
       </View>
     </Background>
   );
-}
+};
 
-const createStyles = (theme :Theme) => {
+const createStyles = (theme: Theme) => {
   const styles = StyleSheet.create({
     contentPrimary: {
       width: "80%",
       height: "70%",
       justifyContent: "center",
       paddingTop: 25,
-    
-      alignItems: "center"
-    
+
+      alignItems: "center",
     },
 
     buttonCircle: {
@@ -210,29 +220,26 @@ const createStyles = (theme :Theme) => {
       alignItems: "center",
     },
 
-
     labelButtonCircle: {
       fontSize: 20,
       textAlign: "center",
       color: theme.secondary,
-      fontFamily: "Inter_600SemiBold"
+      fontFamily: "Inter_600SemiBold",
     },
-
 
     titleHome: {
       color: theme.textVariant,
       fontSize: 24,
-      fontFamily: "Inter_600SemiBold"
-
+      fontFamily: "Inter_600SemiBold",
     },
 
     footer: {
       flex: 1,
       justifyContent: "flex-end",
       alignItems: "flex-end",
-    }
-  })
+    },
+  });
   return styles;
-}
+};
 
 export default HomeProfessional;
