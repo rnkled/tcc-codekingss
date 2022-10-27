@@ -29,7 +29,6 @@ import {
 } from "../services/notificationService";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../components/Loading";
-import FirstTimeProfessional from "../pages/FirstTimeProfessional";
 
 export type RouteStackParamList = {
   login: undefined;
@@ -38,6 +37,7 @@ export type RouteStackParamList = {
   settings: undefined;
   videoCall: {
     channel_id?: string;
+    token_push?: string;
   };
   rateVideoCall: {
     id_professional: string;
@@ -75,6 +75,7 @@ const Routes = () => {
   const { loadingTheme } = useContext(ThemeContext);
   const [initialRoute, setInitialRoute] = useState("home");
   const [loading, setLoading] = useState(false);
+  const [tokenPush, setTokenPush] = useState("");
   const [channel, setChannel] = useState("");
   const navigation = useNavigation<propsCallRoute>();
 
@@ -91,8 +92,6 @@ const Routes = () => {
         remoteMessage.data.type &&
         remoteMessage.data.type === "call"
       ) {
-        console.log(remoteMessage.data.navigate);
-
         const dataNotification: SendNotificationProps = {
           token: remoteMessage.data.tokenPush,
           title: "Encontramos um profissional",
@@ -109,6 +108,7 @@ const Routes = () => {
 
         navigation.navigate("videoCall", {
           channel_id: remoteMessage.data.channel,
+          token_push: remoteMessage.data.tokenSecondary,
         });
       }
     });
@@ -147,6 +147,7 @@ const Routes = () => {
           await sendNotificationTo({ dataNotification });
 
           setChannel(remoteMessage.data.channel);
+          setTokenPush(remoteMessage.data.tokenSecondary);
           setInitialRoute("videoCall"); // e.g. "Settings"
         }
         setLoading(false);
@@ -173,18 +174,13 @@ const Routes = () => {
       initialRouteName={initialRoute as any}
       screenOptions={{ headerShown: false }}
     >
-      {!signed ? (
+      {!signed || !user ? (
         <Stack.Screen name="login" component={LoginStack} />
       ) : (
         <>
           <Stack.Screen
             name="home"
             component={user.role === "professional" ? HomeProfessional : Home}
-            options={transitionsGeral}
-          />
-          <Stack.Screen
-            name="firstTimeProfessional"
-            component={FirstTimeProfessional}
             options={transitionsGeral}
           />
           <Stack.Screen
@@ -203,7 +199,7 @@ const Routes = () => {
             options={transitionsConfigure}
           />
           <Stack.Screen
-            initialParams={{ channel_id: channel }}
+            initialParams={{ channel_id: channel, token_push: tokenPush }}
             name="videoCall"
             component={VideoCall}
             options={transitionsGeral}
