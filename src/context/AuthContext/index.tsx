@@ -18,23 +18,21 @@ interface AuthContextData {
   updateLocalUser(): void;
   firstTime: boolean;
   checkFirstTime(): Promise<boolean>;
+  endFirstTime(): void;
 }
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<userInterface | null>(null);
   const [loading, setLoading] = useState(true);
-  const [firstTime, setFirstTime] = useState(false);
+  const [firstTime, setFirstTime] = useState(null);
 
   useEffect(() => {
     async function loadStorageData() {
       const storagedUser = await AsyncStorage.getItem("@user");
       const storagedToken = await AsyncStorage.getItem("@token");
-      const firstTime = await AsyncStorage.getItem("@firstTime");
-      console.log({ firstTime });
 
       if (storagedUser && storagedToken) {
-        setFirstTime(Boolean(firstTime));
         setUser(JSON.parse(storagedUser));
         api.defaults.headers.common[
           "Authorization"
@@ -46,9 +44,11 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   async function checkFirstTime() {
-    const firstTime = await AsyncStorage.getItem("@firstTime");
-    setFirstTime(Boolean(firstTime));
-    return Boolean(firstTime);
+    let string = await AsyncStorage.getItem("@firstTime");
+    let ft = string === "true" ? true : false;
+    setFirstTime(ft);
+    console.log("firstTime", ft);
+    return ft;
   }
 
   async function signIn(email: string, password: string) {
@@ -107,6 +107,13 @@ export const AuthProvider = ({ children }: any) => {
         console.log(err);
       });
   }
+
+  async function endFirstTime() {
+    console.log("endFirstTime");
+    await AsyncStorage.setItem("@firstTime", "false");
+    setFirstTime(false);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -118,6 +125,7 @@ export const AuthProvider = ({ children }: any) => {
         updateLocalUser,
         firstTime,
         checkFirstTime,
+        endFirstTime,
       }}
     >
       {children}

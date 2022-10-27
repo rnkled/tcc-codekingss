@@ -141,7 +141,8 @@ const HomeProfessional: React.FC = () => {
   useEffect(() => {
     async function checkFt() {
       let firstTime = await checkFirstTime();
-      if (firstTime) {
+      if (firstTime === true) {
+        console.log(firstTime);
         navigation.navigate("firstTimeProfessional");
       }
     }
