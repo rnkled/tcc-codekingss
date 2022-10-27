@@ -40,6 +40,7 @@ const VideoCall: React.FC = () => {
   const { user } = useContext(AuthContext);
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
   const [videoCall, setVideoCall] = useState(false);
+  const [tokenPush, setTokenPush] = useState("");
   const [channel, setChannel] = useState("");
 
   const props: PropsInterface = {
@@ -53,7 +54,7 @@ const VideoCall: React.FC = () => {
       dualStreamMode: 1,
     },
     callbacks: {
-      EndCall: () => goToNextScreen(),
+      EndCall: () => handleExitCall(),
       // UserJoined: (e) => console.log({e}),
     },
     styleProps: {
@@ -162,6 +163,7 @@ const VideoCall: React.FC = () => {
           `${remoteMessage.notification.body}`
         );
         setIdProfessional(remoteMessage.data?.id_professional || null);
+        setTokenPush(remoteMessage.data?.tokenSecondary || null);
         setVideoCall(true);
       }
 
@@ -196,19 +198,47 @@ const VideoCall: React.FC = () => {
           ? navigation.goBack()
           : navigation.navigate("home");
       }
+
+      if (remoteMessage.data.type && remoteMessage.data.type === "callEnd") {
+        goToNextScreen();
+      }
     });
 
     return unsubscribe;
   }, []);
 
-  function goToNextScreen() {
-    user.role === "user"
-      ? navigation.navigate("rateVideoCall", {
-          id_professional: idProfessional || "630bfccfd7c33a229c57f04c",
-        })
-      : navigation.canGoBack()
-      ? navigation.goBack()
-      : navigation.navigate("home");
+  async function handleExitCall() {
+    const tokenPushParams = route.params?.token_push;
+    const dataNotification: SendNotificationProps = {
+      token: user.role === "user" ? tokenPush : tokenPushParams,
+      multiplesToken: false,
+      title: "Atendimento finalizado",
+      body: "Essa chamada foi encerrada com sucesso!",
+      id_professional: null,
+      id_pacient: null,
+      sounds: "message",
+      type: "callEnd",
+      name: "",
+      tokenSecondary: "",
+    };
+    await sendNotificationTo({ dataNotification });
+    if (user.role === "user") {
+      navigation.navigate("rateVideoCall", { id_professional: idProfessional });
+    } else {
+      navigation.canGoBack()
+        ? navigation.goBack()
+        : navigation.navigate("home");
+    }
+  }
+
+  async function goToNextScreen() {
+    if (user.role === "user") {
+      navigation.navigate("rateVideoCall", { id_professional: idProfessional });
+    } else {
+      navigation.canGoBack()
+        ? navigation.goBack()
+        : navigation.navigate("home");
+    }
   }
 
   if (!videoCall && user.role === "professional") {
