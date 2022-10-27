@@ -52,7 +52,7 @@ const FirstTimeProfessional: React.FC = () => {
 
   const navigation = useNavigation<propsScreens>();
 
-  const { user, updateLocalUser } = useContext(AuthContext);
+  const { user, updateLocalUser, endFirstTime } = useContext(AuthContext);
 
   const [name, setName] = useState<string>(user.name);
   const [email, setEmail] = useState<string>(user.email);
@@ -132,7 +132,7 @@ const FirstTimeProfessional: React.FC = () => {
       .then(async (response) => {
         updateLocalUser();
         setLoadingSave(false);
-        await AsyncStorage.setItem("@firstTime", "false");
+        await endFirstTime();
         Alert.alert("Sucesso", "Dados Definidos com sucesso!");
         navigation.navigate("home");
       })
@@ -143,9 +143,6 @@ const FirstTimeProfessional: React.FC = () => {
       });
   }
 
-  function goBack() {
-    navigation.navigate("home");
-  }
 
   function findPhoto() {
     Alert.alert("Upload de imagem", "Por onde deseja carregar sua foto?", [
