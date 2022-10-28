@@ -40,7 +40,7 @@ const VideoCall: React.FC = () => {
   const { user } = useContext(AuthContext);
   const route = useRoute<RouteProp<RouteStackParamList, "videoCall">>();
   const [videoCall, setVideoCall] = useState(false);
-  const [tokenPush, setTokenPush] = useState("");
+  const [tokenPushNotification, setTokenPushNotification] = useState("");
   const [channel, setChannel] = useState("");
 
   const props: PropsInterface = {
@@ -162,8 +162,11 @@ const VideoCall: React.FC = () => {
           `${remoteMessage.notification.title}`,
           `${remoteMessage.notification.body}`
         );
+        console.log("-----------------==-");
+        console.log(remoteMessage.data);
+
         setIdProfessional(remoteMessage.data?.id_professional || null);
-        setTokenPush(remoteMessage.data?.tokenSecondary || null);
+        setTokenPushNotification(remoteMessage.data?.tokenPush || null);
         setVideoCall(true);
       }
 
@@ -200,6 +203,8 @@ const VideoCall: React.FC = () => {
       }
 
       if (remoteMessage.data.type && remoteMessage.data.type === "callEnd") {
+        console.log("aqqqqrodandoooo");
+
         goToNextScreen();
       }
     });
@@ -209,8 +214,10 @@ const VideoCall: React.FC = () => {
 
   async function handleExitCall() {
     const tokenPushParams = route.params?.token_push;
+    console.log({ tokenPushNotification, tokenPushParams });
+
     const dataNotification: SendNotificationProps = {
-      token: user.role === "user" ? tokenPush : tokenPushParams,
+      token: user.role === "user" ? tokenPushNotification : tokenPushParams,
       multiplesToken: false,
       title: "Atendimento finalizado",
       body: "Essa chamada foi encerrada com sucesso!",
