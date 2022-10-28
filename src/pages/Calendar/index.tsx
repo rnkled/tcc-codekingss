@@ -134,7 +134,7 @@ const CalendarComponent: React.FC = () => {
                         </View>
                         <View style={styles.contentSecondary}>
                             {
-                                apiData[selectedDay.dateString.split('-').reverse().join('-')] ? (
+                                apiData && apiData[selectedDay?.dateString.split('-').reverse().join('-')] ? (
                                     <>
                                         <Text style={styles.titleAppointments}>Agendamentos de {new Date(selectedDay.dateString).toLocaleDateString('pt-BR')}</Text>
                                             {
