@@ -105,11 +105,22 @@ const Routes = () => {
           multiplesToken: false,
         };
         await sendNotificationTo({ dataNotification });
+        // console.log({ outrooo: remoteMessage.data.tokenPush });
 
         navigation.navigate("videoCall", {
           channel_id: remoteMessage.data.channel,
-          token_push: remoteMessage.data.tokenSecondary,
+          token_push: remoteMessage.data.tokenPush,
         });
+      }
+
+      if (
+        storagedUser &&
+        storagedUser.role === "professional" &&
+        remoteMessage &&
+        remoteMessage.data.type &&
+        remoteMessage.data.type === "appointmentAlert"
+      ) {
+        navigation.navigate("calendar");
       }
     });
 
@@ -129,9 +140,6 @@ const Routes = () => {
           remoteMessage.data.type &&
           remoteMessage.data.type === "call"
         ) {
-          console.log("aqqq34");
-          console.log({ aa: remoteMessage.data });
-
           const dataNotification: SendNotificationProps = {
             token: remoteMessage.data.tokenPush,
             title: "Encontramos um profissional",
@@ -147,8 +155,17 @@ const Routes = () => {
           await sendNotificationTo({ dataNotification });
 
           setChannel(remoteMessage.data.channel);
-          setTokenPush(remoteMessage.data.tokenSecondary);
+          setTokenPush(remoteMessage.data.tokenPush);
           setInitialRoute("videoCall"); // e.g. "Settings"
+        }
+        if (
+          storagedUser &&
+          storagedUser.role === "professional" &&
+          remoteMessage &&
+          remoteMessage.data.type &&
+          remoteMessage.data.type === "appointmentAlert"
+        ) {
+          setInitialRoute("calendar");
         }
         setLoading(false);
       });
