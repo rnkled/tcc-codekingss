@@ -1,166 +1,109 @@
-import React, { useContext, useState } from "react";
-import {
-  FlatList,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Tab, Text as TextTab, TabView } from "@rneui/themed";
-import CardComment from "../CardComment";
-import commentaryInterface from "../../interfaces/commentaryInterface";
-import { Feather } from "@expo/vector-icons";
-import userInterface from "../../interfaces/userInterface";
-import ThemeContext from "../../context/ThemeContext";
-import { Theme } from "../../interfaces/themeInterface";
-import Loading from "../Loading";
+import React, { useContext, useState } from 'react';
+import { FlatList, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Tab, Text as TextTab, TabView } from '@rneui/themed';
+import CardComment from '../CardComment';
+import commentaryInterface from '../../interfaces/commentaryInterface';
+import { Feather } from '@expo/vector-icons';
+import userInterface from '../../interfaces/userInterface';
+import ThemeContext from '../../context/ThemeContext';
+import { Theme } from '../../interfaces/themeInterface';
+import Loading from '../Loading';
+
 
 type Props = {
-  dataProfessional: userInterface;
-  dataComments: commentaryInterface[];
-  loadingComments: boolean;
-};
+  dataProfessional: userInterface,
+  dataComments: commentaryInterface[],
+  loadingComments: boolean,
+}
 
-const NavComponent = ({
-  dataComments,
-  dataProfessional,
-  loadingComments,
-}: Props) => {
-  const { theme } = useContext(ThemeContext);
-  const styles = React.useMemo(() => createStyles(theme), [theme]);
 
+const NavComponent = ({dataComments, dataProfessional, loadingComments}: Props) => {
+  const {theme} = useContext(ThemeContext);
+  const styles = React.useMemo(
+      () => createStyles(theme),
+      [theme]
+  );
+  
   const [index, setIndex] = useState(0);
+  
 
-  async function openGps() {
-    await Linking.openURL(
-      `https://www.google.com/maps/search/?api=1&query=${dataProfessional.address}`
-    );
-  }
+  async function openGps(){
+  
+  await Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${dataProfessional.address}`);
+}
 
-  return (
+  return(
     <>
-      <Tab
-        value={index}
-        onChange={(e) => setIndex(e)}
-        variant="primary"
-        containerStyle={styles.container}
-        indicatorStyle={{ display: "none" }}
-      >
-        <Tab.Item
-          title="Avaliações"
-          size="sm"
-          titleStyle={{
-            fontSize: 18,
-            color: `${
-              index === 0 ? theme.primaryVariant : theme.textVariantGray
-            }`,
-            fontFamily: "Inter_500Medium",
-            top: -2.5,
-          }}
-          containerStyle={[
-            styles.buttonNav,
-            {
-              backgroundColor: `${
-                index === 0
-                  ? theme.backgroundProfileVariant
-                  : theme.backgroundProfileDisable
-              }`,
-            },
-          ]}
-        />
-        <Tab.Item
-          title="Informações"
-          size="sm"
-          titleStyle={{
-            fontSize: 18,
-            color: `${
-              index === 1 ? theme.primaryVariant : theme.textVariantGray
-            }`,
-            fontFamily: "Inter_500Medium",
-            top: -2.5,
-          }}
-          containerStyle={[
-            styles.buttonNav,
-            {
-              backgroundColor: `${
-                index === 1
-                  ? theme.backgroundProfileVariant
-                  : theme.backgroundProfileDisable
-              }`,
-            },
-          ]}
+    <Tab 
+      value={index}
+      onChange={(e) => setIndex(e)}
+      variant="primary"
+      containerStyle={styles.container}
+      indicatorStyle={{display: "none"}}
+    >
+      <Tab.Item
+        title="Avaliações"
+        size='sm'
+        titleStyle={{ fontSize: 18, color: `${index === 0 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 0 ? theme.backgroundProfileVariant : theme.backgroundProfileDisable}`}]}
+        
+        /> 
+      <Tab.Item
+        title="Informações"
+        size='sm'
+        titleStyle={{ fontSize: 18, color: `${index === 1 ? theme.primaryVariant : theme.textVariantGray}`, fontFamily: "Inter_500Medium", top: -2.5 }}
+        containerStyle={[styles.buttonNav, {backgroundColor: `${index === 1 ? theme.backgroundProfileVariant : theme.backgroundProfileDisable}`}]}   
         />
       </Tab>
 
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={styles.contentDescription}>
-          {loadingComments ? (
-            <Loading transparent={true} />
-          ) : (
+          {loadingComments ? <Loading transparent={true}/> : 
             <FlatList
               data={dataComments}
-              renderItem={({ item }) => (
-                <CardComment data={item} managementMode={false} />
-              )}
-            />
-          )}
+              renderItem={({item}) => (
+                  <CardComment data={item} managementMode={false}/>
+                )
+              }          
+            />}
         </TabView.Item>
         <TabView.Item style={styles.contentDescription}>
           <ScrollView style={styles.containerInformationPersonal}>
             <Text style={styles.labelTitleInformation}>Formação Acadêmica</Text>
-            <Text style={[styles.descriptionInformation, { marginBottom: 10 }]}>
+            <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
               {dataProfessional.degree.description}
             </Text>
-
-            <Text style={styles.labelTitleInformation}>
-              Competências e responsabilidades
-            </Text>
-            <Text style={[styles.descriptionInformation, { marginBottom: 10 }]}>
+            
+            <Text style={styles.labelTitleInformation}>Competências e responsabilidades</Text>
+            <Text style={[styles.descriptionInformation, {marginBottom: 10,}]}>
               {dataProfessional.description}
             </Text>
 
-            <Text style={styles.labelTitleInformation}>
-              Atendimento presencial
-            </Text>
-            <Text style={styles.descriptionInformation}>
-              {dataProfessional.clinicName}
-            </Text>
-            <Text style={styles.descriptionInformation}>
-              {dataProfessional.address.street},{" "}
-              {dataProfessional.address.number},{" "}
-              {dataProfessional.address.neighborhood},{" "}
-              {dataProfessional.address.postalCode}
-            </Text>
-
+            <Text style={styles.labelTitleInformation}>Atendimento presencial</Text>
+            <Text style={styles.descriptionInformation}>{dataProfessional.clinicName}</Text>
+            <Text style={styles.descriptionInformation}>{dataProfessional.address.street}, {dataProfessional.address.number}, {dataProfessional.address.neighborhood}, {dataProfessional.address.postalCode}</Text>
+            
             <View style={styles.contentRowLocale}>
-              <Text
-                style={[styles.descriptionInformation, { marginRight: 10 }]}
-              >
-                {dataProfessional.address.city}
-              </Text>
+              <Text style={[styles.descriptionInformation, {marginRight: 10}]}>{dataProfessional.address.city}</Text>
               <TouchableOpacity onPress={openGps}>
-                <Feather
-                  name="map-pin"
-                  size={24}
-                  color={theme.primaryVariant}
-                />
+                <Feather name="map-pin" size={24} color={theme.primaryVariant} />
               </TouchableOpacity>
             </View>
           </ScrollView>
         </TabView.Item>
-      </TabView>
-    </>
+    </TabView>
+     </>
+      
   );
-};
+}
 
-const createStyles = (theme: Theme) => {
+const createStyles = (theme :Theme) => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.backgroundProfileDisable,
       height: 50,
       borderRadius: 100,
+    
     },
 
     buttonNav: {
@@ -170,6 +113,7 @@ const createStyles = (theme: Theme) => {
       borderColor: theme.backgroundProfileDisable,
       justifyContent: "center",
       alignItems: "center",
+      
     },
 
     contentDescription: {
@@ -179,7 +123,7 @@ const createStyles = (theme: Theme) => {
     },
 
     containerInformationPersonal: {
-      width: "100%",
+      width: '100%',
       paddingHorizontal: 4,
       height: "auto",
     },
@@ -202,9 +146,11 @@ const createStyles = (theme: Theme) => {
       width: "auto",
       flexDirection: "row",
       height: "auto",
-      alignItems: "center",
-    },
-  });
+      alignItems: "center"
+    }
+
+
+  })
   return styles;
 };
 
