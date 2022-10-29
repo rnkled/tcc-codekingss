@@ -41,9 +41,7 @@ const SearchCard = ({ data, type_user="professional" } :CardPrams) => {
     const [rating, setRating] = useState(0.00);
     
     async function getRating(){
-        api.get(`/rate/list/${data._id}`).then(response => {
-            console.log(response.data);
-            
+        api.get(`/rate/list/${data._id}`).then(response => {       
             setRating(parseFloat(response.data.averageRate) || 0.00);
         }).catch(err => {
             console.log(err);

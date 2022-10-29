@@ -88,7 +88,6 @@ const ProfessionalProfile: React.FC = () => {
 
   async function getRating(){
     api.get(`/rate/list/${id}`).then(response => {
-      console.log(response.data);
       
       setRating(parseFloat(response.data.averageRate) || 0.00);
     }).catch(err => {

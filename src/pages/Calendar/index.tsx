@@ -71,6 +71,22 @@ const CalendarComponent: React.FC = () => {
         }
     }, [isFocused]);
 
+    function getDate(date) {
+        function padNumber(number : Number) {
+            if (number < 10) {
+                return String('0' + number);
+            } else {
+                return String(number);
+            }
+        }
+
+        let itemDate = new Date(date);
+        let d = itemDate.getDate();
+        let m = itemDate.getMonth() + 1;
+        let y = itemDate.getFullYear();
+        return padNumber(d) + '/' + padNumber(m) + '/' + padNumber(y)
+      }
+
     function updateData() {
         setLoading(true);
         api.get('/appointment/list/' + user._id).then(response => {            
@@ -169,7 +185,7 @@ const CalendarComponent: React.FC = () => {
                             {
                                 apiData && apiData[selectedDay?.dateString.split('-').reverse().join('-')] ? (
                                     <>
-                                        <Text style={styles.titleAppointments}>Agendamentos de {new Date(selectedDay.dateString).toLocaleDateString('pt-BR')}</Text>
+                                        <Text style={styles.titleAppointments}>Agendamentos de {getDate(new Date(selectedDay.dateString))}</Text>
                                             {
                                                 apiData[selectedDay.dateString.split('-').reverse().join('-')] && apiData[selectedDay.dateString.split('-').reverse().join('-')].map((item: appointmentInterface, index: number) => (
                                                         <AppointmentItem key={index} item={item} updateData={updateData} goToAppointment={goToAppointment} manage={user.role === "professional" ? true : false} date={selectedDay.dateString}/>

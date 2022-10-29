@@ -50,7 +50,7 @@ const VideoCall: React.FC = () => {
       enableAudio: user.role === "user" ? isEnableAudio : true,
       enableVideo: user.role === "user" ? isEnableVideo : true,
       callActive: user.role === "user" && !isEnableVideo,
-      role: user.role === "user" ? 1 : 2,
+      role: 1,
       dualStreamMode: 1,
     },
     callbacks: {
@@ -89,8 +89,13 @@ const VideoCall: React.FC = () => {
   }, []);
 
   async function joinChannel() {
+    console.log("joinChannel");
+    
     if (user.role === "user") {
+
       let channelId = String(Date.now());
+      console.log("channelId", channelId);
+      
       setChannel(channelId);
       await sendCallNotificationForProfessional(channelId);
     }
@@ -124,6 +129,8 @@ const VideoCall: React.FC = () => {
           (item: UserInterface) =>
             item.tokenPush && tokenPush.push(item.tokenPush)
         );
+        console.log("tokenPush", tokenPush);
+        
 
       const dataNotification: SendNotificationProps = {
         token: tokenPush,
@@ -144,9 +151,11 @@ const VideoCall: React.FC = () => {
 
     // setTimeout(() => {
     //   if(!videoCall && user.role === "user"){
-    //     Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
-    //     navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home");
-    //     return
+    //     if (!idProfessional || idProfessional === "") {
+    //       Alert.alert("Atenção", "Não conseguimos encontrar um profissional para o seu atendimento, tente novamente mais tarde!")
+    //       navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home");
+    //       return
+    //     }
     //   }
 
     // }, 180000 )

@@ -86,6 +86,8 @@ const RateCallVideo: React.FC = () => {
   }
 
   function goToProfessionalProfile(){
+    console.log(route.params.id_professional);
+    
     navigation.navigate("professionalProfile", {id_professional: route.params.id_professional})
 
   }

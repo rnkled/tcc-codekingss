@@ -97,12 +97,12 @@ const AppointmentItem = ({item, updateData, goToAppointment, manage, date} :Appo
         <View style={styles.appointmentTimeContainer}>
             <Text style={styles.appointmentTime}>{item.time}</Text>
         </View>
-        <View style={styles.appointmentInfo}>
+        <View style={[styles.appointmentInfo, {justifyContent: manage ? 'space-between' : 'center'}]}>
             <View style={styles.titleBox}>
                 {item.color && <EvilIcons name="sc-instagram" size={24} color={item.color as ColorValue} />}
                 <Text style={styles.appointmentTitle}> {item.name} </Text>
             </View>
-            <Text style={styles.appointmentNote}>{item.note}</Text>
+            {manage && <Text style={styles.appointmentNote}>{item.note}</Text>}
             {manage && <TouchableOpacity style={[styles.appointmentTag, {right: 2}]} onPress={handleDeleteAppointment}>
                 <FontAwesome name="remove" size={24} color={theme.appointmentCardColor} />
             </TouchableOpacity>}
