@@ -115,11 +115,13 @@ const Routes = () => {
 
       if (
         storagedUser &&
-        storagedUser.role === "professional" &&
+        storagedUser.role === "user" &&
         remoteMessage &&
         remoteMessage.data.type &&
         remoteMessage.data.type === "appointmentAlert"
       ) {
+        console.log("execut");
+
         navigation.navigate("calendar");
       }
     });
@@ -160,7 +162,7 @@ const Routes = () => {
         }
         if (
           storagedUser &&
-          storagedUser.role === "professional" &&
+          storagedUser.role === "user" &&
           remoteMessage &&
           remoteMessage.data.type &&
           remoteMessage.data.type === "appointmentAlert"
