@@ -164,6 +164,7 @@ const VideoCall: React.FC = () => {
         );
         console.log("-----------------==-");
         console.log(remoteMessage.data);
+        console.log("aq");
 
         setIdProfessional(remoteMessage.data?.id_professional || null);
         setTokenPushNotification(remoteMessage.data?.tokenPush || null);
@@ -203,8 +204,6 @@ const VideoCall: React.FC = () => {
       }
 
       if (remoteMessage.data.type && remoteMessage.data.type === "callEnd") {
-        console.log("aqqqqrodandoooo");
-
         goToNextScreen();
       }
     });
@@ -228,6 +227,7 @@ const VideoCall: React.FC = () => {
       name: "",
       tokenSecondary: "",
     };
+    setVideoCall(false);
     await sendNotificationTo({ dataNotification });
     if (user.role === "user") {
       navigation.navigate("rateVideoCall", { id_professional: idProfessional });
@@ -239,6 +239,7 @@ const VideoCall: React.FC = () => {
   }
 
   async function goToNextScreen() {
+    setVideoCall(false);
     if (user.role === "user") {
       navigation.navigate("rateVideoCall", { id_professional: idProfessional });
     } else {
