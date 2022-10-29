@@ -1,6 +1,6 @@
 import { Theme } from "../../interfaces/themeInterface";
 
-const colorsDark :Theme = {
+const colorsDark: Theme = {
     primary: '#b5b5ff',
     primaryVariant: '#8B97FF',
     primaryVariantAA: '#8B97FFAA',
@@ -86,7 +86,7 @@ const colorsDark :Theme = {
     }
 };
 
-const colorsLight :Theme= {
+const colorsLight: Theme = {
     primary: '#0C0150',
     primaryVariant: '#005',
     primaryVariantAA: '#0C0150AA',
@@ -173,4 +173,4 @@ const colorsLight :Theme= {
 };
 
 
-export {colorsDark, colorsLight};
+export { colorsDark, colorsLight };
