@@ -127,8 +127,6 @@ const Home: React.FC = () => {
   }
 
   function goToCalendar() {
-    console.log("teste");
-
     navigation.navigate("calendar");
   }
 

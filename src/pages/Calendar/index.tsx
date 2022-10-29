@@ -64,12 +64,45 @@ const CalendarComponent: React.FC = () => {
     const [selectedDay, setSelectedDay] = useState<DateData>({dateString: '0000-00-00'} as DateData);
 
     useEffect(() => {
-        updateData();
+        if(user.role === 'user'){
+            updateDataUser();
+        }else{
+            updateData();
+        }
     }, [isFocused]);
 
     function updateData() {
         setLoading(true);
         api.get('/appointment/list/' + user._id).then(response => {            
+            const APIData = response.data.appointments;            
+            let dataObject = {};
+            APIData && Object.keys(APIData).map((key) => {
+                dataObject[String(key).split('-').reverse().join('-')] = {
+                    customStyles: {
+                        container: {
+                            backgroundColor: 'white',
+                            elevation: 2
+                        },
+                        text: {
+                            color: 'blue'
+                        }
+                    }
+                }
+            })
+            setApiData(APIData);
+            setData(dataObject as AgendaEntry);
+            setLoading(false);
+        }).catch(error => {
+            console.log(error);
+            console.log(error.response.data);
+            setLoading(false);
+        });
+
+    }
+
+    function updateDataUser() {
+        setLoading(true);
+        api.get('/appointment/userlist/' + user._id).then(response => {            
             const APIData = response.data.appointments;            
             let dataObject = {};
             APIData && Object.keys(APIData).map((key) => {
