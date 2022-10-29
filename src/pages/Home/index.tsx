@@ -63,6 +63,37 @@ const Home: React.FC = () => {
           },
         });
       }
+      if (
+        remoteMessage.data.type &&
+        remoteMessage.data.type === "appointmentSend"
+      ) {
+        Notifier.showNotification({
+          title: `${remoteMessage.notification.title}`,
+          description: `${remoteMessage.notification.body}`,
+          duration: 10000,
+          translucentStatusBar: true,
+          showAnimationDuration: 800,
+          showEasing: Easing.bounce,
+          onHidden: () => console.log("Hidden"),
+          onPress: () => {
+            if (user.role === "user") {
+              navigation.navigate("calendar");
+            }
+            if (user.role === "admin") {
+            }
+          },
+          hideOnPress: false,
+          componentProps: {
+            titleStyle: {
+              color: theme.secondary,
+              fontSize: 18,
+              fontFamily: "Inter_500Medium",
+            },
+            descriptionStyle: { fontFamily: "Inter_400Regular" },
+            containerStyle: { backgroundColor: theme.backgroundVariant },
+          },
+        });
+      }
     });
 
     return unsubscribe;
