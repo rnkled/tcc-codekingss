@@ -54,6 +54,8 @@ export interface Theme {
     appointmentCardBackground: string;
     cardLitePerson: string;
     cardLiteText: string;
+    cardNotificationBackground: string;
+    cardNotificationColor: string;
     cardLiteTextVariant: string;
     calendarBackground: string;
     calendarTheme: {

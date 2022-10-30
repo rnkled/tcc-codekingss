@@ -90,12 +90,11 @@ const VideoCall: React.FC = () => {
 
   async function joinChannel() {
     console.log("joinChannel");
-    
-    if (user.role === "user") {
 
+    if (user.role === "user") {
       let channelId = String(Date.now());
       console.log("channelId", channelId);
-      
+
       setChannel(channelId);
       await sendCallNotificationForProfessional(channelId);
     }
@@ -129,8 +128,7 @@ const VideoCall: React.FC = () => {
           (item: UserInterface) =>
             item.tokenPush && tokenPush.push(item.tokenPush)
         );
-        console.log("tokenPush", tokenPush);
-        
+      console.log("tokenPush", tokenPush);
 
       const dataNotification: SendNotificationProps = {
         token: tokenPush,
@@ -199,12 +197,17 @@ const VideoCall: React.FC = () => {
           hideOnPress: false,
           componentProps: {
             titleStyle: {
-              color: theme.secondary,
+              color: theme.cardNotificationColor,
               fontSize: 18,
               fontFamily: "Inter_500Medium",
             },
-            descriptionStyle: { fontFamily: "Inter_400Regular" },
-            containerStyle: { backgroundColor: theme.backgroundVariant },
+            descriptionStyle: {
+              fontFamily: "Inter_400Regular",
+              color: theme.cardNotificationColor,
+            },
+            containerStyle: {
+              backgroundColor: theme.cardNotificationBackground,
+            },
           },
         });
         navigation.canGoBack()

@@ -60,12 +60,17 @@ const HomeProfessional: React.FC = () => {
           hideOnPress: false,
           componentProps: {
             titleStyle: {
-              color: theme.secondary,
+              color: theme.cardNotificationColor,
               fontSize: 18,
               fontFamily: "Inter_500Medium",
             },
-            descriptionStyle: { fontFamily: "Inter_400Regular" },
-            containerStyle: { backgroundColor: theme.backgroundVariant },
+            descriptionStyle: {
+              fontFamily: "Inter_400Regular",
+              color: theme.cardNotificationColor,
+            },
+            containerStyle: {
+              backgroundColor: theme.cardNotificationBackground,
+            },
           },
         });
       }
@@ -99,12 +104,17 @@ const HomeProfessional: React.FC = () => {
           hideOnPress: false,
           componentProps: {
             titleStyle: {
-              color: theme.secondary,
+              color: theme.cardNotificationColor,
               fontSize: 18,
               fontFamily: "Inter_500Medium",
             },
-            descriptionStyle: { fontFamily: "Inter_400Regular" },
-            containerStyle: { backgroundColor: theme.backgroundVariant },
+            descriptionStyle: {
+              fontFamily: "Inter_400Regular",
+              color: theme.cardNotificationColor,
+            },
+            containerStyle: {
+              backgroundColor: theme.cardNotificationBackground,
+            },
           },
         });
       }

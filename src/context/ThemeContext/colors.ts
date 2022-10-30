@@ -57,6 +57,8 @@ const colorsDark: Theme = {
     cardLitePerson: '#8B97FF66',
     cardLiteText: '#8B97FF',
     cardLiteTextVariant: '#8B97FFAA',
+    cardNotificationBackground: '#b5b5ff',
+    cardNotificationColor: '',
     calendarBackground: '#8B97FF22',
     calendarTheme: {
         textSectionTitleColor: '#b6c1cd',
@@ -138,6 +140,8 @@ const colorsLight: Theme = {
     appoimentColor3: "#8F8",
     appoimentColor4: "#FF8",
     cardLitePerson: '#005',
+    cardNotificationBackground: '#22a',
+    cardNotificationColor: '#b5b5ff',
     cardLiteText: '#005',
     cardLiteTextVariant: '#005',
     stars: "#d81",

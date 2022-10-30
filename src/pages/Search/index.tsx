@@ -1,42 +1,38 @@
-import React, {useState, useEffect, useRef, useContext } from 'react';
-import { View, TextInput, StyleSheet, FlatList } from 'react-native';
-import Background from '../../components/Background';
-import Header from '../../components/Header';
-import { AntDesign } from '@expo/vector-icons';
-import SearchCard from '../../components/SearchCard';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteStackParamList } from '../../routes';
-import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api';
-import Loading from '../../components/Loading';
-import UserInterface from '../../interfaces/userInterface';
-import { Notifier, Easing } from 'react-native-notifier';
-import messaging from '@react-native-firebase/messaging';
-import AuthContext from '../../context/AuthContext';
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { View, TextInput, StyleSheet, FlatList } from "react-native";
+import Background from "../../components/Background";
+import Header from "../../components/Header";
+import { AntDesign } from "@expo/vector-icons";
+import SearchCard from "../../components/SearchCard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteStackParamList } from "../../routes";
+import { useNavigation } from "@react-navigation/native";
+import api from "../../services/api";
+import Loading from "../../components/Loading";
+import UserInterface from "../../interfaces/userInterface";
+import { Notifier, Easing } from "react-native-notifier";
+import messaging from "@react-native-firebase/messaging";
+import AuthContext from "../../context/AuthContext";
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 
-type propsScreens = NativeStackNavigationProp<RouteStackParamList>
+type propsScreens = NativeStackNavigationProp<RouteStackParamList>;
 
 const Search: React.FC = () => {
-  const {theme} = useContext(ThemeContext);
-  const styles = React.useMemo(
-    () => createStyles(theme),
-    [theme]
-  );
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
 
   const navigation = useNavigation<propsScreens>();
-  
-  const [searchTerm, setSearchTerm] = useState('');
+
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<UserInterface[]>([]);
-  const {user} =  useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   let refSearch = useRef<TextInput>(null);
 
-
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage.data.type && remoteMessage.data.type === "chat"){
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage.data.type && remoteMessage.data.type === "chat") {
         Notifier.showNotification({
           title: `${remoteMessage.notification.title}`,
           description: `${remoteMessage.notification.body}`,
@@ -44,34 +40,41 @@ const Search: React.FC = () => {
           showAnimationDuration: 800,
           translucentStatusBar: true,
           showEasing: Easing.bounce,
-          onHidden: () => console.log('Hidden'),
+          onHidden: () => console.log("Hidden"),
           onPress: () => {
-            if(user.role === "user"){
+            if (user.role === "user") {
               navigation.navigate("chat", {
                 id_professional: remoteMessage.data.id_professional,
                 pushNotification: remoteMessage.data.tokenPush,
                 id_pacient: undefined,
-                name: remoteMessage.data.name
-              })
+                name: remoteMessage.data.name,
+              });
             }
-            if(user.role === "admin"){
-              
+            if (user.role === "admin") {
             }
           },
           hideOnPress: false,
           componentProps: {
-            titleStyle: {color: theme.secondary, fontSize: 18, fontFamily: "Inter_500Medium"},
-            descriptionStyle: {fontFamily: "Inter_400Regular"},
-            containerStyle: {backgroundColor: theme.backgroundVariant}
-          }
+            titleStyle: {
+              color: theme.cardNotificationColor,
+              fontSize: 18,
+              fontFamily: "Inter_500Medium",
+            },
+            descriptionStyle: {
+              fontFamily: "Inter_400Regular",
+              color: theme.cardNotificationColor,
+            },
+            containerStyle: {
+              backgroundColor: theme.cardNotificationBackground,
+            },
+          },
         });
       }
     });
 
     return unsubscribe;
   }, []);
-  
-  
+
   useEffect(() => {
     async function getFirstData() {
       await getData();
@@ -79,64 +82,79 @@ const Search: React.FC = () => {
     }
     setLoading(true);
     getFirstData();
-  } , [])
-  
+  }, []);
+
   function goToHome() {
-    navigation.navigate('home');
+    navigation.navigate("home");
   }
-  async function getData(){
+  async function getData() {
     setLoading(true);
     refSearch.current?.blur();
-    api.get(`/user/search/${searchTerm}?role=professional`).then(response => {
-      setData(response.data);
-      setLoading(false);
-    }).catch(err => {
-      console.log(err);
-      setLoading(false);
-    })
+    api
+      .get(`/user/search/${searchTerm}?role=professional`)
+      .then((response) => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   }
 
-  
-
-  return <Background>
-    <View style={styles.container}>
-      <Header
-        titlePage={"Buscar"}
-        fontSize={22}
-        color={theme.primaryVariant}
-        buttonLeft={{
-          label: 'Voltar',
-          onPress: goToHome,
-          isIcon: false,
-          fontSize: 18
-        }}
-        buttonRight={{
-          onPress: getData,
-          isIcon: true,
-          icon: () => <AntDesign name="search1" size={28} color={theme.primaryVariant} />,
-        }}
-      />
-      <TextInput 
-        style={styles.input}
-        placeholder="Pesquisar"
-        onChangeText={(text) => setSearchTerm(text)}
-        value={searchTerm}
-        onEndEditing={getData}
-        ref={refSearch}
-      />
-      <View style={styles.listContainer}>
-        {loading ? <Loading transparent={true}/> : 
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item._id}
-          renderItem={({item}) => <SearchCard data={item} type_user={'professional'}/>}
-          style={styles.list}
-        />}
+  return (
+    <Background>
+      <View style={styles.container}>
+        <Header
+          titlePage={"Buscar"}
+          fontSize={22}
+          color={theme.primaryVariant}
+          buttonLeft={{
+            label: "Voltar",
+            onPress: goToHome,
+            isIcon: false,
+            fontSize: 18,
+          }}
+          buttonRight={{
+            onPress: getData,
+            isIcon: true,
+            icon: () => (
+              <AntDesign
+                name="search1"
+                size={28}
+                color={theme.primaryVariant}
+              />
+            ),
+          }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Pesquisar"
+          onChangeText={(text) => setSearchTerm(text)}
+          value={searchTerm}
+          onEndEditing={getData}
+          ref={refSearch}
+        />
+        <View style={styles.listContainer}>
+          {loading ? (
+            <Loading transparent={true} />
+          ) : (
+            <FlatList
+              data={data}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <SearchCard data={item} type_user={"professional"} />
+              )}
+              style={styles.list}
+            />
+          )}
+        </View>
       </View>
-    </View>
-  </Background>}
+    </Background>
+  );
+};
 
-const createStyles = (theme :Theme) => {
+const createStyles = (theme: Theme) => {
   const styles = StyleSheet.create({
     container: {
       width: "100%",
@@ -161,9 +179,8 @@ const createStyles = (theme :Theme) => {
       marginTop: 20,
       flex: 1,
     },
-  })
+  });
   return styles;
-}
-
+};
 
 export default Search;
