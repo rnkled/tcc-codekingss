@@ -55,6 +55,9 @@ const Appointment: React.FC = () => {
     route.params.date === "0000-00-00"
       ? new Date(Date.now())
       : new Date(route.params.date);
+  if (route.params.date !== "0000-00-00") {
+    routeDate.setHours(routeDate.getHours() + 3);
+  }
 
   const { user } = useContext(AuthContext);
 
@@ -172,6 +175,7 @@ const Appointment: React.FC = () => {
       setColor(routeItem.color);
       routeDate.setHours(parseInt(routeItem.time.split(":")[0]));
       routeDate.setMinutes(parseInt(routeItem.time.split(":")[1]));
+
       setDate(new Date(routeDate));
       setOldDate(new Date(routeDate));
       setIsEditing(true);
@@ -271,11 +275,9 @@ const Appointment: React.FC = () => {
           token: selectedUser.tokenPush,
           multiplesToken: false,
           title: "Agendamento de consulta",
-          body: `Olá ${
-            selectedUser.name.split(" ")[0]
-          }, você possui uma consulta agendada para o dia ${
-            getDate().split("/")[0]
-          } às ${getTime()}`,
+          body: `Olá ${selectedUser.name.split(" ")[0]
+            }, você possui uma consulta agendada para o dia ${getDate().split("/")[0]
+            } às ${getTime()}`,
           id_professional: null,
           id_pacient: null,
           sounds: "message",

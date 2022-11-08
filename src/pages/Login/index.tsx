@@ -1,115 +1,136 @@
-import React, {useState, useContext} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState, useContext, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 //import { TextInput } from 'react-native-material-textinput';
-import { AntDesign } from '@expo/vector-icons'; 
-import { useNavigation } from '@react-navigation/native';
-import Header from '../../components/Header';
-import TextInputMaterial from '../../components/TextInputMaterial';
-import Button from '../../components/Button';
-import Background from '../../components/Background';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import Header from "../../components/Header";
+import TextInputMaterial from "../../components/TextInputMaterial";
+import Button from "../../components/Button";
+import Background from "../../components/Background";
+import { Ionicons } from "@expo/vector-icons";
 import AuthContext from "../../context/AuthContext";
-import Loading from '../../components/Loading';
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
+import Loading from "../../components/Loading";
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 
 const Login = () => {
-  const {theme} = useContext(ThemeContext);
-  const styles = React.useMemo(
-    () => createStyles(theme),
-    [theme]
-  );
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   type Nav = {
     navigate: (value: string) => void;
-  }
-  
+  };
 
-  const {signIn, loading} =  useContext(AuthContext);
+  const { signIn, loading } = useContext(AuthContext);
   const navigation = useNavigation<Nav>();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loadingLogin, setLoadingLogin] = useState(false);
 
   function irParaRegistrar() {
-    navigation.navigate('login.create');
+    navigation.navigate("login.create");
   }
 
   function irParaRegistrarProfissional() {
-    navigation.navigate('login.createProfessional');
+    navigation.navigate("login.createProfessional");
   }
 
   async function handleLogin() {
-    if (!email || email == '') {
-      Alert.alert('Erro', 'Preencha o campo de e-mail');
+    if (!email || email == "") {
+      Alert.alert("Erro", "Preencha o campo de e-mail");
       return;
     }
 
-    if (!password || password == '') {
-      Alert.alert('Erro', 'Preencha o campo de senha');
+    if (!password || password == "") {
+      Alert.alert("Erro", "Preencha o campo de senha");
       return;
     }
+
     setLoadingLogin(true);
     let result = await signIn(email, password);
 
     if (!result) {
-      setEmail('');
-      setPassword('');
+      setEmail("");
+      setPassword("");
       setLoadingLogin(false);
     }
   }
 
-  return ( 
-    loading ? 
-      <Loading /> 
-    : 
-      (<Background style={styles.container}>
+  return loading ? (
+    <Loading />
+  ) : (
+    <Background style={styles.container}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-          <View style={styles.contentTitleIconPage}>
-            <Ionicons name="person-circle-outline" size={120} color={theme.primaryVariant} />
-            <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
-          </View>
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContainer}
-        >
+        <View style={styles.contentTitleIconPage}>
+          <Ionicons
+            name="person-circle-outline"
+            size={120}
+            color={theme.primaryVariant}
+          />
+          <Text style={styles.textoHeader}>Acesse sua Conta:</Text>
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <View style={styles.form}>
-            <TextInputMaterial label={"E-mail"} value={email} setValue={setEmail} />
-            <TextInputMaterial label={"Senha"} value={password} setValue={setPassword} secure={true}/>
+            <TextInputMaterial
+              label={"E-mail"}
+              value={email}
+              setValue={(value) =>
+                setEmail(
+                  value.toString().replace(/\s/g, "").toLocaleLowerCase()
+                )
+              }
+            />
+            <TextInputMaterial
+              label={"Senha"}
+              value={password}
+              setValue={setPassword}
+              secure={true}
+            />
             <TouchableOpacity onPress={irParaRegistrar}>
-              <Text style={styles.textoAzul}>Não possui uma conta? Crie uma agora.</Text>
+              <Text style={styles.textoAzul}>
+                Não possui uma conta? Crie uma agora.
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={irParaRegistrarProfissional}>
-              <Text style={[styles.textoAzul, {top: 20, fontSize: 14}]}>Deseja fazer parte da plataforma como profissional? Toque aqui e se cadastre.</Text>
+              <Text style={[styles.textoAzul, { top: 20, fontSize: 14 }]}>
+                Deseja fazer parte da plataforma como profissional? Toque aqui e
+                se cadastre.
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
-            <Button label={"Entrar"} onPress={handleLogin} loading={loadingLogin}/>
+            <Button
+              label={"Entrar"}
+              onPress={handleLogin}
+              loading={loadingLogin}
+            />
             <TouchableOpacity onPress={() => {}}>
               <Text style={styles.textoAzul}>Esqueci minha senha</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
-    </Background>));
-}
-const createStyles = (theme :Theme) => {
+    </Background>
+  );
+};
+const createStyles = (theme: Theme) => {
   const styles = StyleSheet.create({
     container: {
       width: "100%",
       // height: "100%",
       alignItems: "center",
       justifyContent: "center",
-      paddingTop: '6%',
+      paddingTop: "6%",
     },
     scrollViewContainer: {
       width: "100%",
       height: "100%",
       // justifyContent: "flex-start",
       // alignItems: "center",
-      paddingBottom: '8%',
-      paddingTop: '8%',
+      paddingBottom: "8%",
+      paddingTop: "8%",
     },
     textoHeader: {
       fontSize: 34,
@@ -121,8 +142,8 @@ const createStyles = (theme :Theme) => {
       height: "50%",
       alignItems: "center",
       justifyContent: "center",
-      marginTop: '10%',
-      marginBottom: '10%',
+      marginTop: "10%",
+      marginBottom: "10%",
     },
     input: {
       width: "100%",
@@ -153,14 +174,14 @@ const createStyles = (theme :Theme) => {
     },
 
     contentTitleIconPage: {
-      width: "100%", 
-      height: "auto", 
-      justifyContent: "center", 
-      alignItems: "center", 
+      width: "100%",
+      height: "auto",
+      justifyContent: "center",
+      alignItems: "center",
       paddingTop: 10,
-    }
+    },
   });
   return styles;
-}
+};
 
 export default Login;

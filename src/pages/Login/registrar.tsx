@@ -1,115 +1,123 @@
-import React, {useState, useContext} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Alert} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  Alert,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 //import { TextInput } from 'react-native-material-textinput';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-import { useNavigation } from '@react-navigation/native';
-import TextInputMaterial from '../../components/TextInputMaterial';
-import Button from '../../components/Button';
-import Background from '../../components/Background';
-import api from '../../services/api';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import TextInputMaterial from "../../components/TextInputMaterial";
+import Button from "../../components/Button";
+import Background from "../../components/Background";
+import api from "../../services/api";
 import AuthContext from "../../context/AuthContext";
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 
 const Registrar = () => {
-  const {theme} = useContext(ThemeContext);
-  const styles = React.useMemo(
-    () => createStyles(theme),
-    [theme]
-  );
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
 
   type Nav = {
     navigate: (value: string) => void;
-  }
+  };
   const navigation = useNavigation<Nav>();
 
-  const {signIn} =  useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [senhaConfirma, setSenhaConfirma] = useState(''); 
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [senhaConfirma, setSenhaConfirma] = useState("");
 
   function goToLogin() {
     cleanFields();
-    navigation.navigate('login.index');
+    navigation.navigate("login.index");
   }
 
   function register() {
     setLoading(true);
-    api.post('/user/create', {
-      "name": nome,
-      "email": email,
-      "password": senha,
-      "role": "user"
-    }).then((response) => {
-      setLoading(false);
-      console.log(response.data);
-      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
-      signIn(email, senha);
-    }).catch((error) => {
-      setLoading(false);
-      console.log(error.data);
-      Alert.alert('Erro', 'Erro ao cadastrar usuário!');
-    });
+    api
+      .post("/user/create", {
+        name: nome,
+        email: email,
+        password: senha,
+        role: "user",
+      })
+      .then((response) => {
+        setLoading(false);
+        console.log(response.data);
+        Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+        signIn(email, senha);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error.data);
+        Alert.alert("Erro", "Erro ao cadastrar usuário!");
+      });
   }
 
   function cleanFields() {
-    setNome('');
-    setEmail('');
-    setSenha('');
-    setSenhaConfirma('');
+    setNome("");
+    setEmail("");
+    setSenha("");
+    setSenhaConfirma("");
   }
 
   return (
-  <Background style={styles.container}>
-    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContainer}
-      >
+    <Background style={styles.container}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <View style={styles.header}>
             <Text style={styles.textoHeader}>Cadastro</Text>
           </View>
-          <Text style={[styles.textoAzul, {fontSize: 20}]}>Primeira vez por aqui? Crie uma conta.</Text>
+          <Text style={[styles.textoAzul, { fontSize: 20 }]}>
+            Primeira vez por aqui? Crie uma conta.
+          </Text>
           <View style={styles.form}>
+            <TextInputMaterial label="Nome" value={nome} setValue={setNome} />
             <TextInputMaterial
-              label="Nome"
-              value={nome}
-              setValue={setNome}
+              label={"E-mail"}
+              value={email}
+              setValue={(value) => {
+                setEmail(
+                  value.toString().replace(/\s/g, "").toLocaleLowerCase()
+                );
+              }}
             />
             <TextInputMaterial
-              label={"E-mail"} 
-              value={email} 
-              setValue={setEmail}
-            />
-            <TextInputMaterial
-              label={"Senha"} 
-              value={senha} 
-              setValue={setSenha} 
+              label={"Senha"}
+              value={senha}
+              setValue={setSenha}
               secure={true}
             />
             <TextInputMaterial
               label="Confirme sua senha"
               value={senhaConfirma}
-              setValue={setSenhaConfirma} 
+              setValue={setSenhaConfirma}
               secure={true}
             />
           </View>
           <View style={styles.footer}>
-            <Button label={"Cadastrar"} onPress={register} loading={loading}/>
+            <Button label={"Cadastrar"} onPress={register} loading={loading} />
             <TouchableOpacity onPress={goToLogin}>
-              <Text style={[styles.textoAzul, {fontSize: 20}]}>Voltar</Text>
+              <Text style={[styles.textoAzul, { fontSize: 20 }]}>Voltar</Text>
             </TouchableOpacity>
           </View>
-      </ScrollView>
-    </KeyboardAwareScrollView>
-  </Background>);
-}
+        </ScrollView>
+      </KeyboardAwareScrollView>
+    </Background>
+  );
+};
 
-const createStyles = (theme :Theme) => {
+const createStyles = (theme: Theme) => {
   const styles = StyleSheet.create({
     container: {
       width: "100%",
@@ -123,15 +131,15 @@ const createStyles = (theme :Theme) => {
       flex: 1,
       justifyContent: "flex-start",
       alignItems: "center",
-      paddingBottom: '8%',
-      paddingTop: '8%',
+      paddingBottom: "8%",
+      paddingTop: "8%",
     },
     header: {
       width: "80%",
       height: 50,
       flexDirection: "row",
       alignItems: "center",
-      justifyContent:'space-evenly',
+      justifyContent: "space-evenly",
     },
     textoHeader: {
       fontSize: 38,
@@ -139,7 +147,7 @@ const createStyles = (theme :Theme) => {
       color: theme.textVariant,
       width: "90%",
       textAlign: "center",
-      fontFamily: "Inter_600SemiBold"
+      fontFamily: "Inter_600SemiBold",
     },
     form: {
       width: 350,
@@ -193,7 +201,6 @@ const createStyles = (theme :Theme) => {
     },
   });
   return styles;
-}
-
+};
 
 export default Registrar;

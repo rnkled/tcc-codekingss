@@ -1,47 +1,54 @@
-import React, { useContext } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { Text } from 'react-native-elements';
-import { AntDesign } from '@expo/vector-icons';
-import ThemeContext from '../../context/ThemeContext';
-import { Theme } from '../../interfaces/themeInterface';
+import React, { useContext } from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Text } from "react-native-elements";
+import { AntDesign } from "@expo/vector-icons";
+import ThemeContext from "../../context/ThemeContext";
+import { Theme } from "../../interfaces/themeInterface";
 // import { Container } from './styles';
 
 type Props = {
-  text:  string;
+  text: string;
   onChangeText: Function;
   onPressButton: Function;
-}
+};
 
-const InputTextChat = ({onChangeText, text, onPressButton}: Props) => {
-  const {theme} = useContext(ThemeContext);
-  const styles = React.useMemo(
-      () => createStyles(theme),
-      [theme]
-  );
-  return(
+const InputTextChat = ({ onChangeText, text, onPressButton }: Props) => {
+  const { theme } = useContext(ThemeContext);
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+  return (
     <View style={styles.container}>
-        <TextInput value={text} onChangeText={(text) => onChangeText(text)} placeholderTextColor={theme.chatText} placeholder='Digite sua mensagem aqui' style={styles.inputStyle}/>
-     
-       <TouchableOpacity activeOpacity={0.8} onPress={() => onPressButton()} style={styles.buttonInput}>
+      <TextInput
+        value={text}
+        onChangeText={(text) => onChangeText(text)}
+        placeholderTextColor={theme.chatText}
+        placeholder="Digite sua mensagem aqui"
+        style={styles.inputStyle}
+      />
+
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => onPressButton()}
+        style={styles.buttonInput}
+      >
         <View>
           <AntDesign name="arrowup" size={24} color="black" />
         </View>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
-const createStyles = (theme :Theme) => {
-
+const createStyles = (theme: Theme) => {
   const styles = StyleSheet.create({
     container: {
-      flexDirection:'row', 
-      width: "100%", 
-      alignItems:'center',  
+      flexDirection: "row",
+      width: "100%",
+      alignItems: "center",
     },
 
     inputStyle: {
       width: "100%",
+      paddingRight: 50,
       height: 50,
       backgroundColor: theme.chatInputBackground,
       borderRadius: 100,
@@ -50,14 +57,13 @@ const createStyles = (theme :Theme) => {
     },
 
     buttonInput: {
-    width: 35, 
-    height: 35, 
-    left: -45, 
-    borderRadius: 100, 
-    backgroundColor: theme.chatInputSend,
-    justifyContent: "center",
-    alignItems: "center"
-
+      width: 35,
+      height: 35,
+      left: -45,
+      borderRadius: 100,
+      backgroundColor: theme.chatInputSend,
+      justifyContent: "center",
+      alignItems: "center",
     },
 
     contentButton: {
@@ -65,14 +71,13 @@ const createStyles = (theme :Theme) => {
       zIndex: 1000,
       width: "auto",
       height: "auto",
-      left: -20 ,
+      left: -20,
     },
 
     contentInput: {
       width: "100%",
-      
-    }
-  })
+    },
+  });
   return styles;
 };
 

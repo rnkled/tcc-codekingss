@@ -101,7 +101,7 @@ const Settings: React.FC = () => {
     let data = {
       cpf: cpf,
       name: name,
-      email: email,
+      email: email.toLowerCase().trim(),
       degree: {
         description: degreeDescription,
         crp: degreeCrp,
