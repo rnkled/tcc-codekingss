@@ -83,7 +83,7 @@ const Settings: React.FC = () => {
     user.address.postalCode
   );
 
-  const [loadingImage, setLoadingImage] = useState<boolean>(true);
+  const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
   const [openProfissionalInfo, setOpenProfissionalInfo] =
     useState<boolean>(false);
@@ -95,7 +95,7 @@ const Settings: React.FC = () => {
     getPhotoFirestore();
   }, []);
 
-  function handleSave() {
+  async function handleSave() {
     setLoadingSave(true);
 
     let data = {
@@ -120,10 +120,6 @@ const Settings: React.FC = () => {
       skills: skills,
       profilePhoto: profilePhoto,
     };
-
-    if (profilePhoto !== user.profilePhoto) {
-      savePhotoFireStore();
-    }
 
     api
       .put("/user/update/" + user._id, data)
@@ -181,23 +177,21 @@ const Settings: React.FC = () => {
           presentationStyle: "fullScreen",
         };
 
-        await launchCamera(options, (response) => {
-          //   console.log("Response = ", response);
-
+        await launchCamera(options, async (response) => {
           if (response.errorCode) {
-            console.log("0013");
-
-            return console.log(response.errorMessage);
+            return Alert.alert("Alerta", "Não foi possível carregar sua foto!");
           }
 
           if (response.didCancel) {
-            return Alert.alert("Alerta");
+            return console.log("cancelado");
           }
 
           if (response.assets && response.assets.length > 0) {
-            const { uri, type, fileName, fileSize } = response?.assets[0];
+            const { uri } = response?.assets[0];
             if (!!uri) {
-              setProfilePhoto(uri);
+              console.log("chamando aqqqq");
+              await savePhotoFireStore(uri);
+
               setLoadingImage(false);
             }
           }
@@ -218,49 +212,44 @@ const Settings: React.FC = () => {
       presentationStyle: "fullScreen",
     };
 
-    await launchImageLibrary(options, (response) => {
+    await launchImageLibrary(options, async (response) => {
       if (response.errorCode) {
-        console.log("0012");
-
-        return console.log(response.errorMessage);
+        return Alert.alert("Alerta", "Não foi possível carregar sua foto!");
       }
       if (response.assets && response.assets.length > 0) {
-        const { uri, type, fileName, fileSize } = response?.assets[0];
+        const { uri } = response?.assets[0];
         if (!!uri) {
-          setProfilePhoto(uri);
+          await savePhotoFireStore(uri);
           setLoadingImage(false);
         }
       }
     });
   }
 
-  async function savePhotoFireStore() {
-    console.log("enviando");
-
+  async function savePhotoFireStore(uri: string) {
     const reference = storage().ref(`/images/${user._id}/img_profile.png`);
-    await reference.putFile(profilePhoto);
+    await reference.putFile(uri);
+
+    await getPhotoFirestore();
   }
 
   async function getPhotoFirestore() {
-    const reference = storage().ref(`/images/${user._id}/`);
+    try {
+      setLoadingImage(true);
 
-    await reference.listAll().then((result) => {
-      if (result.items.length > 0) {
-        result.items.forEach(async (ref) => {
-          let url = await ref.getDownloadURL();
-          if (!!url) {
-            setProfilePhoto(url);
-            setLoadingImage(false);
-          } else {
-            setProfilePhoto(user.profilePhoto);
-            setLoadingImage(false);
-          }
-        });
+      const reference = storage().ref(`/images/${user._id}/img_profile.png`);
+      let url = await reference.getDownloadURL();
+
+      if (!!url) {
+        setProfilePhoto(url);
       } else {
-        setProfilePhoto(user.profilePhoto);
-        setLoadingImage(false);
+        setProfilePhoto("");
       }
-    });
+    } catch (err) {
+      Alert.alert("Alerta", "Não foi possível carregar sua foto de perfil!");
+    } finally {
+      setLoadingImage(false);
+    }
   }
 
   return (
@@ -302,11 +291,11 @@ const Settings: React.FC = () => {
           }}
         />
         <View style={styles.contentPrimary}>
-          {loadingImage && (
+          {loadingImage && !profilePhoto && (
             <>
               <TouchableOpacity style={styles.contentPhoto} onPress={findPhoto}>
                 <ActivityIndicator
-                  color={theme.primaryVariant}
+                  color={theme.appoimentColor2}
                   size={100}
                   style={{
                     display: loadingImage ? "flex" : "none",
@@ -317,7 +306,7 @@ const Settings: React.FC = () => {
               </TouchableOpacity>
             </>
           )}
-          {profilePhoto && (
+          {!!profilePhoto && (
             <>
               <TouchableOpacity style={styles.contentPhoto} onPress={findPhoto}>
                 <Image
@@ -329,7 +318,7 @@ const Settings: React.FC = () => {
                   // onLoad={() => setLoadingImage(false)}
                 />
                 <ActivityIndicator
-                  color={theme.primaryVariant}
+                  color={theme.appoimentColor2}
                   size={100}
                   style={{
                     display: loadingImage ? "flex" : "none",
